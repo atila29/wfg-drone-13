@@ -4,18 +4,35 @@ import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
+import org.opencv.video.BackgroundSubtractorMOG2;
+import org.opencv.video.Video;
 
 public class MyFrame {
 
 	private final JFrame frame;
 	private final MyPanel panel;
+	
+	// attributes needed for processeing images
+	private Mat currentFrame;
+	private Mat lastFrame;
+	private BackgroundSubtractorMOG2 bsMog;
+	int treshold = 50; // vigtig kommentar
 
 	public MyFrame() {
+		bsMog = Video.createBackgroundSubtractorMOG2();
                 // JFrame which holds JPanel
 		frame = new JFrame();
 		frame.getContentPane().setLayout(new FlowLayout());
@@ -31,16 +48,70 @@ public class MyFrame {
 	}
 
 	public void render(Mat image) {
-		Mat man = editFrame(image);
+		Mat man = processMat(image);
 		Image i = toBufferedImage(man);
 		panel.setImage(i);
 		panel.repaint();
 		frame.pack();
 	}
 	
-	public Mat editFrame(Mat a) {
+	public Mat processMat(Mat a) {
 		// lav billede ændring og analyse
+		
+		Mat prosFrame = new Mat();
+		
+		currentFrame = a;
+		
+		if(lastFrame == null){
+			lastFrame = a;
+			return lastFrame;
+		}
+		
+		Imgproc.GaussianBlur(currentFrame, currentFrame, new Size(3,3), 0);
+		Imgproc.GaussianBlur(lastFrame, lastFrame, new Size(3,3), 0);
+		
+		Core.subtract(currentFrame, lastFrame, prosFrame);
+		
+		Imgproc.cvtColor(prosFrame, prosFrame, Imgproc.COLOR_RGB2GRAY);
+		
+		Imgproc.threshold(prosFrame, prosFrame, treshold, 255,Imgproc.THRESH_BINARY);
+		
+		ArrayList<Rect> rects = detect_contours(currentFrame, prosFrame);
+		
+		for(Rect r : rects) {
+			Imgproc.rectangle(currentFrame, r.br(), r.tl(), new Scalar(0, 255, 0));
+		}
+		
 		return a;
+	}
+	
+	public ArrayList<Rect> detect_contours(Mat frame, Mat out) {
+		Mat v = new Mat();
+		Mat y = out.clone();
+		
+		List<MatOfPoint> c = new ArrayList<>();
+		Imgproc.findContours(y, c, v, Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
+		
+		double maxArea = 100;
+		int maxArea_idx;
+		Rect r;
+		ArrayList<Rect> r_array = new ArrayList<Rect>();
+		
+		for(int i = 0; i < c.size(); i++){
+			Mat con = c.get(i);
+			double con_area = Imgproc.contourArea(con);
+			
+			if(con_area > maxArea) {
+				maxArea_idx = i;
+				r = Imgproc.boundingRect(c.get(maxArea_idx));
+				r_array.add(r);
+				Imgproc.drawContours(frame, c, maxArea_idx, new Scalar(0,0,255));
+			}
+		}
+		v.release();
+		return r_array;
+		
+		
 	}
 
 	public static Image toBufferedImage(Mat m){

@@ -17,7 +17,6 @@ public class Test {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		
 		VideoCapture cap = new VideoCapture(0);
-		
 		if(!cap.isOpened()) {
 			System.exit(1);
 		}
@@ -32,7 +31,7 @@ public class Test {
 		while (true) {
 			// Read current camera frame into matrix
 			try {
-				Thread.sleep(33);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
