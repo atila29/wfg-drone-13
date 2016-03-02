@@ -3,6 +3,8 @@ package dtu.grp13.drone.test.video;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
+//import com.googlecode.javac.*;
+
 
 public class Test {
 
@@ -15,6 +17,8 @@ public class Test {
 
 	public static void main(String[] args) {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+		System.loadLibrary("opencv_ffmpeg310_64");
+		
 		
 		VideoCapture cap = new VideoCapture("resources/video1.avi");
 		
