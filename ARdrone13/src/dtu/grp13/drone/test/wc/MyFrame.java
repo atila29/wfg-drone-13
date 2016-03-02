@@ -64,7 +64,6 @@ public class MyFrame {
 		}
 		
 		currentFrame = a;
-		
 		Imgproc.GaussianBlur(currentFrame, currentFrame, new Size(3,3), 0);
 		Imgproc.GaussianBlur(lastFrame, lastFrame, new Size(3,3), 0);
 		
@@ -79,7 +78,7 @@ public class MyFrame {
 		for(Rect r : rects) {
 			Imgproc.rectangle(currentFrame, r.br(), r.tl(), new Scalar(0, 255, 0));
 		}
-		lastFrame = a;
+		lastFrame = currentFrame.clone();
 		return currentFrame;
 	}
 	
