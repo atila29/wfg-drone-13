@@ -3,7 +3,6 @@ package dtu.grp13.drone.test.video;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
-//import com.googlecode.javac.*;
 
 
 public class Test {
@@ -36,18 +35,18 @@ public class Test {
 		while (true) {
 			// Read current camera frame into matrix
 			try {
-				Thread.sleep(33);
+				Thread.sleep(25);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			cap.read(image);
 			// Render frame if the camera is still acquiring images
-			if (image != null) {
+			if (cap.read(image)) {
 				frame.render(image);
 			} else {
 				System.out.println("Camera error!");
-				System.exit(1);			
+				System.exit(1);
+				cap.release();
 			}			
 		}	
 	}
