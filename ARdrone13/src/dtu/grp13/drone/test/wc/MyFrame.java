@@ -4,6 +4,7 @@ import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
+import java.beans.FeatureDescriptor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,13 +12,19 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.opencv.core.Core;
+import org.opencv.core.KeyPoint;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfKeyPoint;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
+import org.opencv.features2d.FeatureDetector;
+import org.opencv.features2d.Features2d;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.video.BackgroundSubtractorMOG2;
+
+import com.sun.prism.Surface;
 
 public class MyFrame {
 
@@ -28,7 +35,7 @@ public class MyFrame {
 	private Mat currentFrame;
 	private Mat lastFrame;
 	private BackgroundSubtractorMOG2 bsMog;
-	int treshold = 50; // vigtig kommentar
+	int treshold = 60; // vigtig kommentar
 
 	public MyFrame() {
                 // JFrame which holds JPanel
@@ -64,9 +71,36 @@ public class MyFrame {
 		}
 		
 		currentFrame = a;
-		Imgproc.GaussianBlur(currentFrame, currentFrame, new Size(3,3), 0);
-		Imgproc.GaussianBlur(lastFrame, lastFrame, new Size(3,3), 0);
+		Imgproc.GaussianBlur(currentFrame, currentFrame, new Size(5, 5), 0);
+		Imgproc.GaussianBlur(lastFrame, lastFrame, new Size(5, 5), 0);
 		
+		// Greyscale
+		
+		Imgproc.cvtColor(currentFrame, currentFrame, Imgproc.COLOR_RGB2GRAY);
+		
+		
+		// simpel point detection - evt. med extraction og opticalflow
+		
+		FeatureDetector fd = FeatureDetector.create(FeatureDetector.GRID_HARRIS);
+		
+		MatOfKeyPoint currentKeyPoints = new MatOfKeyPoint();
+		MatOfKeyPoint lastKeyPoints = new MatOfKeyPoint();
+		
+		fd.detect(currentFrame, currentKeyPoints);
+		fd.detect(lastFrame, lastKeyPoints);
+		
+		Features2d.drawKeypoints(currentFrame, currentKeyPoints, prosFrame);
+		
+		//for(KeyPoint kp : currentKeyPoints.)
+		
+		//simpleMotionDetection(prosFrame);
+		
+		
+		lastFrame = currentFrame.clone();
+		return prosFrame;
+	}
+
+	private void simpleMotionDetection(Mat prosFrame) {
 		Core.subtract(currentFrame, lastFrame, prosFrame);
 		
 		Imgproc.cvtColor(prosFrame, prosFrame, Imgproc.COLOR_RGB2GRAY);
@@ -78,8 +112,8 @@ public class MyFrame {
 		for(Rect r : rects) {
 			Imgproc.rectangle(currentFrame, r.br(), r.tl(), new Scalar(0, 255, 0));
 		}
+		
 		lastFrame = currentFrame.clone();
-		return currentFrame;
 	}
 	
 	public ArrayList<Rect> detect_contours(Mat frame, Mat out) {
