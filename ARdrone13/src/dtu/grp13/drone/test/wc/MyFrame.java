@@ -19,6 +19,7 @@ import org.opencv.core.MatOfFloat;
 import org.opencv.core.MatOfKeyPoint;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
+import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
@@ -97,23 +98,40 @@ public class MyFrame {
 		MatOfKeyPoint lastKeyPoints = new MatOfKeyPoint();
 		fd.detect(currentFrame, currentKeyPoints);
 		fd.detect(lastFrame, lastKeyPoints);
+		Point[] cPoint = new Point[currentKeyPoints.toArray().length];
+		Point[] lPoint = new Point[lastKeyPoints.toArray().length];
+
+		for(int i = 0; i < currentKeyPoints.toArray().length ; i++){
+			cPoint[i] = currentKeyPoints.toArray()[i].pt;
+		}
 		
+		for(int i = 0; i < lastKeyPoints.toArray().length ; i++){
+			lPoint[i] = lastKeyPoints.toArray()[i].pt;
+		}
+		
+		MatOfPoint2f l = new MatOfPoint2f();
+		l.fromArray(lPoint);
+		MatOfPoint2f c = new MatOfPoint2f();
+		c.fromArray(cPoint);
+		
+		MatOfPoint2f test = new MatOfPoint2f();
 		
 		Features2d.drawKeypoints(currentFrame, currentKeyPoints, prosFrame);
 		
-		//Video.calcOpticalFlowPyrLK(lastFrame, currentFrame, new MatOfPoint2f(lastKeyPoints), new MatOfPoint2f(currentKeyPoints), new MatOfByte(), new MatOfFloat());
+		Video.calcOpticalFlowPyrLK(lastFrame, currentFrame, l, c, new MatOfByte(), new MatOfFloat());
 		
 		
 		
-		for(int i = 0; i < 10; i++) {
-			double x = currentKeyPoints.toArray()[i].pt.x - lastKeyPoints.toArray()[i].pt.x;
-			double y = currentKeyPoints.toArray()[i].pt.y - lastKeyPoints.toArray()[i].pt.y;
+		
+		for(int i = 0; i < 2; i++) {
+			double x = c.toArray()[i].x - l.toArray()[i].x;
+			double y = c.toArray()[i].y - l.toArray()[i].y;
 			System.out.println("vec_x: " + i +" : " + x);
 			System.out.println("vec_y: " + i +" : " + y);
 			//Imgproc.line(currentFrame, pt1, pt2, color);
 			
 			if(x!=0 && y!=0)
-				Imgproc.arrowedLine(currentFrame, currentKeyPoints.toArray()[i].pt, lastKeyPoints.toArray()[i].pt, new Scalar(0,255,0));
+				Imgproc.arrowedLine(currentFrame, c.toArray()[i], l.toArray()[i], new Scalar(0,255,0));
 		}
 
 
