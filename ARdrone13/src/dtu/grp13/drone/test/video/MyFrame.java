@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
 
 public class MyFrame {
 
@@ -31,8 +32,8 @@ public class MyFrame {
 	}
 
 	public void render(Mat image) {
-		Mat man = editFrame(image);
-		Image i = toBufferedImage(man);
+		//Mat man = editFrame(image);
+		Image i = toBufferedImage(image);
 		panel.setImage(i);
 		panel.repaint();
 		frame.pack();
