@@ -121,9 +121,9 @@ public class MyFrame {
 		Video.calcOpticalFlowPyrLK(lastFrame, currentFrame, l, c, new MatOfByte(), new MatOfFloat());
 		
 		
+		int s = (c.toArray().length < l.toArray().length? c.toArray().length : l.toArray().length);
 		
-		
-		for(int i = 0; i < 2; i++) {
+		for(int i = 0; i < 10; i++) {
 			double x = c.toArray()[i].x - l.toArray()[i].x;
 			double y = c.toArray()[i].y - l.toArray()[i].y;
 			System.out.println("vec_x: " + i +" : " + x);
@@ -131,7 +131,7 @@ public class MyFrame {
 			//Imgproc.line(currentFrame, pt1, pt2, color);
 			
 			if(x!=0 && y!=0)
-				Imgproc.arrowedLine(currentFrame, c.toArray()[i], l.toArray()[i], new Scalar(0,255,0));
+				Imgproc.arrowedLine(currentFrame, l.toArray()[i], c.toArray()[i], new Scalar(0,255,0));
 		}
 
 
