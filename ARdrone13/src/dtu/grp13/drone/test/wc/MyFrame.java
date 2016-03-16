@@ -76,9 +76,9 @@ public class MyFrame {
 		
 		currentFrame = a;
 		Imgproc.GaussianBlur(currentFrame, currentFrame, new Size(3,3), 0);
-		//Imgproc.GaussianBlur(lastFrame, lastFrame, new Size(5, 5), 0);
+		Imgproc.GaussianBlur(lastFrame, lastFrame, new Size(5, 5), 0);
 		
-		Imgproc.cvtColor(currentFrame, currentFrame, Imgproc.COLOR_RGB2GRAY);
+		//Imgproc.cvtColor(currentFrame, currentFrame, Imgproc.COLOR_RGB2GRAY);
 		
 		
 		//Photo.fastNlMeansDenoising(currentFrame, currentFrame);
@@ -122,8 +122,9 @@ public class MyFrame {
 		
 		
 		int s = (c.toArray().length < l.toArray().length? c.toArray().length : l.toArray().length);
+		s = (s<20? s : 20);
 		
-		for(int i = 0; i < 10; i++) {
+		for(int i = 0; i < s; i++) {
 			double x = c.toArray()[i].x - l.toArray()[i].x;
 			double y = c.toArray()[i].y - l.toArray()[i].y;
 			System.out.println("vec_x: " + i +" : " + x);
