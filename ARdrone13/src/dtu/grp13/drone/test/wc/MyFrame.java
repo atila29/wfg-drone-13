@@ -28,9 +28,6 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.photo.Photo;
 import org.opencv.video.BackgroundSubtractorMOG2;
 import org.opencv.video.Video;
-import org.reflections.util.FilterBuilder.Matcher;
-
-import com.sun.prism.Surface;
 
 public class MyFrame {
 
