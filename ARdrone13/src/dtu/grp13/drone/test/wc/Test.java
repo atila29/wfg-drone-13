@@ -31,7 +31,7 @@ public class Test {
 		while (true) {
 			// Read current camera frame into matrix
 			try {
-				Thread.sleep(100);
+				Thread.sleep(33);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

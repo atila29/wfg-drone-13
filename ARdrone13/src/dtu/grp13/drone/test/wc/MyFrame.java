@@ -14,15 +14,21 @@ import javax.swing.JPanel;
 import org.opencv.core.Core;
 import org.opencv.core.KeyPoint;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfByte;
+import org.opencv.core.MatOfFloat;
 import org.opencv.core.MatOfKeyPoint;
 import org.opencv.core.MatOfPoint;
+import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.features2d.FeatureDetector;
 import org.opencv.features2d.Features2d;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.photo.Photo;
 import org.opencv.video.BackgroundSubtractorMOG2;
+import org.opencv.video.Video;
+import org.reflections.util.FilterBuilder.Matcher;
 
 import com.sun.prism.Surface;
 
@@ -71,12 +77,19 @@ public class MyFrame {
 		}
 		
 		currentFrame = a;
-		Imgproc.GaussianBlur(currentFrame, currentFrame, new Size(5, 5), 0);
-		Imgproc.GaussianBlur(lastFrame, lastFrame, new Size(5, 5), 0);
+		Imgproc.GaussianBlur(currentFrame, currentFrame, new Size(3,3), 0);
+		//Imgproc.GaussianBlur(lastFrame, lastFrame, new Size(5, 5), 0);
+		
+		Imgproc.cvtColor(currentFrame, currentFrame, Imgproc.COLOR_RGB2GRAY);
+		
+		
+		//Photo.fastNlMeansDenoising(currentFrame, currentFrame);
+		//Photo.fastNlMeansDenoisingColored(currentFrame, currentFrame);
+		
+		//Photo.fastNlMeansDenoising(lastFrame, lastFrame);
 		
 		// Greyscale
 		
-		Imgproc.cvtColor(currentFrame, currentFrame, Imgproc.COLOR_RGB2GRAY);
 		
 		
 		// simpel point detection - evt. med extraction og opticalflow
@@ -85,19 +98,35 @@ public class MyFrame {
 		
 		MatOfKeyPoint currentKeyPoints = new MatOfKeyPoint();
 		MatOfKeyPoint lastKeyPoints = new MatOfKeyPoint();
-		
 		fd.detect(currentFrame, currentKeyPoints);
 		fd.detect(lastFrame, lastKeyPoints);
 		
+		
 		Features2d.drawKeypoints(currentFrame, currentKeyPoints, prosFrame);
+		
+		//Video.calcOpticalFlowPyrLK(lastFrame, currentFrame, new MatOfPoint2f(lastKeyPoints), new MatOfPoint2f(currentKeyPoints), new MatOfByte(), new MatOfFloat());
+		
+		
+		
+		for(int i = 0; i < 10; i++) {
+			double x = currentKeyPoints.toArray()[i].pt.x - lastKeyPoints.toArray()[i].pt.x;
+			double y = currentKeyPoints.toArray()[i].pt.y - lastKeyPoints.toArray()[i].pt.y;
+			System.out.println("vec_x: " + i +" : " + x);
+			System.out.println("vec_y: " + i +" : " + y);
+			//Imgproc.line(currentFrame, pt1, pt2, color);
+			
+			if(x!=0 && y!=0)
+				Imgproc.arrowedLine(currentFrame, currentKeyPoints.toArray()[i].pt, lastKeyPoints.toArray()[i].pt, new Scalar(0,255,0));
+		}
+
+
 		
 		//for(KeyPoint kp : currentKeyPoints.)
 		
 		//simpleMotionDetection(prosFrame);
-		
-		
 		lastFrame = currentFrame.clone();
-		return prosFrame;
+		
+		return currentFrame;
 	}
 
 	private void simpleMotionDetection(Mat prosFrame) {

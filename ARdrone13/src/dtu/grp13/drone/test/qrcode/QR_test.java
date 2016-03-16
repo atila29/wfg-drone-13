@@ -13,7 +13,7 @@ public class QR_test {
 
 		
 		
-		VideoCapture cap = new VideoCapture("resources/IMG_0210.m4v");
+		VideoCapture cap = new VideoCapture(0);
 		
 		if(!cap.isOpened()) {
 			System.exit(1);
