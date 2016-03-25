@@ -16,6 +16,10 @@ public class MyFrame {
 	private final JFrame frame;
 	private final MyPanel panel;
 
+	public MyPanel getPanel() {
+		return panel;
+	}
+
 	public MyFrame() {
                 // JFrame which holds JPanel
 		frame = new JFrame();
@@ -24,6 +28,7 @@ public class MyFrame {
 		frame.setTitle("wc - 0.1 - 29");
                 // JPanel which is used for drawing image
 		panel = new MyPanel();
+		
 		frame.getContentPane().add(panel);
 	}
 

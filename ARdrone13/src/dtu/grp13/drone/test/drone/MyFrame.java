@@ -48,8 +48,8 @@ public class MyFrame {
 	}
 
 	public void render(Mat image) {
-		Mat man = processMat(image);
-		Image i = toBufferedImage(man);
+		//Mat man = processMat(image);
+		Image i = toBufferedImage(image);
 		panel.setImage(i);
 		panel.repaint();
 		frame.pack();

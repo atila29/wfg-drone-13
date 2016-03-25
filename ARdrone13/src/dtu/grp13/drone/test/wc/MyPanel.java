@@ -6,12 +6,12 @@ import java.awt.Image;
 
 import javax.swing.JPanel;
 
-public class MyPanel extends JPanel {
+import dtu.grp13.drone.test.drone.VectorAnalyzer;
 
+public class MyPanel extends JPanel {
 	private Image img;
 
 	public MyPanel() {
-
 	}
 
 	public void setImage(Image img) {

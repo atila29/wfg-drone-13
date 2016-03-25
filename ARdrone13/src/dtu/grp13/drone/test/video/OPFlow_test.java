@@ -1,7 +1,6 @@
 package dtu.grp13.drone.test.video;
 
 import java.util.List;
-
 import java.util.ArrayList;
 
 import org.opencv.core.Core;
@@ -19,13 +18,17 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.video.Video;
 import org.opencv.videoio.VideoCapture;
 
+import de.yadrone.base.ARDrone;
+import de.yadrone.base.command.VideoChannel;
+import dtu.grp13.drone.test.drone.VectorAnalyzer;
+
 
 public class OPFlow_test {
 
 	public static void main(String[] args) {
 		
 	    System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-		System.loadLibrary("opencv_ffmpeg310_64");
+		//System.loadLibrary("opencv_ffmpeg310_64");
 		
 		List<Point> cornersThis = new ArrayList<Point>();
 		List<Point> cornersPrev = new ArrayList<Point>();
@@ -52,9 +55,12 @@ public class OPFlow_test {
 	    int scale = 1;
 	    int delta = 0;
 	    int ddepth = CvType.CV_32FC1;
+	    
+	    //ARDrone drone = new ARDrone();
+	    //drone.getCommandManager().setVideoChannel(VideoChannel.);
 		
 		
-		VideoCapture cap = new VideoCapture("resources/IMG_0208.m4v");
+		VideoCapture cap = new VideoCapture(0);
 		
 		if(!cap.isOpened()) {
 			System.exit(1);
@@ -67,7 +73,7 @@ public class OPFlow_test {
 		while (true) {
 			// Read current camera frame into matrix
 			try {
-				Thread.sleep(33);
+				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -83,7 +89,7 @@ public class OPFlow_test {
 					Imgproc.GaussianBlur(matOpFlowThis, matOpFlowThis, new Size(3,3), 0);
 					//Imgproc.Canny(matOpFlowThis, matOpFlowThis, 1, 50, 3, true);
 					matOpFlowThis.copyTo(matOpFlowPrev);
-					Imgproc.goodFeaturesToTrack(matOpFlowPrev, MOPcorners, iGFFTMax, 0.50, 5);
+					Imgproc.goodFeaturesToTrack(matOpFlowPrev, MOPcorners, iGFFTMax, 0.20, 5);
 					mMOP2fptsPrev.fromArray(MOPcorners.toArray());
 					mMOP2fptsPrev.copyTo(mMOP2fptsSafe);
 					
@@ -94,7 +100,7 @@ public class OPFlow_test {
 					Imgproc.cvtColor(mRgba, matOpFlowThis, Imgproc.COLOR_RGBA2GRAY);
 					Imgproc.GaussianBlur(matOpFlowThis, matOpFlowThis, new Size(3,3), 0);
 					//Imgproc.Canny(matOpFlowThis, matOpFlowThis, 10, 50, 3, true);
-					Imgproc.goodFeaturesToTrack(matOpFlowThis, MOPcorners, iGFFTMax, 0.50, 5);
+					Imgproc.goodFeaturesToTrack(matOpFlowThis, MOPcorners, iGFFTMax, 0.20, 5);
 					mMOP2fptsThis.fromArray(MOPcorners.toArray());
 					mMOP2fptsSafe.copyTo(mMOP2fptsPrev);
 					mMOP2fptsThis.copyTo(mMOP2fptsSafe);
@@ -106,17 +112,26 @@ public class OPFlow_test {
 		        byteStatus = mMOBStatus.toList();
 		        
 		        y = byteStatus.size() - 1;
+		        
+		        VectorAnalyzer va = new VectorAnalyzer();
 		        for (x = 0; x < y; x++) {
 		           	if (byteStatus.get(x) == 1) {
 		                pt = cornersThis.get(x);
 		                pt2 = cornersPrev.get(x);
-		                System.out.println(pt);
-		                System.out.println(pt2);
-
+		                //System.out.println(pt + " : " + pt2);
+		                // System.out.println(pt2);
+		                va.addVector(matOpFlowThis, pt, pt2);
 		                Imgproc.arrowedLine(matOpFlowThis, pt, pt2, colorRed);
 		                
 		            }
 		        }
+		        //va.getCoordinateSystem().drawAxes(g);
+		        //Imgproc.arrowedLine(matOpFlowThis, new Point(0,0), va.getResult(), colorRed);
+		        System.out.println("------------------------------");
+		        //System.out.println("VIGTIGT: " + va.getResult());
+		        va.drawSumVector(matOpFlowThis);
+		        //va.drawAllVectors(matOpFlowThis);
+                System.out.println("------------------------------");
 		        frame.render(matOpFlowThis);
 
 			} else {

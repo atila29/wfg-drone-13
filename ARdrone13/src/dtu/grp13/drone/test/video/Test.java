@@ -18,8 +18,8 @@ public class Test {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		System.loadLibrary("opencv_ffmpeg310_64");
 		
-		
-		VideoCapture cap = new VideoCapture("resources/video1.avi");
+		// "resources/video1.avi"
+		VideoCapture cap = new VideoCapture(0);
 		
 		if(!cap.isOpened()) {
 			System.exit(1);

@@ -13,6 +13,7 @@ public class MyPanel extends JPanel {
 	public MyPanel() {
 
 	}
+	
 
 	public void setImage(Image img) {
                 // Image which we will render later
@@ -20,6 +21,7 @@ public class MyPanel extends JPanel {
 
                 // Set JPanel size to image size
 		Dimension size = new Dimension(img.getWidth(null), img.getHeight(null));
+		//System.out.println(size);
 		setPreferredSize(size);
 		setMinimumSize(size);
 		setMaximumSize(size);

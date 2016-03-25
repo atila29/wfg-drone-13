@@ -30,6 +30,8 @@ import org.opencv.photo.Photo;
 import org.opencv.video.BackgroundSubtractorMOG2;
 import org.opencv.video.Video;
 
+import dtu.grp13.drone.test.drone.VectorAnalyzer;
+
 public class MyFrame {
 
 	private final JFrame frame;
