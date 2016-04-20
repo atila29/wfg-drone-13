@@ -90,9 +90,17 @@ public class VectorAnalyzer {
 	}
 	
 	public void writeVectors(String name) {
+		double x = 0;
+		double y = 0;
 		for(Vector2 v : sumVectorSet.get(name)) {
 			System.out.println(v.getX() + " : " + v.getY());
+			x += v.getX();
+			y += v.getY();
 		}
+		x = x;
+		y = y;
+		Vector2 sum = new Vector2(x,y);
+		System.out.println("Samlet v(" + name + ") : " + sum);
 	}
 	
 	public void reset(){

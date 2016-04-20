@@ -9,6 +9,11 @@ public class Vector2 {
 		this.y = y;
 	}
 	
+	@Override
+	public String toString() {
+		return "{"+ this.x + " : "+ this.y+"}";
+	}
+	
 	// måske fejl?
 	public Vector2(Matrix2 m) {
 		this.x = m.getFromIndex(1, 1);

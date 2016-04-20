@@ -97,7 +97,6 @@ public class Test {
 		va = new VectorAnalyzer("test");
 		
 		drone = new ARDrone();
-		drone.getCommandManager().setVideoChannel(VideoChannel.VERT);
 		cmdThread = new CommandThread(drone);
 		listener = new ImageListener() {
 
@@ -186,23 +185,28 @@ public class Test {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
 		Test test = new Test();
+		test.drone.getCommandManager().setVideoChannel(VideoChannel.VERT);
 		test.frame.setOnClickListenerForStart(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new Thread(() -> {
 					try {
+						String ran = Long.toHexString(System.currentTimeMillis());
 						test.cmdThread.takeOff();
 						test.cmdThread.waitFor(5000);
 						// test.cmdThread.hover(5000);
-						test.cmdThread.forward(10, 500);
-						test.cmdThread.forward(10, 500);
-						test.cmdThread.forward(10, 500);
-						test.cmdThread.forward(10, 500);
-						test.cmdThread.forward(10, 500);
-						test.cmdThread.forward(10, 500);
+						System.out.println("herfra");
+						test.va.setCollection("vigtig_1m"+ran);
+						test.cmdThread.forward(20, 500);
+						test.cmdThread.forward(20, 500);
+						test.va.stop();
+						test.va.writeVectors("vigtig_1m"+ran);
+						System.out.println("hertil");
 						test.cmdThread.hover(5000);
 						test.cmdThread.land();
+						
+						test.va.start();
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
