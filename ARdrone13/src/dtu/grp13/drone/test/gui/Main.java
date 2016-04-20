@@ -5,6 +5,7 @@ import java.awt.image.DataBufferByte;
 
 import javax.swing.JFrame;
 
+import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
@@ -32,7 +33,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-		
+		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
 		MainFrame mainFrame = new MainFrame("Gruppe 13 - Drone Control");
 		mainFrame.setSize(1000, 600);
@@ -40,7 +41,6 @@ public class Main {
 		
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setVisible(true);
-		mainFrame.render(new Mat());
 		
 		ARDrone drone = new ARDrone();
 		drone.getCommandManager().setVideoChannel(VideoChannel.VERT);
@@ -53,6 +53,7 @@ public class Main {
 			} 
 				
 		};
+		drone.getVideoManager().addImageListener(listener);
 		drone.start();
 
 	}

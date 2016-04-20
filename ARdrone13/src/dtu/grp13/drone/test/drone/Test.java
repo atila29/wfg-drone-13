@@ -208,7 +208,7 @@ public class Test {
 						e1.printStackTrace();
 					}
 
-				}) {
+				}) { 
 				}.start();
 				
 				//test.cmdThread.hover(1000);
