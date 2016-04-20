@@ -1,8 +1,16 @@
 package dtu.grp13.drone.test.qrcode;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
+
+import de.yadrone.base.ARDrone;
+import de.yadrone.base.command.VideoChannel;
+import de.yadrone.base.video.ImageListener;
 
 public class QR_test {
 
@@ -11,41 +19,32 @@ public class QR_test {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		System.loadLibrary("opencv_ffmpeg310_64");
 
+		ARDrone drone = new ARDrone();
 		
-		
-		VideoCapture cap = new VideoCapture(0);
-		
-		if(!cap.isOpened()) {
-			System.exit(1);
-		}
 		
 		Mat image = new Mat();
 		
 		MyFrame frame = new MyFrame();
 		frame.setVisible(true);
-		
-
-		// Main loop
-		while (true) {
-			// Read current camera frame into matrix
-			try {
-				Thread.sleep(33);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			// Render frame if the camera is still acquiring images
-			;
-			// Render frame if the camera is still acquiring images
-			if (cap.read(image)) {
-				frame.render(image);
-			} else {
-				System.out.println("Camera error!");
-				cap.release();
-				System.exit(1);
+		drone.getCommandManager().setVideoChannel(VideoChannel.HORI);
+		drone.getVideoManager().addImageListener(new ImageListener() {
+			
+			@Override
+			public void imageUpdated(BufferedImage arg0) {
+				frame.render(bufferedImageToMat(arg0));
 				
-			}			
-		}	
+			}
+		});
+		drone.start();
+		
+	}
+	
+	public static Mat bufferedImageToMat(BufferedImage bi) {
+		Mat mat = new Mat(bi.getHeight(), bi.getWidth(), CvType.CV_8UC3);
+		byte[] data = ((DataBufferByte) bi.getRaster().getDataBuffer())
+				.getData();
+		mat.put(0, 0, data);
+		return mat;
 	}
 
 }

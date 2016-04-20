@@ -194,7 +194,7 @@ public class Test {
 					try {
 						String ran = Long.toHexString(System.currentTimeMillis());
 						test.cmdThread.takeOff();
-						test.cmdThread.waitFor(5000);
+						test.cmdThread.waitFor(2000);
 						// test.cmdThread.hover(5000);
 						System.out.println("herfra");
 						test.va.setCollection("vigtig_1m"+ran);
@@ -203,7 +203,7 @@ public class Test {
 						test.va.stop();
 						test.va.writeVectors("vigtig_1m"+ran);
 						System.out.println("hertil");
-						test.cmdThread.hover(5000);
+						test.cmdThread.hover(300);
 						test.cmdThread.land();
 						
 						test.va.start();
