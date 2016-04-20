@@ -1,7 +1,11 @@
 package dtu.grp13.drone.test.drone;
 
+import java.awt.Button;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.util.ArrayList;
@@ -22,6 +26,10 @@ import org.opencv.video.Video;
 
 public class MyFrame {
 
+	public JFrame getFrame() {
+		return frame;
+	}
+
 	private final JFrame frame;
 	private final MyPanel panel;
 	
@@ -30,6 +38,8 @@ public class MyFrame {
 	private Mat lastFrame;
 	private BackgroundSubtractorMOG2 bsMog;
 	int treshold = 50; // vigtig kommentar
+	private Button b;
+	private Button b2;
 
 	public MyFrame() {
 		bsMog = Video.createBackgroundSubtractorMOG2();
@@ -40,7 +50,21 @@ public class MyFrame {
 		frame.setTitle("wc - 0.1 - 29");
                 // JPanel which is used for drawing image
 		panel = new MyPanel();
+		JPanel panel2 = new JPanel();
+		b = new Button("Start");
+		b2= new Button("Stop");
+		panel2.add(b);
+		panel2.add(b2);
+		frame.add(panel2);
 		frame.getContentPane().add(panel);
+	}
+	
+	public void setOnClickListenerForStart(ActionListener a) {
+		b.addActionListener(a);
+	}
+	
+	public void setOnClickListenerForStop(ActionListener a) {
+		b2.addActionListener(a);
 	}
 
 	public void setVisible(boolean visible) {

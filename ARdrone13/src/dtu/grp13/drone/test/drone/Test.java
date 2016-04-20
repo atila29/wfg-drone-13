@@ -1,5 +1,9 @@
 package dtu.grp13.drone.test.drone;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.util.ArrayList;
@@ -28,15 +32,21 @@ import de.yadrone.base.ARDrone;
 import de.yadrone.base.command.CommandManager;
 import de.yadrone.base.command.VideoChannel;
 import de.yadrone.base.video.ImageListener;
+import dtu.grp13.drone.core.CommandThread;
+import dtu.grp13.drone.core.ImageListenerThread;
 
 /*
- * 
+ * KUN TIL TEST
+ * ------------
+ * denne klasse er spaghetti kode
+ * og skal kun benyttes til test.
  * 
  * 
  */
 
 public class Test {
 
+	private ImageListenerThread imgThread;
 	private MyFrame frame;
 	private Mat image;
 	private ScheduledExecutorService timer;
@@ -53,7 +63,7 @@ public class Test {
 	Point pt1 = new Point(0, 0);
 	Point pt2 = new Point(0, 0);
 	List<Byte> byteStatus = new ArrayList<Byte>();
-	int iGFFTMax = 400;
+	int iGFFTMax = 50;
 	int y;
 	int x;
 	Mat matOpFlowThis = new Mat();
@@ -72,17 +82,24 @@ public class Test {
 	int scale = 1;
 	int delta = 0;
 	int ddepth = CvType.CV_32FC1;
-
+	int speed = 20;
+	
+	
+	ImageListener listener = null;
+	private volatile VectorAnalyzer va; // hvis der sker en fejl, er det evt. denne der ikke kan tilgås fra andre tråde!!!
+	private CommandThread cmdThread;
 	// op_flow END
 
 	public Test() {
 
-		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+		//System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
+		va = new VectorAnalyzer("test");
+		
 		drone = new ARDrone();
-		drone.getCommandManager().setVideoChannel(VideoChannel.HORI);
-
-		drone.getVideoManager().addImageListener(new ImageListener() {
+		drone.getCommandManager().setVideoChannel(VideoChannel.VERT);
+		cmdThread = new CommandThread(drone);
+		listener = new ImageListener() {
 
 			@Override
 			public void imageUpdated(BufferedImage arg0) {
@@ -112,7 +129,7 @@ public class Test {
 					}
 
 					matOpFlowThis.copyTo(matOpFlowPrev);
-					mRgba = image;
+					mRgba = image.clone();
 					Imgproc.cvtColor(mRgba, matOpFlowThis,
 							Imgproc.COLOR_RGBA2GRAY);
 					Imgproc.GaussianBlur(matOpFlowThis, matOpFlowThis,
@@ -135,20 +152,17 @@ public class Test {
 
 					y = byteStatus.size() - 1;
 					
-					VectorAnalyzer va = new VectorAnalyzer();
 					
 					for (x = 0; x < y; x++) {
 						if (byteStatus.get(x) == 1) {
 							pt = cornersThis.get(x);
 							pt2 = cornersPrev.get(x);
-							System.out.println(pt + " : " + pt2);
-							va.addVector(matOpFlowThis, pt1, pt2);
+							//System.out.println(pt + " : " + pt2);
+							va.addVector(matOpFlowThis, pt, pt2);
 							Imgproc.arrowedLine(matOpFlowThis, pt, pt2,
 									colorRed);
 
 						}
-						
-						System.out.println("VIGTIGT: " + "");
 					}
 					// op_flow END
 					
@@ -160,27 +174,90 @@ public class Test {
 					System.exit(1);
 				}
 			}
-		});
+		};
 
 		frame = new MyFrame();
 		image = new Mat();
 		timer = Executors.newSingleThreadScheduledExecutor();
+		imgThread = new ImageListenerThread(listener);
 	}
 
 	public static void main(String[] args) {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
 		Test test = new Test();
+		test.frame.setOnClickListenerForStart(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new Thread(() -> {
+					try {
+						test.cmdThread.takeOff();
+						test.cmdThread.waitFor(5000);
+						// test.cmdThread.hover(5000);
+						test.cmdThread.forward(10, 500);
+						test.cmdThread.forward(10, 500);
+						test.cmdThread.forward(10, 500);
+						test.cmdThread.forward(10, 500);
+						test.cmdThread.forward(10, 500);
+						test.cmdThread.forward(10, 500);
+						test.cmdThread.hover(5000);
+						test.cmdThread.land();
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
+				}) {
+				}.start();
+				
+				//test.cmdThread.hover(1000);
+				
+				//test.cmdThread.land();
+			}
+		});
+		test.frame.setOnClickListenerForStop(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//test.cmdThread.land();
+				test.drone.getCommandManager().landing();
+				//test.imgThread.stop();
+			}
+		});
 
 		test.drone.start();
+		test.drone.getVideoManager().addImageListener(new ImageListener() {
+			@Override
+			public void imageUpdated(BufferedImage arg0) {
+				test.imgThread.analyzeImage(arg0);
+				
+			}
+		});
 
 		// VideoCapture cap = new VideoCapture(0);
 
 		test.frame.setVisible(true);
-
+		
+		
+		
+		//test.drone.getCommandManager().flatTrim().takeOff();
+		//test.drone.getCommandManager().flatTrim().waitFor(12000);
+		//test.drone.getCommandManager().hover().doFor(15000);
+		//System.out.println("herfra");
+		//test.va.setCollection("vigtig_1m");
+		//test.drone.getCommandManager().forward(speed).doFor(990);
+		//test.drone.getCommandManager().backward(speed).doFor(999);
+		//test.va.stop();
+		//test.va.writeVectors("vigtig_1m");
+		//System.out.println("hertil");
+		//test.va.start();
+		//test.drone.getCommandManager().hover().doFor(500);
+		//test.drone.getCommandManager().landing();
+		
 		// MyLoop loop = test.new MyLoop();
 		// test.timer.scheduleAtFixedRate(loop, 0, 33, TimeUnit.MILLISECONDS);
-
+		//test.imgThread.stop();
 	}
 
 	public static Mat bufferedImageToMat(BufferedImage bi) {
@@ -191,22 +268,5 @@ public class Test {
 		return mat;
 	}
 
-	private class MyLoop implements Runnable {
-
-		@Override
-		public void run() {
-
-			// cap.read(image);
-			// Render frame if the camera is still acquiring images
-			if (image != null) {
-				frame.render(image);
-			} else {
-				System.out.println("Camera error!");
-				System.exit(1);
-			}
-
-		}
-
-	}
 
 }

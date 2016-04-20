@@ -59,6 +59,7 @@ public class OPFlow_test {
 	    //ARDrone drone = new ARDrone();
 	    //drone.getCommandManager().setVideoChannel(VideoChannel.);
 		
+	    VectorAnalyzer va = new VectorAnalyzer("test");
 		
 		VideoCapture cap = new VideoCapture(0);
 		
@@ -113,7 +114,7 @@ public class OPFlow_test {
 		        
 		        y = byteStatus.size() - 1;
 		        
-		        VectorAnalyzer va = new VectorAnalyzer();
+		        
 		        for (x = 0; x < y; x++) {
 		           	if (byteStatus.get(x) == 1) {
 		                pt = cornersThis.get(x);
@@ -127,11 +128,11 @@ public class OPFlow_test {
 		        }
 		        //va.getCoordinateSystem().drawAxes(g);
 		        //Imgproc.arrowedLine(matOpFlowThis, new Point(0,0), va.getResult(), colorRed);
-		        System.out.println("------------------------------");
+		        
 		        //System.out.println("VIGTIGT: " + va.getResult());
 		        va.drawSumVector(matOpFlowThis);
 		        //va.drawAllVectors(matOpFlowThis);
-                System.out.println("------------------------------");
+               
 		        frame.render(matOpFlowThis);
 
 			} else {

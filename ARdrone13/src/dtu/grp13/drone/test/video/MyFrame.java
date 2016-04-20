@@ -16,6 +16,10 @@ public class MyFrame {
 	private final JFrame frame;
 	private final MyPanel panel;
 
+	public JFrame getFrame() {
+		return frame;
+	}
+
 	public MyPanel getPanel() {
 		return panel;
 	}

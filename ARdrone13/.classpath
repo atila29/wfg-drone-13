@@ -13,5 +13,10 @@
 	<classpathentry exported="true" kind="lib" path="libs/lib/xuggle-xuggler-5.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/yadrone_032.jar"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/OpenCV-3.1"/>
+	<classpathentry exported="true" kind="lib" path="libs/jumi-actors/jumi-actors-1.0.277.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="http://jumi.fi/api/jumi-actors/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
