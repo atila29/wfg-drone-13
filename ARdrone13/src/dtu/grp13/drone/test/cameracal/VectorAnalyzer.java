@@ -1,4 +1,4 @@
-package dtu.grp13.drone.test.drone;
+package dtu.grp13.drone.test.cameracal;
 
 import java.util.ArrayList;
 import java.util.HashMap;
