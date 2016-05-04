@@ -20,6 +20,11 @@ public class MyFrame {
 
 	private final JFrame frame;
 	private final MyPanel panel;
+	private double Pxh;
+	private double fl = 546.5;
+	private double IRLh = 100;
+	private double IMGh;
+	private double Senh = 222;
 
 	public MyFrame() {
                 // JFrame which holds JPanel
@@ -42,6 +47,7 @@ public class MyFrame {
 		panel.setImage(i);
 		panel.repaint();
 		frame.pack();
+		IMGh = image.height();
 	}
 	
 	public Mat editFrame(Mat a) {
@@ -53,6 +59,8 @@ public class MyFrame {
 		{
 			Result scanResult = reader.decode(bitmap);
 			System.out.println(scanResult.getText());
+			Pxh = scanResult.getResultPoints()[2].getY()-scanResult.getResultPoints()[0].getY();
+			System.out.println("Højden i px = " + Pxh);
 		} catch (Exception ex) {
 			System.out.println("-----");
 		}
@@ -60,8 +68,12 @@ public class MyFrame {
 		reader.reset();
 		
 		
-		
 		return a;
+	}
+	
+	public double calcDist(double focal, double objhøjde, double imghøjde, double objpix, double sensh){
+		double dist = (focal*objhøjde*imghøjde)/(objpix*sensh);
+		return dist;
 	}
 	
 	
