@@ -26,7 +26,7 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.video.Video;
 import org.opencv.videoio.VideoCapture;
 
-import com.sun.javafx.css.CalculatedValue;
+//import com.sun.javafx.css.CalculatedValue;
 
 import de.yadrone.base.ARDrone;
 import de.yadrone.base.command.CommandManager;
