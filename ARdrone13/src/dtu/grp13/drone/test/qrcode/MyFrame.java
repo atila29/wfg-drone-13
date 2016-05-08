@@ -4,14 +4,12 @@ import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
-import java.nio.DoubleBuffer;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.print.attribute.standard.RequestingUserName;
 import javax.swing.JFrame;
 
-import org.omg.CORBA.SystemException;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 
@@ -22,6 +20,9 @@ import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.multi.qrcode.QRCodeMultiReader;
 
+import dtu.grp13.drone.core.PositionSystem;
+import dtu.grp13.drone.vector.Vector2;
+
 
 public class MyFrame {
 
@@ -29,18 +30,15 @@ public class MyFrame {
 	private final MyPanel panel;
 	private double horizontalRadians = 1.30899694;
 	private double widthRes = 1280;
-	private double heightRes = 720;
-	private double realDistQR;
 	private List<Double> betaList = new ArrayList<Double>();
 	private double distvRadian;
 	private double disthRadian;
 	private double radius1;
 	private double radius2;
-	private Point center1;
-	private Point center2;
-	private Point p1 = new Point(0.0, 0.0);
-	private Point p2 = new Point(1.0, 2.0);
-	private Point p3 = new Point(0.0, 4.0);
+	private Vector2 center1;
+	private Vector2 center2;
+	private PositionSystem positionSystem;
+
 
 	private double beta;
 	private double b = (widthRes / 2) / (Math.tan(horizontalRadians / 2));
@@ -55,6 +53,11 @@ public class MyFrame {
 		// JPanel which is used for drawing image
 		panel = new MyPanel();
 		frame.getContentPane().add(panel);
+		try {
+		positionSystem = new PositionSystem();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void setVisible(boolean visible) {
@@ -105,26 +108,25 @@ public class MyFrame {
 				else
 					disthRadian = betaList.get(1) + betaList.get(2);
 
-				radius1 = calcRadius(Math.sqrt(5), distvRadian);
-				radius2 = calcRadius(Math.sqrt(5), disthRadian);
-				center1 = calcCenter(p1, p2, Math.sqrt(5), distvRadian);
-				center2 = calcCenter(p3, p2, Math.sqrt(5), distvRadian);
+				Vector2 p1 = positionSystem.getVec(scanResult[0].getText());
+				Vector2 p2 = positionSystem.getVec(scanResult[1].getText());
+				Vector2 p3 = positionSystem.getVec(scanResult[2].getText());
 				
-//				Point centertest1 = new Point(5.995, -1.748);
-//				Point centertest2 = new Point(5.443, 5.467);
-//				calcIntersection(centertest1, centertest2, 6.245 ,5.628);
-
+				double afstand1 = Math.sqrt(Math.pow(p1.getX()-p2.getX(), 2)+Math.pow(p1.getY(), p2.getY()));
+				double afstand2 = Math.sqrt(Math.pow(p2.getX()-p3.getX(), 2)+Math.pow(p2.getY(), p3.getY()));
 				
+				radius1 = calcRadius(afstand1, distvRadian);
+				radius2 = calcRadius(afstand2, disthRadian);
 				
+				center1 = calcCenter(p1, p2, afstand1, distvRadian);
+				center2 = calcCenter(p3, p2, afstand2, distvRadian);
 				
+				calcIntersection(center1, center2, radius1 ,radius2);
+	
 			}
 		} catch (Exception ex) {
-			//System.out.println("-----");
+			System.out.println("-----");
 		}
-		
-		Point centertest1 = new Point(5.995, -1.748);
-		Point centertest2 = new Point(5.443, 5.467);
-		calcIntersection(centertest1, centertest2, 6.245 , 5.628);
 
 		reader.reset();
 		betaList.clear();
@@ -137,34 +139,27 @@ public class MyFrame {
 		return radius;
 	}
 
-	public Point calcCenter(Point p1, Point p2, double afstand, double vinkel) {
-		Point center = new Point();
-		center.x = 0.5 * (((p2.y - p1.y) / Math.sqrt(Math.pow(2, -p2.y + p1.y) + Math.pow(2, -p2.x + p1.x))))
+	public Vector2 calcCenter(Vector2 p1, Vector2 p2, double afstand, double vinkel) {
+		
+		double x = 0.5 * (((p2.getY() - p1.getY()) / Math.sqrt(Math.pow(2, -p2.getY() + p1.getY()) + Math.pow(2, -p2.getX() + p1.getX()))))
 				* (Math.sqrt((Math.pow(2, afstand)) / Math.pow(2, Math.sin(vinkel))) - Math.pow(2, afstand))
-				+ (0.5 * p1.x) + (0.5 * p2.x);
-		center.y = 0.5 * (((p2.x - p1.x) / Math.sqrt(Math.pow(2, -p2.y + p1.y) + Math.pow(2, -p2.x + p1.x))))
+				+ (0.5 * p1.getX()) + (0.5 * p2.getX());
+		double y = 0.5 * (((p2.getX() - p1.getX()) / Math.sqrt(Math.pow(2, -p2.getY() + p1.getY()) + Math.pow(2, -p2.getX() + p1.getX()))))
 				* (Math.sqrt((Math.pow(2, afstand)) / Math.pow(2, Math.sin(vinkel))) - Math.pow(2, afstand))
-				+ (0.5 * p1.y) + (0.5 * p2.y);
-		return center;
+				+ (0.5 * p1.getY()) + (0.5 * p2.getY());
+		return new Vector2(x, y);
 	}
 	
-	public Point calcIntersection(Point center1, Point center2, double radius1, double radius2) {
+	public Point calcIntersection(Vector2 center1, Vector2 center2, double radius1, double radius2) {
 		
-		double d = Math.sqrt(Math.pow(center1.x-center2.x, 2)+Math.pow(center1.y-center2.y, 2));
-		System.out.println("d = " + d);
+		double d = Math.sqrt(Math.pow(center1.getX()-center2.getX(), 2)+Math.pow(center1.getY()-center2.getY(), 2));
 		double t1 = Math.pow(radius1, 2) - Math.pow(radius2, 2) + Math.pow(d, 2);
-		System.out.println("t1 = " + t1);
 		double d1 = t1/(2*d);
-		System.out.println("d1 = " + d1);
 		double h = Math.sqrt(Math.pow(radius1, 2) - Math.pow(d1, 2));
-		System.out.println("h = " + h);
-		double x3 = center1.x + (d1 * (center2.x-center1.x))/d;
-		System.out.println("x3 = " + x3);
-		double y3 = center1.y + (d1 * (center2.y-center1.y))/d;
-		System.out.println("y3 = " + y3);
-		double x4 = x3 + (h * (center2.y - center1.y))/d;
-		double y4 = y3 - (h * (center2.x - center1.x))/d;
-		System.out.println("X cor: " + x4 + " Y cor: " + y4);
+		double x3 = center1.getX() + (d1 * (center2.getX()-center1.getX()))/d;
+		double y3 = center1.getY() + (d1 * (center2.getY()-center1.getY()))/d;
+		double x4 = x3 + (h * (center2.getY() - center1.getY()))/d;
+		double y4 = y3 - (h * (center2.getX() - center1.getX()))/d;
 		return new Point(x4, y4);
 	}
 
