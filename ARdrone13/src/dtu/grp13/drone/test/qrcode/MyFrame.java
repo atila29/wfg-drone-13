@@ -84,6 +84,7 @@ public class MyFrame {
 				reader.reset();
 				return a;
 			}
+			sortResults(scanResult, 0, scanResult.length-1);
 
 			for (int index = 0; index < scanResult.length; index++) {
 
@@ -174,7 +175,41 @@ public class MyFrame {
 		double y4 = y3 - (h * (center2.getX() - center1.getX())) / d;
 		return new Vector2(x4, y4);
 	}
+	
+	public static void sortResults(Result[] array, int fra, int til) {
+		// code from
+		// http://www.programcreek.com/2012/11/quicksort-array-in-java/
+		if (fra >= til){
+			return;
+		}
+		int start = fra + (til - fra) / 2;
+		Result current = array[start];
 
+
+		int i = fra, j = til;
+		while (i <= j) {
+			while (array[i].getResultPoints()[0].getX() < current.getResultPoints()[0].getX()) {
+				i++;
+			}
+			while (array[j].getResultPoints()[0].getX() > current.getResultPoints()[0].getX()) {
+				j--;
+			}
+			if (i <= j) {
+				Result temp = array[i];
+				array[i] = array[j];
+				array[j] = temp;
+				i++;
+				j--;
+			}
+		}
+		if (fra < j){
+			sortResults(array, fra, j);
+		}
+		if (til > i){
+			sortResults(array, i, til);
+		}
+	}
+	
 	public static Image toBufferedImage(Mat m) {
 		// Code from
 		// http://stackoverflow.com/questions/15670933/opencv-java-load-image-to-gui
