@@ -6,12 +6,12 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JFrame;
 
 import org.opencv.core.Mat;
-import org.opencv.core.Point;
 
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.LuminanceSource;
@@ -22,7 +22,6 @@ import com.google.zxing.multi.qrcode.QRCodeMultiReader;
 
 import dtu.grp13.drone.core.PositionSystem;
 import dtu.grp13.drone.vector.Vector2;
-
 
 public class MyFrame {
 
@@ -37,8 +36,9 @@ public class MyFrame {
 	private double radius2;
 	private Vector2 center1;
 	private Vector2 center2;
+	private Vector2 intersection;
 	private PositionSystem positionSystem;
-
+	private List<String> sortedResult = new ArrayList<String>();
 
 	private double beta;
 	private double b = (widthRes / 2) / (Math.tan(horizontalRadians / 2));
@@ -54,7 +54,7 @@ public class MyFrame {
 		panel = new MyPanel();
 		frame.getContentPane().add(panel);
 		try {
-		positionSystem = new PositionSystem();
+			positionSystem = new PositionSystem();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -79,53 +79,62 @@ public class MyFrame {
 		QRCodeMultiReader reader = new QRCodeMultiReader();
 		try {
 			Result[] scanResult = reader.decodeMultiple(bitmap);
+			System.out.println(scanResult.length);
 			if (scanResult.length < 3) {
 				reader.reset();
 				return a;
 			}
+
 			for (int index = 0; index < scanResult.length; index++) {
-				System.out.println(scanResult[index].getText());
-				if (scanResult[index].getResultPoints()[0].getX() > 640)
+
+				if (scanResult[index].getResultPoints()[0].getX() > 640) {
 					t = scanResult[index].getResultPoints()[0].getX() - 640;
-				else
+				} else {
 					t = 640 - scanResult[index].getResultPoints()[0].getX();
+				}
+
 				beta = Math.atan(t / b);
 				betaList.add(beta);
-				// System.out.println("Vinklen mellem midten og qr kode " +
-				// (index+1) + " er: " + beta);
+
 			}
 			if (scanResult[1].getResultPoints()[0].getX() > 640) {
 				disthRadian = betaList.get(2) - betaList.get(1);
-				if (scanResult[0].getResultPoints()[0].getX() > 640)
+				if (scanResult[0].getResultPoints()[0].getX() > 640) {
 					distvRadian = betaList.get(2) - betaList.get(0);
-				else
+				} else {
 					distvRadian = betaList.get(2) + betaList.get(0);
+				}
 
 			} else if (scanResult[1].getResultPoints()[0].getX() < 640) {
 				distvRadian = betaList.get(0) - betaList.get(1);
-				if (scanResult[2].getResultPoints()[0].getX() < 640)
+				if (scanResult[2].getResultPoints()[0].getX() < 640) {
 					disthRadian = betaList.get(1) - betaList.get(2);
-				else
+				} else {
 					disthRadian = betaList.get(1) + betaList.get(2);
+				}
 
 				Vector2 p1 = positionSystem.getVec(scanResult[0].getText());
 				Vector2 p2 = positionSystem.getVec(scanResult[1].getText());
 				Vector2 p3 = positionSystem.getVec(scanResult[2].getText());
-				
-				double afstand1 = Math.sqrt(Math.pow(p1.getX()-p2.getX(), 2)+Math.pow(p1.getY(), p2.getY()));
-				double afstand2 = Math.sqrt(Math.pow(p2.getX()-p3.getX(), 2)+Math.pow(p2.getY(), p3.getY()));
-				
+
+				double afstand1 = Math.sqrt(Math.pow(p1.getX() - p2.getX(), 2) + Math.pow(p1.getY() - p2.getY(), 2));
+				double afstand2 = Math.sqrt(Math.pow(p2.getX() - p3.getX(), 2) + Math.pow(p2.getY() - p3.getY(), 2));
+
 				radius1 = calcRadius(afstand1, distvRadian);
 				radius2 = calcRadius(afstand2, disthRadian);
-				
+
 				center1 = calcCenter(p1, p2, afstand1, distvRadian);
 				center2 = calcCenter(p3, p2, afstand2, distvRadian);
-				
-				calcIntersection(center1, center2, radius1 ,radius2);
-	
+
+				intersection = calcIntersection(center1, center2, radius1, radius2);
+				System.out.println("--" + scanResult[0] + "--");
+				System.out.println("--" + scanResult[1] + "--");
+				System.out.println("--" + scanResult[2] + "--");
+				System.out.println("X cor: " + intersection.getX() + " Y Cor: " + intersection.getY());
+
 			}
 		} catch (Exception ex) {
-			System.out.println("-----");
+			ex.printStackTrace();
 		}
 
 		reader.reset();
@@ -140,27 +149,30 @@ public class MyFrame {
 	}
 
 	public Vector2 calcCenter(Vector2 p1, Vector2 p2, double afstand, double vinkel) {
-		
-		double x = 0.5 * (((p2.getY() - p1.getY()) / Math.sqrt(Math.pow(2, -p2.getY() + p1.getY()) + Math.pow(2, -p2.getX() + p1.getX()))))
-				* (Math.sqrt((Math.pow(2, afstand)) / Math.pow(2, Math.sin(vinkel))) - Math.pow(2, afstand))
-				+ (0.5 * p1.getX()) + (0.5 * p2.getX());
-		double y = 0.5 * (((p2.getX() - p1.getX()) / Math.sqrt(Math.pow(2, -p2.getY() + p1.getY()) + Math.pow(2, -p2.getX() + p1.getX()))))
-				* (Math.sqrt((Math.pow(2, afstand)) / Math.pow(2, Math.sin(vinkel))) - Math.pow(2, afstand))
-				+ (0.5 * p1.getY()) + (0.5 * p2.getY());
+
+		double x = 0.5 * (p2.getY() - p1.getY())
+				/ Math.sqrt(Math.pow(-p2.getY() + p1.getY(), 2) + Math.pow(-p2.getX() + p1.getX(), 2))
+				* Math.sqrt(Math.pow(afstand, 2) / Math.pow(Math.sin(vinkel), 2) - Math.pow(afstand, 2))
+				+ 0.5 * p1.getX() + (0.5 * p2.getX());
+		double y = 0.5 * (p2.getX() - p1.getX())
+				/ Math.sqrt(Math.pow(-p2.getY() + p1.getY(), 2) + Math.pow(-p2.getX() + p1.getX(), 2))
+				* Math.sqrt(Math.pow(afstand, 2) / Math.pow(Math.sin(vinkel), 2) - Math.pow(afstand, 2))
+				+ 0.5 * p1.getY() + (0.5 * p2.getY());
 		return new Vector2(x, y);
 	}
-	
-	public Point calcIntersection(Vector2 center1, Vector2 center2, double radius1, double radius2) {
-		
-		double d = Math.sqrt(Math.pow(center1.getX()-center2.getX(), 2)+Math.pow(center1.getY()-center2.getY(), 2));
+
+	public Vector2 calcIntersection(Vector2 center1, Vector2 center2, double radius1, double radius2) {
+
+		double d = Math
+				.sqrt(Math.pow(center1.getX() - center2.getX(), 2) + Math.pow(center1.getY() - center2.getY(), 2));
 		double t1 = Math.pow(radius1, 2) - Math.pow(radius2, 2) + Math.pow(d, 2);
-		double d1 = t1/(2*d);
+		double d1 = t1 / (2 * d);
 		double h = Math.sqrt(Math.pow(radius1, 2) - Math.pow(d1, 2));
-		double x3 = center1.getX() + (d1 * (center2.getX()-center1.getX()))/d;
-		double y3 = center1.getY() + (d1 * (center2.getY()-center1.getY()))/d;
-		double x4 = x3 + (h * (center2.getY() - center1.getY()))/d;
-		double y4 = y3 - (h * (center2.getX() - center1.getX()))/d;
-		return new Point(x4, y4);
+		double x3 = center1.getX() + (d1 * (center2.getX() - center1.getX())) / d;
+		double y3 = center1.getY() + (d1 * (center2.getY() - center1.getY())) / d;
+		double x4 = x3 + (h * (center2.getY() - center1.getY())) / d;
+		double y4 = y3 - (h * (center2.getX() - center1.getX())) / d;
+		return new Vector2(x4, y4);
 	}
 
 	public static Image toBufferedImage(Mat m) {
