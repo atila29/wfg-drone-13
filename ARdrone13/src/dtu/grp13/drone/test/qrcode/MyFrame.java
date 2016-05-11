@@ -151,14 +151,10 @@ public class MyFrame {
 
 	public Vector2 calcCenter(Vector2 p1, Vector2 p2, double afstand, double vinkel) {
 
-		double x = 0.5 * (p2.getY() - p1.getY())
-				/ Math.sqrt(Math.pow(-p2.getY() + p1.getY(), 2) + Math.pow(-p2.getX() + p1.getX(), 2))
-				* Math.sqrt(Math.pow(afstand, 2) / Math.pow(Math.sin(vinkel), 2) - Math.pow(afstand, 2))
-				+ 0.5 * p1.getX() + (0.5 * p2.getX());
-		double y = 0.5 * (p2.getX() - p1.getX())
-				/ Math.sqrt(Math.pow(-p2.getY() + p1.getY(), 2) + Math.pow(-p2.getX() + p1.getX(), 2))
-				* Math.sqrt(Math.pow(afstand, 2) / Math.pow(Math.sin(vinkel), 2) - Math.pow(afstand, 2))
-				+ 0.5 * p1.getY() + (0.5 * p2.getY());
+		double var0 = Math.sqrt(Math.pow(Math.abs(-p2.getY()+p1.getY()), 2) + Math.pow(Math.abs(-p2.getX()+p1.getX()), 2));
+		double var1 = Math.sqrt(Math.pow(afstand, 2)/Math.pow(Math.sin(vinkel), 2) - Math.pow(afstand, 2));
+		double x = 0.5 * (p2.getY() - p1.getY())/var0 * var1 + (0.5 * p1.getX()) + (0.5 * p2.getX());
+		double y = 0.5 * (p2.getX() - p1.getX())/var0 * var1 + (0.5 * p1.getY()) + (0.5 * p2.getY());
 		return new Vector2(x, y);
 	}
 
