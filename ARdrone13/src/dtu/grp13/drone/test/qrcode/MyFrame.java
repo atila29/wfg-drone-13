@@ -7,13 +7,18 @@ import java.awt.image.DataBufferByte;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JFrame;
 
 import org.opencv.core.Mat;
+import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
 
 import com.google.zxing.BinaryBitmap;
+import com.google.zxing.DecodeHintType;
 import com.google.zxing.LuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
@@ -73,12 +78,17 @@ public class MyFrame {
 	}
 
 	public Mat editFrame(Mat a) {
+		//Mat dst = new Mat();
+		//Imgproc.resize(a, dst, new Size(1480, 720));
 		Image i = toBufferedImage(a);
 		LuminanceSource source = new BufferedImageLuminanceSource((BufferedImage) i);
 		BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
 		QRCodeMultiReader reader = new QRCodeMultiReader();
+		
 		try {
-			Result[] scanResult = reader.decodeMultiple(bitmap);
+			Map<DecodeHintType,Object> hintsMap = new EnumMap<DecodeHintType, Object>(DecodeHintType.class);
+            hintsMap.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+			Result[] scanResult = reader.decodeMultiple(bitmap, hintsMap);
 			System.out.println(scanResult.length);
 			if (scanResult.length < 3) {
 				reader.reset();

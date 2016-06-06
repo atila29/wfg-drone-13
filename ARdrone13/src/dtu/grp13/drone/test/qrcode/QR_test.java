@@ -27,6 +27,7 @@ public class QR_test {
 		MyFrame frame = new MyFrame();
 		frame.setVisible(true);
 		drone.getCommandManager().setVideoChannel(VideoChannel.HORI);
+		
 		drone.getVideoManager().addImageListener(new ImageListener() {
 			
 			@Override
