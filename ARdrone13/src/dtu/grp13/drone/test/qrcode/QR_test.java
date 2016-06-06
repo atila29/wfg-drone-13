@@ -10,6 +10,7 @@ import org.opencv.videoio.VideoCapture;
 
 import de.yadrone.base.ARDrone;
 import de.yadrone.base.command.VideoChannel;
+import de.yadrone.base.command.VideoCodec;
 import de.yadrone.base.video.ImageListener;
 
 public class QR_test {
@@ -26,7 +27,9 @@ public class QR_test {
 		
 		MyFrame frame = new MyFrame();
 		frame.setVisible(true);
+		drone.getCommandManager().setVideoCodec(VideoCodec.H264_720P);
 		drone.getCommandManager().setVideoChannel(VideoChannel.HORI);
+		
 		
 		drone.getVideoManager().addImageListener(new ImageListener() {
 			
