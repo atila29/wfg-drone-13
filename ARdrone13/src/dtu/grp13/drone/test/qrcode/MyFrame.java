@@ -125,8 +125,10 @@ public class MyFrame {
 				radius2 = calcRadius(afstand2, disthRadian);
 
 				center1 = calcCenter(p1, p2, afstand1, distvRadian);
-				center2 = calcCenter(p3, p2, afstand2, distvRadian);
-
+				center2 = calcCenter(p2, p3, afstand2, disthRadian);
+				System.out.println("C1x: " + center1.getX() + " C1y: " + center1.getY());
+				System.out.println("C2x: " + center2.getX() + " C2y: " + center2.getY());
+				
 				intersection = calcIntersection(center1, center2, radius1, radius2);
 				System.out.println("--" + scanResult[0] + "--");
 				System.out.println("--" + scanResult[1] + "--");
@@ -154,7 +156,7 @@ public class MyFrame {
 		double var0 = Math.sqrt(Math.pow(Math.abs(-p2.getY()+p1.getY()), 2) + Math.pow(Math.abs(-p2.getX()+p1.getX()), 2));
 		double var1 = Math.sqrt(Math.pow(afstand, 2)/Math.pow(Math.sin(vinkel), 2) - Math.pow(afstand, 2));
 		double x = 0.5 * (p2.getY() - p1.getY())/var0 * var1 + (0.5 * p1.getX()) + (0.5 * p2.getX());
-		double y = 0.5 * (p2.getX() - p1.getX())/var0 * var1 + (0.5 * p1.getY()) + (0.5 * p2.getY());
+		double y = 0.5 * (-p2.getX() + p1.getX())/var0 * var1 + (0.5 * p1.getY()) + (0.5 * p2.getY());
 		return new Vector2(x, y);
 	}
 
