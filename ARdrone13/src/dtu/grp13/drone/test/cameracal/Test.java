@@ -108,12 +108,6 @@ public class Test {
 			public void imageUpdated(BufferedImage arg0) {
 				// TODO Auto-generated method stub
 				
-
-
-				
-
-
-				
 				image = bufferedImageToMat(arg0);
 				frame.render(image);
 			}
