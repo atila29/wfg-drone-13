@@ -24,6 +24,7 @@ import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.multi.qrcode.QRCodeMultiReader;
+import com.google.zxing.qrcode.QRCodeReader;
 
 import dtu.grp13.drone.core.PositionSystem;
 import dtu.grp13.drone.vector.Vector2;
@@ -83,14 +84,14 @@ public class MyFrame {
 		Image i = toBufferedImage(a);
 		LuminanceSource source = new BufferedImageLuminanceSource((BufferedImage) i);
 		BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-		QRCodeMultiReader reader = new QRCodeMultiReader();
+		QRCodeReader reader = new QRCodeReader();
 		
 		try {
 			Map<DecodeHintType,Object> hintsMap = new EnumMap<DecodeHintType, Object>(DecodeHintType.class);
             hintsMap.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
-			Result[] scanResult = reader.decodeMultiple(bitmap, hintsMap);
-			System.out.println(scanResult.length);
-			if (scanResult.length < 3) {
+			Result scanResult = reader.decode(bitmap);
+			System.out.println(scanResult.getText());
+			if (scanResult.getText().equals("")) {
 				reader.reset();
 				return a;
 			}
