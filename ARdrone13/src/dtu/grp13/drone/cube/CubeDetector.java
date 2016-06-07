@@ -19,7 +19,7 @@ public class CubeDetector {
 	
 	public List<Rect> findRects(Mat src, Mat dst) {
 		List<MatOfPoint> edges = new ArrayList<MatOfPoint>();
-		Imgproc.findContours(src, edges, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);;
+		Imgproc.findContours(src, edges, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
 		List<Rect> ret = new ArrayList<Rect>();
 		for(int i = 0; i < edges.size(); i++) {
 			Rect rect = bindRects(edges.get(i));
@@ -29,6 +29,19 @@ public class CubeDetector {
 			}
 		}
 		return ret;
+	}
+	
+	public List<Rect> isolateinterestingRects(List<Rect> rects, double aRatio){
+		List<Rect> QR = new ArrayList<Rect>();
+		int currentRatio = 0;
+		for(int i = 0; i < rects.size(); i++) {
+			currentRatio = rects.get(i).height/rects.get(i).width;
+			if(aRatio-0.1 < currentRatio && currentRatio < aRatio+0.1){
+				QR.add(rects.get(i));
+				System.out.println(QR.size());
+			}
+		}
+		return QR;
 	}
 	
 	public List<Rect> isolateInterestingCubes(List<Rect> rects, int dif) {

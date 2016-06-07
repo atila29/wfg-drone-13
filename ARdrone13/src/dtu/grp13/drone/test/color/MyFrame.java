@@ -69,10 +69,11 @@ public class MyFrame {
 		Mat grey = new Mat();
 		Imgproc.cvtColor(currentFrame, grey, Imgproc.COLOR_BGRA2GRAY); 
 		Imgproc.GaussianBlur(grey, grey, new Size(3,3),0,0);
-		Imgproc.Canny(grey, grey, 5, 60);
+		Imgproc.Canny(grey, grey, 5, 50);
 		CubeDetector c = new CubeDetector();
 		List<Rect> rects = c.findRects(grey, img);
 		c.findCubes(currentFrame, img, rects);
+		c.isolateinterestingRects(rects, 1.41);
 		
 //		Mat hsv_cf = new Mat();
 //		Mat threshold = new Mat();
