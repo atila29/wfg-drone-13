@@ -8,22 +8,14 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
-import org.bytedeco.javacpp.opencv_core.CvScalar;
-import org.bytedeco.javacpp.opencv_core.IplImage;
-import org.jfree.data.time.Hour;
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
+import org.opencv.features2d.FeatureDetector;
+import org.opencv.features2d.Features2d;
 import org.opencv.imgproc.Imgproc;
-import org.opencv.imgproc.Moments;
 import org.opencv.video.BackgroundSubtractorMOG2;
-import org.bytedeco.javacv.Java2DFrameConverter;
-import org.bytedeco.javacv.OpenCVFrameConverter;
-
-import com.xuggle.xuggler.Converter;
 
 import dtu.grp13.drone.cube.CubeDetector;
 
@@ -71,28 +63,18 @@ public class MyFrame {
 		Imgproc.GaussianBlur(grey, grey, new Size(3,3),0,0);
 		Imgproc.Canny(grey, grey, 5, 50);
 		CubeDetector c = new CubeDetector();
-		List<Rect> rects = c.findRects(grey, img);
-		c.findCubes(currentFrame, img, rects);
-		c.isolateinterestingRects(rects, 1.41);
-		
+//		List<Rect> rects = c.findRects(grey, img);
+//		c.findCubes(currentFrame, img, rects);
+//		c.isolateinterestingRects(rects, 1.41);
+		//c.findCubeColor(currentFrame, img);
+		c.findSpecificCubeColor(currentFrame, img, new Scalar(20, 20, 20), new Scalar(50, 255, 50));
 //		Mat hsv_cf = new Mat();
 //		Mat threshold = new Mat();
 //		Imgproc.GaussianBlur(currentFrame, currentFrame, new Size(3, 3), 0);
 //		Imgproc.cvtColor(currentFrame, hsv_cf, Imgproc.COLOR_BGR2HSV);
 //		Core.inRange(hsv_cf, new Scalar(160, 100, 100),
 //				new Scalar(179, 255, 255), threshold);
-		
-		
-		//currentFrame = threshold;
 
-		// color range of red like color
-		// final CvScalar min = new CvScalar(0, 0, 130, 0);//BGR-A
-		// final CvScalar max = new CvScalar(140, 110, 255, 0);//BGR-A
-		//
-		// IplImage img;
-		// OpenCVFrameConverter.ToIplImage converter = new
-		// OpenCVFrameConverter.ToIplImage();
-		// img = converter.convert(frame)
 		// LOGIK END
 
 		return img;
