@@ -4,6 +4,7 @@ import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -76,7 +77,14 @@ public class MyFrame {
 		Filterable green = new Filterable() {
 			@Override
 			public void process(Mat src, Mat dst) {
-				Core.inRange(src, new Scalar(0, 70, 0), new Scalar(85, 255, 100), dst);
+				Mat temp = src.clone();
+				List<Mat> listOfMats = new ArrayList<>();
+				Core.inRange(src, new Scalar(0, 70, 0), new Scalar(70, 255, 100), temp);
+				//Core.add(temp, dst, dst);
+				listOfMats.add(temp.clone());
+				Core.inRange(src, new Scalar(0, 40, 0), new Scalar(0, 255, 0), temp);
+				listOfMats.add(temp.clone());
+				Core.merge(listOfMats, dst);
 			}
 		};
 		c.findSpecificCubeColor(currentFrame, img, green);
