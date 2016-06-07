@@ -31,9 +31,19 @@ public class CubeDetector {
 		return ret;
 	}
 	
+	public List<Rect> isolateInterestingCubes(List<Rect> rects, int dif) {
+		List<Rect> ret = new ArrayList<Rect>();
+		for(int i = 0; i < rects.size(); i++) {
+			if(rects.get(i).height > rects.get(i).width-dif && rects.get(i).height < rects.get(i).width+dif){
+				ret.add(rects.get(i));
+			}
+		}
+		return ret;
+	}
+	
 	public void findCubes(Mat src, Mat dst, List<Rect> rects) {
 		for(int i = 0; i < rects.size(); i++) {
-			if(rects.get(i).height > rects.get(i).width-2 && rects.get(i).height < rects.get(i).width+2) {
+			if(rects.get(i).height > rects.get(i).width-3 && rects.get(i).height < rects.get(i).width+3) {
 				Mat c = src.submat(rects.get(i));
 				int redCount = 0;
 				int greenCount = 0;
@@ -43,18 +53,18 @@ public class CubeDetector {
 					for (int y = 0; y < c.rows();y+=5) {
 						double[] point = c.get(y, x);
 						// RGB[] 0 = red, 1 = green, 2 = blue 
-						if(point[0] > 70 && point[1] < 50 && point[2] <50)
+						if(point[0] > 60 && point[1] < 50 && point[2] <50)
 							redCount ++;
 						if(point[0] < 50 && point[1] > 80 && point[2] < 50) {
 							greenCount ++;
 						}
 					}
 				}
-				String text = "is none";
-				if(totalCount*0.69 < redCount) {
-					text = "is red";
-				} else if (totalCount*0.69 < greenCount) {
-					text = "is green";
+				String text = "NaN";
+				if(totalCount*0.6 < redCount) {
+					text = "red";
+				} else if (totalCount*0.6 < greenCount) {
+					text = "green";
 				} 
 				Imgproc.putText(dst, text, rects.get(i).tl(), Core.FONT_HERSHEY_PLAIN, 1, textColor,2);	
 			}
