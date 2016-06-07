@@ -78,13 +78,7 @@ public class MyFrame {
 		Filterable green = new Filterable() {
 			@Override
 			public void process(Mat src, Mat dst) {
-				Mat temp = src.clone();
-				dst = src.clone();
-				List<Mat> listOfMats = new ArrayList<>();
-				Core.inRange(src, new Scalar(0, 70, 0), new Scalar(70, 255, 100), temp);
-				dst.push_back(temp.clone());
-				Core.inRange(src, new Scalar(0, 40, 0), new Scalar(0, 255, 0), temp);
-				dst.push_back(temp.clone());
+				Core.inRange(src, new Scalar(0, 70, 0), new Scalar(85, 255, 100), dst);
 			}
 		};
 		c.findSpecificCubeColor(currentFrame, img, green);
