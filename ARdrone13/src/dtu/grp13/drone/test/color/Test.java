@@ -1,4 +1,4 @@
-package dtu.grp13.drone.colortest;
+package dtu.grp13.drone.test.color;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
