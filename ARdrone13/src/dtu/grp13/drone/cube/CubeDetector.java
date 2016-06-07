@@ -52,8 +52,8 @@ public class CubeDetector {
 				for(int x = 0 ; x < c.cols();x+=5) {
 					for (int y = 0; y < c.rows();y+=5) {
 						double[] point = c.get(y, x);
-						// RGB[] 0 = red, 1 = green, 2 = blue 
-						if(point[0] > 60 && point[1] < 50 && point[2] <50)
+						// BGR[] 0 : blue, 1: green, 2: red
+						if(point[0] < 50 && point[1] < 50 && point[2] > 80)
 							redCount ++;
 						if(point[0] < 50 && point[1] > 80 && point[2] < 50) {
 							greenCount ++;
