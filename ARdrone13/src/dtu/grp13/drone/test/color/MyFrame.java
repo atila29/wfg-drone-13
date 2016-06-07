@@ -10,6 +10,7 @@ import java.util.List;
 import javax.swing.JFrame;
 
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
@@ -78,13 +79,12 @@ public class MyFrame {
 			@Override
 			public void process(Mat src, Mat dst) {
 				Mat temp = src.clone();
+				dst = src.clone();
 				List<Mat> listOfMats = new ArrayList<>();
 				Core.inRange(src, new Scalar(0, 70, 0), new Scalar(70, 255, 100), temp);
-				//Core.add(temp, dst, dst);
-				listOfMats.add(temp.clone());
+				dst.push_back(temp.clone());
 				Core.inRange(src, new Scalar(0, 40, 0), new Scalar(0, 255, 0), temp);
-				listOfMats.add(temp.clone());
-				Core.merge(listOfMats, dst);
+				dst.push_back(temp.clone());
 			}
 		};
 		c.findSpecificCubeColor(currentFrame, img, green);
