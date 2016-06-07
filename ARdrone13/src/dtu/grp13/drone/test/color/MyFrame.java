@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
@@ -18,6 +19,7 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.video.BackgroundSubtractorMOG2;
 
 import dtu.grp13.drone.cube.CubeDetector;
+import dtu.grp13.drone.cube.Filterable;
 
 public class MyFrame {
 
@@ -71,7 +73,14 @@ public class MyFrame {
 		//Red
 		//c.findSpecificCubeColor(currentFrame, img, new Scalar(0, 0, 220), new Scalar(110, 110, 255));
 		//Green
-		c.findSpecificCubeColor(currentFrame, img, new Scalar(0, 70, 0), new Scalar(85, 255, 100));
+		Filterable green = new Filterable() {
+			@Override
+			public void process(Mat src, Mat dst) {
+				Core.inRange(src, new Scalar(v0), new Scalar(), dst);
+				
+			}
+		};
+		c.findSpecificCubeColor(currentFrame, img, green);
 		
 //		Mat hsv_cf = new Mat();
 //		Mat threshold = new Mat();

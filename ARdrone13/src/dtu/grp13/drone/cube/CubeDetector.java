@@ -89,40 +89,7 @@ public class CubeDetector {
 		}
 	}
 	
-	public Scalar RGB2HSV(Scalar src) {
-		double mR = src.val[0]/255;
-		double mG = src.val[1]/255;
-		double mB = src.val[2]/255;
-		Double[] mC = {mR, mG, mB};
-		
-		double max = Collections.max(Arrays.asList(mC));
-		double min = Collections.min(Arrays.asList(mC));
-		double delta = max - min;
-		
-		double hue = 0;
-		
-		if(delta == 0) {
-			// nothing lol
-		} else if(max == mR) {
-			hue = 60 * (((mG - mB)/delta)%6);
-		} else if(max == mG) {
-			hue = 60 * ((mB-mR)/delta)+2;
-		} else if(max == mB) {
-			hue = 60*((mR-mG)/delta)+4;
-		}
-		
-		double saturation = 0;
-		
-		if(max== 0) {
-			// nothing lol
-		} else {
-			saturation = delta / max;
-		}
-		
-		return new Scalar(hue, saturation, max);
-		
-	}
-	
+
 	//	xtra params evt: Scalar col, int margin
 	public Scalar findCubeColor(Mat src, Mat dst) {
 		FeatureDetector fd = FeatureDetector.create(FeatureDetector.PYRAMID_SIMPLEBLOB);
@@ -147,14 +114,14 @@ public class CubeDetector {
 		
 		return new Scalar(val);
 	}
-	public Scalar findSpecificCubeColor(Mat src, Mat dst, Scalar lwcol, Scalar upcol) {
+	
+	public void findSpecificCubeColor(Mat src, Mat dst, Filterable filter) {
 //		FeatureDetector fd = FeatureDetector.create(FeatureDetector.PYRAMID_SIMPLEBLOB);
 //		MatOfKeyPoint keypoints = new MatOfKeyPoint();
 //		fd.detect(src, keypoints);
 		List<Scalar> colOfPoints = new ArrayList<Scalar>();
 		
 		double blue = 0, green = 0, red = 0;
-		int n = 0;
 		for(int x = 0 ; x < src.cols(); x+=5) {
 			for (int y = 0; y < src.rows(); y+=5) {
 				double[] point = src.get(y, x);
@@ -165,11 +132,18 @@ public class CubeDetector {
 				colOfPoints.add(new Scalar(point));
 			}
 		}
-		Core.inRange(src, lwcol, upcol, dst);
+		Mat d = src.clone();
+		//Core.inRange(src, lwcol, upcol, d);
+		filter.process(src, dst);
 		
-		double[] val = {(blue/n) , (green/n), (red/n)};
+		List<Rect> rects = findRects(d, new Mat());
 		
-		return new Scalar(val);
+		for(int i = 0; i < rects.size(); i++) {
+			if(rects.get(i).height > rects.get(i).width-3 && rects.get(i).height < rects.get(i).width+3) {
+				Imgproc.putText(dst, "denne er green", rects.get(i).tl(), Core.FONT_HERSHEY_PLAIN, 1, textColor,2);
+				Imgproc.rectangle(dst, rects.get(i).tl(), rects.get(i).br(), new Scalar(255, 0, 0));
+			}
+		}
 	}
 	
 	public Rect bindRects(MatOfKeyPoint points) {
