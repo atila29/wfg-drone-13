@@ -67,7 +67,12 @@ public class MyFrame {
 //		c.findCubes(currentFrame, img, rects);
 //		c.isolateinterestingRects(rects, 1.41);
 		//c.findCubeColor(currentFrame, img);
-		c.findSpecificCubeColor(currentFrame, img, new Scalar(20, 20, 20), new Scalar(50, 255, 50));
+		
+		//Red
+		//c.findSpecificCubeColor(currentFrame, img, new Scalar(0, 0, 220), new Scalar(110, 110, 255));
+		//Green
+		c.findSpecificCubeColor(currentFrame, img, new Scalar(0, 70, 0), new Scalar(85, 255, 100));
+		
 //		Mat hsv_cf = new Mat();
 //		Mat threshold = new Mat();
 //		Imgproc.GaussianBlur(currentFrame, currentFrame, new Size(3, 3), 0);
