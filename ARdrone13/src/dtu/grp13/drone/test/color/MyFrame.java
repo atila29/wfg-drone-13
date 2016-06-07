@@ -77,7 +77,6 @@ public class MyFrame {
 			@Override
 			public void process(Mat src, Mat dst) {
 				Core.inRange(src, new Scalar(0, 70, 0), new Scalar(85, 255, 100), dst);
-				
 			}
 		};
 		c.findSpecificCubeColor(currentFrame, img, green);
