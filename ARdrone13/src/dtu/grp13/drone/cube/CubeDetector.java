@@ -134,7 +134,7 @@ public class CubeDetector {
 		}
 		Mat d = src.clone();
 		//Core.inRange(src, lwcol, upcol, d);
-		filter.process(src, dst);
+		filter.process(src, d);
 		
 		List<Rect> rects = findRects(d, new Mat());
 		
