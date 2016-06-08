@@ -35,8 +35,8 @@ public class FrameProcess extends AbstractProcess {
 			}
 		};
 		
-		c.findSpecificCubeColor(currentFrame, img, filter);
-
+		//c.findSpecificCubeColor(currentFrame, img, filter);
+		c.getQr(currentFrame, img);
 		// LOGIK END
 
 		return img;
