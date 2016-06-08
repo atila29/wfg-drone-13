@@ -20,10 +20,13 @@ import org.opencv.features2d.Features2d;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.video.BackgroundSubtractorMOG2;
 
+import de.yadrone.base.ARDrone;
+import dtu.grp13.drone.core.ImageListenerThread;
 import dtu.grp13.drone.cube.CubeDetector;
 import dtu.grp13.drone.cube.Filterable;
 
 public class MyFrame {
+	
 
 	private final JFrame frame;
 	private final MyPanel panel;
@@ -32,7 +35,7 @@ public class MyFrame {
 	private Mat currentFrame;
 	private Mat lastFrame;
 	private BackgroundSubtractorMOG2 bsMog;
-	int treshold = 60; // vigtig kommentar
+	private int treshold = 60; // vigtig kommentar
 
 	public MyFrame() {
 		// JFrame which holds JPanel

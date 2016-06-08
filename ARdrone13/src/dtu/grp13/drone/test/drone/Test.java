@@ -28,9 +28,11 @@ import org.opencv.videoio.VideoCapture;
 
 //import com.sun.javafx.css.CalculatedValue;
 
+
 import de.yadrone.base.ARDrone;
 import de.yadrone.base.command.CommandManager;
 import de.yadrone.base.command.VideoChannel;
+import de.yadrone.base.command.VideoCodec;
 import de.yadrone.base.video.ImageListener;
 import dtu.grp13.drone.core.CommandThread;
 import dtu.grp13.drone.core.ImageListenerThread;
@@ -185,7 +187,9 @@ public class Test {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
 		Test test = new Test();
+		test.drone.getCommandManager().setVideoCodec(VideoCodec.H264_360P_SLRS);
 		test.drone.getCommandManager().setVideoChannel(VideoChannel.VERT);
+		
 		test.frame.setOnClickListenerForStart(new ActionListener() {
 			
 			@Override
