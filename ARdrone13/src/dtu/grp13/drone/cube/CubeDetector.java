@@ -134,7 +134,7 @@ public class CubeDetector {
 		}
 		Mat d = src.clone();
 		//Core.inRange(src, lwcol, upcol, d);
-		Imgproc.cvtColor(d, d, Imgproc.COLOR_BGR2HSV);
+		//Imgproc.cvtColor(d, d, Imgproc.COLOR_HSV2RGB);
 		filter.process(d, d);
 		
 		List<Rect> rects = findRects(d, new Mat());
