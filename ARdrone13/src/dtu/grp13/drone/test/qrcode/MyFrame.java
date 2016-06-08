@@ -6,7 +6,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +13,7 @@ import java.util.Map;
 import javax.swing.JFrame;
 
 import org.opencv.core.Mat;
-import org.opencv.core.Size;
+import org.opencv.core.Rect;
 import org.opencv.imgproc.Imgproc;
 
 import com.google.zxing.BinaryBitmap;
@@ -23,10 +22,10 @@ import com.google.zxing.LuminanceSource;
 import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
-import com.google.zxing.multi.qrcode.QRCodeMultiReader;
 import com.google.zxing.qrcode.QRCodeReader;
 
 import dtu.grp13.drone.core.PositionSystem;
+import dtu.grp13.drone.cube.CubeDetector;
 import dtu.grp13.drone.vector.Vector2;
 
 public class MyFrame {
@@ -45,6 +44,7 @@ public class MyFrame {
 	private Vector2 intersection;
 	private PositionSystem positionSystem;
 	private List<String> sortedResult = new ArrayList<String>();
+	private CubeDetector cubeDetector;
 
 	private double beta;
 	private double b = (widthRes / 2) / (Math.tan(horizontalRadians / 2));
@@ -52,6 +52,7 @@ public class MyFrame {
 
 	public MyFrame() {
 		// JFrame which holds JPanel
+		cubeDetector = new CubeDetector();
 		frame = new JFrame();
 		frame.getContentPane().setLayout(new FlowLayout());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -78,75 +79,82 @@ public class MyFrame {
 		frame.pack();
 	}
 
-	public Mat editFrame(Mat a) {
-		//Mat dst = new Mat();
+	public Mat editFrame(Mat src) {
+		Mat dst = src.clone();
 		//Imgproc.resize(a, dst, new Size(1480, 720));
-		Image i = toBufferedImage(a);
+		Image i = toBufferedImage(src);
 		LuminanceSource source = new BufferedImageLuminanceSource((BufferedImage) i);
 		BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
 		QRCodeReader reader = new QRCodeReader();
+		Mat grey = new Mat();
+		Imgproc.cvtColor(src, grey, Imgproc.COLOR_BGR2GRAY);
+		List<Rect> rectList = cubeDetector.findRects(grey, dst);
+		cubeDetector.isolateinterestingRects(rectList, 1.41);
+
 		
 		try {
 			Map<DecodeHintType,Object> hintsMap = new EnumMap<DecodeHintType, Object>(DecodeHintType.class);
             hintsMap.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
 			Result scanResult = reader.decode(bitmap);
-			System.out.println(scanResult.getText());
+			
+						System.out.println(scanResult.getText());
+			
 			if (scanResult.getText().equals("")) {
 				reader.reset();
-				return a;
+				return dst;
 			}
-			sortResults(scanResult, 0, scanResult.length-1);
-
-			for (int index = 0; index < scanResult.length; index++) {
-
-				if (scanResult[index].getResultPoints()[0].getX() > 640) {
-					t = scanResult[index].getResultPoints()[0].getX() - 640;
-				} else {
-					t = 640 - scanResult[index].getResultPoints()[0].getX();
-				}
-
-				beta = Math.atan(t / b);
-				betaList.add(beta);
-
-			}
-			if (scanResult[1].getResultPoints()[0].getX() > 640) {
-				disthRadian = betaList.get(2) - betaList.get(1);
-				if (scanResult[0].getResultPoints()[0].getX() > 640) {
-					distvRadian = betaList.get(2) - betaList.get(0);
-				} else {
-					distvRadian = betaList.get(2) + betaList.get(0);
-				}
-
-			} else if (scanResult[1].getResultPoints()[0].getX() < 640) {
-				distvRadian = betaList.get(0) - betaList.get(1);
-				if (scanResult[2].getResultPoints()[0].getX() < 640) {
-					disthRadian = betaList.get(1) - betaList.get(2);
-				} else {
-					disthRadian = betaList.get(1) + betaList.get(2);
-				}
-
-				Vector2 p1 = positionSystem.getVec(scanResult[0].getText());
-				Vector2 p2 = positionSystem.getVec(scanResult[1].getText());
-				Vector2 p3 = positionSystem.getVec(scanResult[2].getText());
-
-				double afstand1 = Math.sqrt(Math.pow(p1.getX() - p2.getX(), 2) + Math.pow(p1.getY() - p2.getY(), 2));
-				double afstand2 = Math.sqrt(Math.pow(p2.getX() - p3.getX(), 2) + Math.pow(p2.getY() - p3.getY(), 2));
-
-				radius1 = calcRadius(afstand1, distvRadian);
-				radius2 = calcRadius(afstand2, disthRadian);
-
-				center1 = calcCenter(p1, p2, afstand1, distvRadian);
-				center2 = calcCenter(p2, p3, afstand2, disthRadian);
-				System.out.println("C1x: " + center1.getX() + " C1y: " + center1.getY());
-				System.out.println("C2x: " + center2.getX() + " C2y: " + center2.getY());
-				
-				intersection = calcIntersection(center1, center2, radius1, radius2);
-				System.out.println("--" + scanResult[0] + "--");
-				System.out.println("--" + scanResult[1] + "--");
-				System.out.println("--" + scanResult[2] + "--");
-				System.out.println("X cor: " + intersection.getX() + " Y Cor: " + intersection.getY());
-
-			}
+//			sortResults(scanResult, 0, scanResult.length-1);
+//
+//			for (int index = 0; index < scanResult.length; index++) {
+//
+//				if (scanResult[index].getResultPoints()[0].getX() > 640) {
+//					t = scanResult[index].getResultPoints()[0].getX() - 640;
+//				} else {
+//					t = 640 - scanResult[index].getResultPoints()[0].getX();
+//				}
+//
+//				beta = Math.atan(t / b);
+//				betaList.add(beta);
+//
+//			}
+//			if (scanResult[1].getResultPoints()[0].getX() > 640) {
+//				disthRadian = betaList.get(2) - betaList.get(1);
+//				if (scanResult[0].getResultPoints()[0].getX() > 640) {
+//					distvRadian = betaList.get(2) - betaList.get(0);
+//				} else {
+//					distvRadian = betaList.get(2) + betaList.get(0);
+//				}
+//
+//			} else if (scanResult[1].getResultPoints()[0].getX() < 640) {
+//				distvRadian = betaList.get(0) - betaList.get(1);
+//				if (scanResult[2].getResultPoints()[0].getX() < 640) {
+//					disthRadian = betaList.get(1) - betaList.get(2);
+//				} else {
+//					disthRadian = betaList.get(1) + betaList.get(2);
+//				}
+//
+//				Vector2 p1 = positionSystem.getVec(scanResult[0].getText());
+//				Vector2 p2 = positionSystem.getVec(scanResult[1].getText());
+//				Vector2 p3 = positionSystem.getVec(scanResult[2].getText());
+//
+//				double afstand1 = Math.sqrt(Math.pow(p1.getX() - p2.getX(), 2) + Math.pow(p1.getY() - p2.getY(), 2));
+//				double afstand2 = Math.sqrt(Math.pow(p2.getX() - p3.getX(), 2) + Math.pow(p2.getY() - p3.getY(), 2));
+//
+//				radius1 = calcRadius(afstand1, distvRadian);
+//				radius2 = calcRadius(afstand2, disthRadian);
+//
+//				center1 = calcCenter(p1, p2, afstand1, distvRadian);
+//				center2 = calcCenter(p2, p3, afstand2, disthRadian);
+//				System.out.println("C1x: " + center1.getX() + " C1y: " + center1.getY());
+//				System.out.println("C2x: " + center2.getX() + " C2y: " + center2.getY());
+//				
+//				intersection = calcIntersection(center1, center2, radius1, radius2);
+//				System.out.println("--" + scanResult[0] + "--");
+//				System.out.println("--" + scanResult[1] + "--");
+//				System.out.println("--" + scanResult[2] + "--");
+//				System.out.println("X cor: " + intersection.getX() + " Y Cor: " + intersection.getY());
+//
+//			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -154,7 +162,7 @@ public class MyFrame {
 		reader.reset();
 		betaList.clear();
 
-		return a;
+		return dst;
 	}
 
 	public double calcRadius(double afstand, double vinkel) {
