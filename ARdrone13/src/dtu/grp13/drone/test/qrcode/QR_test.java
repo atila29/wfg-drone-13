@@ -28,7 +28,7 @@ public class QR_test {
 		MyFrame frame = new MyFrame();
 		frame.setVisible(true);
 		//drone.getCommandManager().setVideoCodec(VideoCodec.H264_360P);
-		drone.getCommandManager().setVideoCodecFps(15);
+		//drone.getCommandManager().setVideoCodecFps(16);
 		drone.getCommandManager().setVideoChannel(VideoChannel.HORI);
 		
 		

@@ -78,13 +78,21 @@ public class MyFrame {
 		//Red
 		//c.findSpecificCubeColor(currentFrame, img, new Scalar(0, 0, 220), new Scalar(110, 110, 255));
 		//Green
-		Filterable green = new Filterable() {
+		Filterable filter = new Filterable() {
 			@Override
-			public void process(Mat src, Mat dst) {
-				Core.inRange(src, new Scalar(0, 50, 0), new Scalar(30, 255, 50), dst);
+			public void processGreen(Mat src, Mat dst) {
+				Core.inRange(src, new Scalar(0, 50, 0), new Scalar(50, 255, 50), dst);
+				
+			}
+
+			@Override
+			public void processRed(Mat src, Mat dst) {
+				Core.inRange(src, new Scalar(0, 0, 50), new Scalar(50, 50, 255), dst);
+				
 			}
 		};
-		c.findSpecificCubeColor(currentFrame, img, green);
+		
+		c.findSpecificCubeColor(currentFrame, img, filter);
 		
 //		Mat hsv_cf = new Mat();
 //		Mat threshold = new Mat();

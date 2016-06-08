@@ -10,6 +10,7 @@ import org.opencv.videoio.VideoCapture;
 
 import de.yadrone.base.ARDrone;
 import de.yadrone.base.command.VideoChannel;
+import de.yadrone.base.command.VideoCodec;
 import de.yadrone.base.video.ImageListener;
 import dtu.grp13.drone.core.ImageListenerThread;
 
@@ -41,7 +42,9 @@ public class Test {
 //		if(!cap.isOpened()) {
 //			System.exit(1);
 //		}
-		test.drone.getCommandManager().setVideoChannel(VideoChannel.HORI);
+		test.drone.reset();
+		test.drone.getCommandManager().setVideoCodec(VideoCodec.H264_360P_SLRS);
+		test.drone.getCommandManager().setVideoChannel(VideoChannel.VERT);
 		test.frame = new MyFrame();
 		test.frame.setVisible(true);
 		test.drone.getVideoManager().addImageListener(new ImageListener() {

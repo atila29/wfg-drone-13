@@ -187,8 +187,10 @@ public class Test {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
 		Test test = new Test();
+		test.drone.reset();
 		test.drone.getCommandManager().setVideoCodec(VideoCodec.H264_360P_SLRS);
 		test.drone.getCommandManager().setVideoChannel(VideoChannel.VERT);
+		//test.drone.getCommandManager().setVideoCodecFps(15);
 		
 		test.frame.setOnClickListenerForStart(new ActionListener() {
 			
