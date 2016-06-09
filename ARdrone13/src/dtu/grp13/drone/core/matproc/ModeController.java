@@ -23,9 +23,9 @@ public class ModeController {
 	
 	
 	
-	public ARDrone useDrone(Runnable setup){
+	public ARDrone useDrone(IDroneSetup setup){
 		initDrone();
-		new Thread(setup).start();
+		setup.setup(drone);
 		drone.getVideoManager().addImageListener(new ImageListener() {
 			@Override
 			public void imageUpdated(BufferedImage arg0) {

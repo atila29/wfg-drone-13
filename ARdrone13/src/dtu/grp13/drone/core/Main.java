@@ -2,7 +2,10 @@ package dtu.grp13.drone.core;
 
 import org.opencv.core.Core;
 
+import de.yadrone.base.ARDrone;
+import de.yadrone.base.command.VideoCodec;
 import dtu.grp13.drone.core.matproc.FrameProcess;
+import dtu.grp13.drone.core.matproc.IDroneSetup;
 import dtu.grp13.drone.core.matproc.ModeController;
 
 public class Main {
@@ -11,11 +14,13 @@ public class Main {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		ModeController mc = new ModeController(new FrameProcess());
 		//mc.useWebcam();
-		mc.useDrone(new Runnable() {
+		mc.useDrone(new IDroneSetup() {
 			
 			@Override
-			public void run() {
-				// TODO Auto-generated method stub
+			public void setup(ARDrone drone) {
+				drone.getCommandManager().setVideoCodec(VideoCodec.H264_720P);
+				drone.getCommandManager().setVideoCodecFps(15);
+				drone.getCommandManager().setVideoBitrate(4000);
 				
 			}
 		});
