@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Vector;
 
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfKeyPoint;
 import org.opencv.core.MatOfPoint;
@@ -15,6 +16,7 @@ import org.opencv.core.MatOfPoint2f;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.features2d.FeatureDetector;
 import org.opencv.features2d.Features2d;
 import org.opencv.imgproc.Imgproc;
@@ -51,6 +53,34 @@ public class CubeDetector {
 			}
 		}
 		return QR;
+	}
+	
+	public void getQr(Mat src, Mat dst) {
+		List<MatOfPoint> edges = new ArrayList<MatOfPoint>();
+		Mat s = src.clone();
+		// lidt billedebahandling
+		Imgproc.cvtColor(s, s, Imgproc.COLOR_BGR2GRAY);
+		Imgproc.GaussianBlur(s, s, new Size(3,3), -1);		
+		Imgproc.Canny(s, s, 100, 200); // læs op på, noget med lysforhold
+		
+		Imgproc.findContours(s, edges, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
+		for(int i = 0; i < edges.size(); i++){
+			MatOfPoint2f mop2 = new MatOfPoint2f();
+			edges.get(i).convertTo(mop2, CvType.CV_32FC1);
+			double marg = 0.01f;
+			double ep = marg * Imgproc.arcLength(mop2, true);
+			Imgproc.approxPolyDP(mop2, mop2, ep, true);
+			mop2.convertTo(edges.get(i), CvType.CV_32S);
+			
+			if(edges.get(i).total() == 4){
+				Imgproc.drawContours(dst, edges, i, new Scalar(255,0,0), 4);
+				
+			}
+			
+		}
+		
+		
+		
 	}
 	
 	public List<Rect> isolateInterestingCubes(List<Rect> rects, int dif) {
