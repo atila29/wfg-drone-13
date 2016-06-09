@@ -76,6 +76,7 @@ public class CubeDetector {
 				Imgproc.drawContours(dst, edges, i, new Scalar(255,0,0), 4);
 				
 			}
+			
 		}
 	}
 	
