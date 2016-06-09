@@ -88,8 +88,9 @@ public class MyFrame {
 		QRCodeReader reader = new QRCodeReader();
 		Mat grey = new Mat();
 		Imgproc.cvtColor(src, grey, Imgproc.COLOR_BGR2GRAY);
-		List<Rect> rectList = cubeDetector.findRects(grey, dst);
-		cubeDetector.isolateinterestingRects(rectList, 1.41);
+		dst = cubeDetector.findHoughLines(src);
+//		List<Rect> rectList = cubeDetector.findRects(grey, dst);
+//		cubeDetector.isolateinterestingRects(rectList, 1.41);
 
 		
 		try {
