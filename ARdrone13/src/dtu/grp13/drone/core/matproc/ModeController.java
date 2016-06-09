@@ -24,8 +24,8 @@ public class ModeController {
 	
 	
 	public ARDrone useDrone(IDroneSetup setup){
-		initDrone();
 		setup.setup(drone);
+		initDrone();
 		return drone;
 	}
 	
