@@ -26,12 +26,6 @@ public class ModeController {
 	public ARDrone useDrone(IDroneSetup setup){
 		initDrone();
 		setup.setup(drone);
-		drone.getVideoManager().addImageListener(new ImageListener() {
-			@Override
-			public void imageUpdated(BufferedImage arg0) {
-				imgThread.analyzeImage(arg0);
-			}
-		});
 		return drone;
 	}
 	
@@ -46,6 +40,12 @@ public class ModeController {
 			}
 		};
 		imgThread = new ImageListenerThread(listener);
+		drone.getVideoManager().addImageListener(new ImageListener() {
+			@Override
+			public void imageUpdated(BufferedImage arg0) {
+				imgThread.analyzeImage(arg0);
+			}
+		});
 	}
 	
 	public void useWebcam(){
