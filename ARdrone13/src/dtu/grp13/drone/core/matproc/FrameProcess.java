@@ -49,7 +49,7 @@ public class FrameProcess extends AbstractProcess {
 
 			@Override
 			public void processColor(Mat src, Mat dst) {
-				Core.inRange(src, new Scalar(0, 0, 60), new Scalar(40, 40, 255), dst);
+				Core.inRange(src, new Scalar(0, 0, 50), new Scalar(40, 40, 255), dst);
 			}
 		});
 	}
