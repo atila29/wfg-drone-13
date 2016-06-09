@@ -63,7 +63,7 @@ public class CubeDetector {
 		Imgproc.GaussianBlur(s, s, new Size(3,3), 3);		
 		Imgproc.Canny(s, s, 100, 200); // læs op på, noget med lysforhold
 		
-		Imgproc.findContours(s, edges, new Mat(), Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
+		Imgproc.findContours(s, edges, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
 		for(int i = 0; i < edges.size(); i++){
 			MatOfPoint2f mop2 = new MatOfPoint2f();
 			edges.get(i).convertTo(mop2, CvType.CV_32FC1);
