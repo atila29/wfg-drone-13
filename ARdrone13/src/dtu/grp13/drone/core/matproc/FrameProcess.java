@@ -11,6 +11,17 @@ import dtu.grp13.drone.cube.Filterable;
 
 public class FrameProcess extends AbstractProcess {
 	private Mat currentFrame;
+	Filterable filter = new Filterable() {
+	@Override
+	public void processGreen(Mat src, Mat dst) {
+		Core.inRange(src, new Scalar(0, 50, 0), new Scalar(50, 255, 50), dst);
+	}
+
+	@Override
+	public void processRed(Mat src, Mat dst) {
+		Core.inRange(src, new Scalar(0, 0, 50), new Scalar(50, 50, 255), dst);
+	}
+};
 
 	@Override
 	public Mat processMat(Mat a) {
@@ -23,20 +34,10 @@ public class FrameProcess extends AbstractProcess {
 		Imgproc.Canny(grey, grey, 5, 50);*/
 		CubeDetector c = new CubeDetector();
 
-//		Filterable filter = new Filterable() {
-//			@Override
-//			public void processGreen(Mat src, Mat dst) {
-//				Core.inRange(src, new Scalar(0, 50, 0), new Scalar(50, 255, 50), dst);
-//			}
-//
-//			@Override
-//			public void processRed(Mat src, Mat dst) {
-//				Core.inRange(src, new Scalar(0, 0, 50), new Scalar(50, 50, 255), dst);
-//			}
-//		};
+
 		
-		//c.findSpecificCubeColor(currentFrame, img, filter);
-		c.getQr(currentFrame, img);
+		c.findSpecificCubeColor(currentFrame, img, filter);
+		//c.getQr(currentFrame, img);
 		// LOGIK END
 
 		return img;

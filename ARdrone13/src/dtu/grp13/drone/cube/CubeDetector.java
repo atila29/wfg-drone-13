@@ -203,8 +203,8 @@ public class CubeDetector {
 	
 	public Mat findHoughLines(Mat src) {
 	    Mat dst = src.clone();
-		Mat mYuv = new Mat();
-	    Mat mRgba = new Mat();
+//		Mat mYuv = new Mat();
+//	    Mat mRgba = new Mat();
 	    //Mat thresholdImage = new Mat(getFrameHeight() + getFrameHeight() / 2, getFrameWidth(), CvType.CV_8UC1);
 	    //mYuv.put(0, 0, data);
 	    //Imgproc.cvtColor(mYuv, mRgba, Imgproc.COLOR_YUV420sp2RGB, 4);
@@ -229,7 +229,7 @@ public class CubeDetector {
 
 	          Imgproc.line(src, start, end, new Scalar(0,255,0), 5);
 	    }
-	    return dst;
+	    return src;
 	}
 	
 }
