@@ -168,7 +168,7 @@ public class CubeDetector {
 		Mat fRed 	= src.clone();
 		
 		filter.processGreen(fGreen, fGreen);
-		filter.processGreen(fRed, fRed);
+		filter.processRed(fRed, fRed);
 		List<Rect> rectsGreen = findRects(fGreen, new Mat());
 		List<Rect> rectsRed = findRects(fRed, new Mat());
 		
