@@ -24,10 +24,13 @@ public class Main {
 //			@Override
 //			public void setup(ARDrone drone) {
 //				drone.reset();
+//				drone.getCommandManager().setWifiMode(WifiMode.STATION);
 //				drone.getCommandManager().setVideoBitrateControl(VideoBitRateMode.DISABLED);
 //				drone.getCommandManager().setVideoBitrate(4000);
 //				drone.getCommandManager().setVideoCodecFps(15);
 //				drone.getCommandManager().setVideoCodec(VideoCodec.H264_720P);
+//				//drone.getCommandManager().setVideoChannel(VideoChannel.NEXT);
+//				drone.getCommandManager().setVideoChannel(VideoChannel.VERT);
 //			}
 //		});
 		try {
@@ -37,6 +40,7 @@ public class Main {
 			e.printStackTrace();
 		}
 		
+
 	}
 
 }

@@ -4,6 +4,6 @@ import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 
 public interface Filterable {
-	void processGreen(Mat src, Mat dst);
-	void processRed(Mat src, Mat dst);
+	String getName();
+	void processColor(Mat src, Mat dst);
 }
