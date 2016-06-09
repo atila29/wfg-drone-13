@@ -56,7 +56,7 @@ public class CubeDetector {
 		Mat s = src.clone();
 		// lidt billedebahandling
 		Imgproc.cvtColor(s, s, Imgproc.COLOR_BGR2GRAY);
-		Imgproc.GaussianBlur(s, s, new Size(3,3), -1);		
+		Imgproc.GaussianBlur(s, s, new Size(3,3), 3);		
 		Imgproc.Canny(s, s, 100, 200); // læs op på, noget med lysforhold
 		
 		Imgproc.findContours(s, edges, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);

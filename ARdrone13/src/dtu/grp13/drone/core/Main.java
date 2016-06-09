@@ -10,7 +10,15 @@ public class Main {
 	public static void main(String[] args) {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		ModeController mc = new ModeController(new FrameProcess());
-		mc.useWebcam();
+		//mc.useWebcam();
+		mc.useDrone(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 
 }
