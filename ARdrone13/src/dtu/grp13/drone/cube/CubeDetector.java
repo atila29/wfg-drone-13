@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Vector;
 
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
@@ -12,12 +13,15 @@ import org.opencv.core.Mat;
 import org.opencv.core.MatOfKeyPoint;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
+import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.features2d.FeatureDetector;
 import org.opencv.features2d.Features2d;
 import org.opencv.imgproc.Imgproc;
+
+import dtu.grp13.drone.vector.Vector2;
 
 public class CubeDetector {
 	private final int minSizeOfRects = 40;
@@ -198,6 +202,37 @@ public class CubeDetector {
 		Imgproc.approxPolyDP(new MatOfPoint2f(points.toArray()), o, 5, true);
 		MatOfPoint m = new MatOfPoint(o.toArray());
 		return Imgproc.boundingRect(m);
+	}
+	
+	public Mat findHoughLines(Mat src) {
+	    Mat dst = src.clone();
+		Mat mYuv = new Mat();
+	    Mat mRgba = new Mat();
+	    //Mat thresholdImage = new Mat(getFrameHeight() + getFrameHeight() / 2, getFrameWidth(), CvType.CV_8UC1);
+	    //mYuv.put(0, 0, data);
+	    //Imgproc.cvtColor(mYuv, mRgba, Imgproc.COLOR_YUV420sp2RGB, 4);
+	    //Imgproc.cvtColor(mRgba, dst, Imgproc.COLOR_RGB2GRAY, 4);
+	    Imgproc.Canny(src, dst, 80, 100, 3, true);
+	    Mat lines = dst.clone();
+	    int threshold = 100;
+	    int minLineSize = 40;
+	    int lineGap = 10;
+
+	    Imgproc.HoughLinesP(dst, lines, 1, Math.PI/180, threshold, minLineSize, lineGap);
+	    
+	    for (int x = 0; x < lines.cols(); x++) 
+	    {
+	          double[] vec = lines.get(0, x);
+	          double x1 = vec[0], 
+	                 y1 = vec[1],
+	                 x2 = vec[2],
+	                 y2 = vec[3];
+	          Point start = new Point(x1, y1);
+	          Point end = new Point(x2, y2);
+
+	          Imgproc.line(src, start, end, new Scalar(0,255,0), 5);
+	    }
+	    return dst;
 	}
 	
 }
