@@ -17,10 +17,10 @@ public class FrameProcess extends AbstractProcess {
 		currentFrame = a;
 		// LOGIK
 		Mat img = currentFrame.clone();
-		Mat grey = new Mat();
+		/*Mat grey = new Mat();
 		Imgproc.cvtColor(currentFrame, grey, Imgproc.COLOR_BGRA2GRAY); 
 		Imgproc.GaussianBlur(grey, grey, new Size(3,3),0,0);
-		Imgproc.Canny(grey, grey, 5, 50);
+		Imgproc.Canny(grey, grey, 5, 50);*/
 		CubeDetector c = new CubeDetector();
 
 		Filterable filter = new Filterable() {
