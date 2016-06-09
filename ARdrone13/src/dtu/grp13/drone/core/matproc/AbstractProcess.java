@@ -30,6 +30,7 @@ public abstract class AbstractProcess implements Processable{
 		Mat man = processMat(image);
 		Image i = WFGUtilities.toBufferedImage(man);
 		panel.setImage(i);
+		i = null;
 		panel.repaint();
 		frame.pack();
 	}
