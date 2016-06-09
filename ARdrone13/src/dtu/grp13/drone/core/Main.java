@@ -18,10 +18,9 @@ public class Main {
 			
 			@Override
 			public void setup(ARDrone drone) {
-				drone.getCommandManager().setVideoCodec(VideoCodec.H264_720P);
-				drone.getCommandManager().setVideoCodecFps(15);
 				drone.getCommandManager().setVideoBitrate(4000);
-				
+				drone.getCommandManager().setVideoCodecFps(15);
+				drone.getCommandManager().setVideoCodec(VideoCodec.H264_720P);
 			}
 		});
 	}
