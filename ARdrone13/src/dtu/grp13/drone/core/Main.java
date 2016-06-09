@@ -31,7 +31,7 @@ public class Main {
 //			}
 //		});
 		try {
-			mc.useStaticImage("./resources/pic4.jpg");
+			mc.useStaticImage("./resources/pic1.jpg");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
