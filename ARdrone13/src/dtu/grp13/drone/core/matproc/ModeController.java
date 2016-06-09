@@ -24,15 +24,14 @@ public class ModeController {
 	
 	
 	public ARDrone useDrone(IDroneSetup setup){
+		drone = new ARDrone();
 		setup.setup(drone);
 		initDrone();
 		return drone;
 	}
 	
 	private void initDrone(){
-		drone = new ARDrone();
 		listener = new ImageListener() {
-			
 			@Override
 			public void imageUpdated(BufferedImage arg0) {
 				image = WFGUtilities.bufferedImageToMat(arg0);
