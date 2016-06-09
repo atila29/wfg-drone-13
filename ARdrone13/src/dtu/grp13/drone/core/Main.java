@@ -17,7 +17,7 @@ public class Main {
 	public static void main(String[] args) {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		ModeController mc = new ModeController(new FrameProcess());
-		//mc.useWebcam();
+//		mc.useWebcam();
 		mc.useDrone(new IDroneSetup() {
 			
 			@Override
@@ -27,7 +27,8 @@ public class Main {
 				drone.getCommandManager().setVideoBitrate(4000);
 				drone.getCommandManager().setVideoCodecFps(15);
 				drone.getCommandManager().setVideoCodec(VideoCodec.H264_720P);
-				drone.getCommandManager().setVideoChannel(VideoChannel.NEXT);
+//				drone.getCommandManager().setVideoChannel(VideoChannel.NEXT);
+				drone.getCommandManager().setVideoChannel(VideoChannel.VERT);
 			}
 		});
 	}

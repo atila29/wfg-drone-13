@@ -1,5 +1,8 @@
 package dtu.grp13.drone.core.matproc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
@@ -11,17 +14,45 @@ import dtu.grp13.drone.cube.Filterable;
 
 public class FrameProcess extends AbstractProcess {
 	private Mat currentFrame;
-	Filterable filter = new Filterable() {
-	@Override
-	public void processGreen(Mat src, Mat dst) {
-		Core.inRange(src, new Scalar(0, 50, 0), new Scalar(50, 255, 50), dst);
-	}
+	List<Filterable> filtre = new ArrayList<>();
+	
+	public FrameProcess(){
+		super();
+		filtre.add(new Filterable(){
+			@Override
+			public String getName() {
+				return "green";
+			}
 
-	@Override
-	public void processRed(Mat src, Mat dst) {
-		Core.inRange(src, new Scalar(0, 0, 50), new Scalar(50, 50, 255), dst);
+			@Override
+			public void processColor(Mat src, Mat dst) {
+				Core.inRange(src, new Scalar(0, 50, 0), new Scalar(50, 255, 50), dst);
+			}
+		});
+//		filtre.add(new Filterable(){
+//			@Override
+//			public String getName() {
+//				return "green";
+//			}
+//
+//			@Override
+//			public void processColor(Mat src, Mat dst) {
+//				Core.inRange(src, new Scalar(0, 255, 0), new Scalar(120, 255, 120), dst);
+//			}
+//		});
+
+		filtre.add(new Filterable(){
+			@Override
+			public String getName() {
+				return "red";
+			}
+
+			@Override
+			public void processColor(Mat src, Mat dst) {
+				Core.inRange(src, new Scalar(0, 0, 60), new Scalar(40, 40, 255), dst);
+			}
+		});
 	}
-};
 
 	@Override
 	public Mat processMat(Mat a) {
@@ -36,7 +67,7 @@ public class FrameProcess extends AbstractProcess {
 
 
 		
-		c.findSpecificCubeColor(currentFrame, img, filter);
+		c.findSpecificCubeColor(currentFrame, img, this.filtre);
 		//c.getQr(currentFrame, img);
 		// LOGIK END
 

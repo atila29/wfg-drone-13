@@ -146,11 +146,11 @@ public class CubeDetector {
 		return new Scalar(val);
 	}
 	
-	public void findSpecificCubeColor(Mat src, Mat dst, Filterable filter) {
+//	public void findSpecificCubeColor(Mat src, Mat dst, Filterable filter) {
 //		FeatureDetector fd = FeatureDetector.create(FeatureDetector.PYRAMID_SIMPLEBLOB);
 //		MatOfKeyPoint keypoints = new MatOfKeyPoint();
 //		fd.detect(src, keypoints);
-		List<Scalar> colOfPoints = new ArrayList<Scalar>();
+//		List<Scalar> colOfPoints = new ArrayList<Scalar>();
 		
 /*		double blue = 0, green = 0, red = 0;
 		for(int x = 0 ; x < src.cols(); x+=5) {
@@ -164,26 +164,46 @@ public class CubeDetector {
 		// dette er en dyr methode da en gør brug af inRange()
 		// ville kunnne spare tid ved at skifte til egen inRange, der checker 
 		// flere parametre samtidig, eller bruge bedre fra openCV 
-		Mat fGreen	= src.clone(); 
-		Mat fRed 	= src.clone();
+//		Mat fGreen	= src.clone(); 
+//		Mat fRed 	= src.clone();
+//		Mat fColor 	= src.clone();
+//		
+//		filter.processGreen(fGreen, fGreen);
+//		filter.processRed(fRed, fRed);
+//		
+//		
+//		List<Rect> rectsGreen = findRects(fGreen, new Mat());
+//		List<Rect> rectsRed = findRects(fRed, new Mat());
+//		List<Rect> rectsColor = findRects(fColor, new Mat());
+//		
+//		for(int i = 0; i < rectsGreen.size(); i++) {
+//			if(rectsGreen.get(i).height > rectsGreen.get(i).width-5 && rectsGreen.get(i).height < rectsGreen.get(i).width+5) {
+//				Imgproc.putText(dst, "GREEN", rectsGreen.get(i).tl(), Core.FONT_HERSHEY_PLAIN, 1, textColor,2);
+//				Imgproc.rectangle(dst, rectsGreen.get(i).tl(), rectsGreen.get(i).br(), new Scalar(255, 0, 0));
+//			}
+//		}
+//		for(int i = 0; i < rectsRed.size(); i++) {
+//			if(rectsRed.get(i).height > rectsRed.get(i).width-5 && rectsRed.get(i).height < rectsRed.get(i).width+5) {
+//				Imgproc.putText(dst, "RED", rectsRed.get(i).tl(), Core.FONT_HERSHEY_PLAIN, 1, textColor,2);
+//				Imgproc.rectangle(dst, rectsRed.get(i).tl(), rectsRed.get(i).br(), new Scalar(255, 0, 0));
+//			}
+//		}
 		
-		filter.processGreen(fGreen, fGreen);
-		filter.processRed(fRed, fRed);
-		List<Rect> rectsGreen = findRects(fGreen, new Mat());
-		List<Rect> rectsRed = findRects(fRed, new Mat());
-		
-		for(int i = 0; i < rectsGreen.size(); i++) {
-			if(rectsGreen.get(i).height > rectsGreen.get(i).width-5 && rectsGreen.get(i).height < rectsGreen.get(i).width+5) {
-				Imgproc.putText(dst, "GREEN", rectsGreen.get(i).tl(), Core.FONT_HERSHEY_PLAIN, 1, textColor,2);
-				Imgproc.rectangle(dst, rectsGreen.get(i).tl(), rectsGreen.get(i).br(), new Scalar(255, 0, 0));
+//	}
+	
+	public void findSpecificCubeColor(Mat src, Mat dst, List<Filterable> filterList){
+		for(Filterable f : filterList) {
+			Mat s = src.clone();
+			f.processColor(s, s);
+			List<Rect> rects = findRects(s, new Mat());
+			for(int i = 0; i < rects.size(); i++) {
+				if(rects.get(i).height > rects.get(i).width-5 && rects.get(i).height < rects.get(i).width+5) {
+					Imgproc.putText(dst, f.getName(), rects.get(i).tl(), Core.FONT_HERSHEY_PLAIN, 1, textColor,2);
+					Imgproc.rectangle(dst, rects.get(i).tl(), rects.get(i).br(), new Scalar(255, 0, 0));
+				}
 			}
 		}
-		for(int i = 0; i < rectsRed.size(); i++) {
-			if(rectsRed.get(i).height > rectsRed.get(i).width-5 && rectsRed.get(i).height < rectsRed.get(i).width+5) {
-				Imgproc.putText(dst, "RED", rectsRed.get(i).tl(), Core.FONT_HERSHEY_PLAIN, 1, textColor,2);
-				Imgproc.rectangle(dst, rectsRed.get(i).tl(), rectsRed.get(i).br(), new Scalar(255, 0, 0));
-			}
-		}
+		
 	}
 	
 	public Rect bindRects(MatOfKeyPoint points) {
