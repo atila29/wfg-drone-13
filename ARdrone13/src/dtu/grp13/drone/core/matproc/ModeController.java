@@ -1,6 +1,10 @@
 package dtu.grp13.drone.core.matproc;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
@@ -45,6 +49,26 @@ public class ModeController {
 				imgThread.analyzeImage(arg0);
 			}
 		});
+	}
+	
+	public void useStaticImage(String path) throws IOException{
+		Mat image = new Mat();
+		
+		//frame.setVisible(true);
+		
+
+		// Main loop
+		while (true) {
+			// Read current camera frame into matrix
+			try {
+				Thread.sleep(33);
+				frame.render(WFGUtilities.bufferedImageToMat(ImageIO.read(new File(path))));
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
 	}
 	
 	public void useWebcam(){

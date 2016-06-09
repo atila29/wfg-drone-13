@@ -73,7 +73,7 @@ public class CubeDetector {
 			mop2.convertTo(edges.get(i), CvType.CV_32S);
 			
 			if(edges.get(i).total() == 4){
-				Imgproc.drawContours(dst, edges, i, new Scalar(255,0,0), 4);
+				Imgproc.drawContours(dst, edges, i, new Scalar(255,0,0), 2);
 				
 			}
 			
