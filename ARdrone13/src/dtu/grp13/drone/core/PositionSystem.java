@@ -155,6 +155,17 @@ public class PositionSystem {
 		return radius;
 	}
 
+//	public Vector2 calcCenter(Rect p1, Rect p2, double afstand, double vinkel) {
+//		
+//
+//		double var0 = Math.sqrt(Math.pow(Math.abs(-p2.y + p1.y), 2) + Math.pow(Math.abs(-p2.x + p1.x), 2));
+//		double var1 = Math.sqrt(Math.pow(afstand, 2) / Math.pow(Math.sin(vinkel), 2) - Math.pow(afstand, 2));
+//		double x = 0.5 * (p2.y - p1.y) / var0 * var1 + (0.5 * p1.x) + (0.5 * p2.x);
+//		double y = 0.5 * (-p2.x + p1.x) / var0 * var1 + (0.5 * p1.y) + (0.5 * p2.y);
+//		System.out.println("x: " + x + " --- y: " + y);
+//		return new Vector2(x, y);
+//	}
+	
 	public Vector2 calcCenter(Vector2 v1, Vector2 v2, double afstand, double vinkel) {
 		
 
@@ -177,10 +188,13 @@ public class PositionSystem {
 			Vector2 leftVec = getVec(getLeft(qr));
 			Vector2 rightVec = getVec(getRight(qr));
 
+			//Vector2 cent1 = calcCenter(qrCordList.get(0), qrCordList.get(1), distArray[0], betaArray[0]);
+			//Vector2 cent2 = calcCenter(qrCordList.get(1), qrCordList.get(2), distArray[1], betaArray[1]);
+			
 			Vector2 cent1 = calcCenter(leftVec, qrVec, distArray[0], betaArray[0]);
 			Vector2 cent2 = calcCenter(rightVec, qrVec, distArray[1], betaArray[1]);
 			double radius1 = calcRadius(distArray[0], betaArray[0]);
-			double radius2 = calcRadius(distArray[1], betaArray[0]);
+			double radius2 = calcRadius(distArray[1], betaArray[1]);
 			
 //			cent1 = new Vector2(5.995, -1.748);
 //			cent2 = new Vector2(5.433, 5.467);
