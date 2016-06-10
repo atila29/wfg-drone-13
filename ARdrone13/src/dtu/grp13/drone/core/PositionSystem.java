@@ -93,7 +93,6 @@ public class PositionSystem {
 
 	// Index 0 er venstre og index 1 er højre
 	public double[] calcDistance(String qr) {
-		System.out.println("Qr: " + qr);
 		Vector2 qrVec = getVec(qr);
 		Vector2 leftVec = getVec(getLeft(qr));
 		Vector2 rightVec = getVec(getRight(qr));
@@ -105,6 +104,7 @@ public class PositionSystem {
 		distArray[1] = Math
 				.sqrt(Math.pow(qrVec.getX() - rightVec.getX(), 2) + Math.pow(qrVec.getY() - rightVec.getY(), 2));
 
+		
 		return distArray;
 
 	}
@@ -124,7 +124,6 @@ public class PositionSystem {
 			} else {
 				t = 640 - qrCordList.get(i).x;
 			}
-
 			beta = Math.atan(t / b);
 			betaList.add(beta);
 
@@ -145,21 +144,25 @@ public class PositionSystem {
 				betaArray[1] = betaList.get(1) + betaList.get(2);
 			}
 		}
+		System.out.println(betaArray[0] + " --- " + betaArray[1]);
 
 		return betaArray;
 	}
 
 	public double calcRadius(double afstand, double vinkel) {
 		double radius = (0.5 * afstand) / Math.sin(vinkel);
+		//System.out.println("Radius: " + radius);
 		return radius;
 	}
 
-	public Vector2 calcCenter(Rect p1, Rect p2, double afstand, double vinkel) {
+	public Vector2 calcCenter(Vector2 v1, Vector2 v2, double afstand, double vinkel) {
+		
 
-		double var0 = Math.sqrt(Math.pow(Math.abs(-p2.y + p1.y), 2) + Math.pow(Math.abs(-p2.x + p1.x), 2));
+		double var0 = Math.sqrt(Math.pow(Math.abs(-v2.getY() + v1.getY()), 2) + Math.pow(Math.abs(-v2.getX() + v1.getX()), 2));
 		double var1 = Math.sqrt(Math.pow(afstand, 2) / Math.pow(Math.sin(vinkel), 2) - Math.pow(afstand, 2));
-		double x = 0.5 * (p2.y - p1.y) / var0 * var1 + (0.5 * p1.x) + (0.5 * p2.x);
-		double y = 0.5 * (-p2.x + p1.x) / var0 * var1 + (0.5 * p1.y) + (0.5 * p2.y);
+		double x = 0.5 * (v2.getY() - v1.getY()) / var0 * var1 + (0.5 * v1.getX()) + (0.5 * v2.getX());
+		double y = 0.5 * (-v2.getX() + v1.getX()) / var0 * var1 + (0.5 * v1.getY()) + (0.5 * v2.getY());
+		System.out.println("x: " + x + " --- y: " + y);
 		return new Vector2(x, y);
 	}
 
@@ -169,16 +172,27 @@ public class PositionSystem {
 
 			double[] distArray = calcDistance(qr);
 			double[] betaArray = calcBeta(qrCordList);
+			
+			Vector2 qrVec = getVec(qr);
+			Vector2 leftVec = getVec(getLeft(qr));
+			Vector2 rightVec = getVec(getRight(qr));
 
-			Vector2 cent1 = calcCenter(qrCordList.get(0), qrCordList.get(1), distArray[0], betaArray[0]);
-			Vector2 cent2 = calcCenter(qrCordList.get(1), qrCordList.get(2), distArray[1], betaArray[1]);
+			Vector2 cent1 = calcCenter(leftVec, qrVec, distArray[0], betaArray[0]);
+			Vector2 cent2 = calcCenter(rightVec, qrVec, distArray[1], betaArray[1]);
 			double radius1 = calcRadius(distArray[0], betaArray[0]);
 			double radius2 = calcRadius(distArray[1], betaArray[0]);
+			
+//			cent1 = new Vector2(5.995, -1.748);
+//			cent2 = new Vector2(5.433, 5.467);
+//			radius1 = 6.245;
+//			radius2 = 5.628;
+			
+			
 
 			double d = Math.sqrt(Math.pow(cent1.getX() - cent2.getX(), 2) + Math.pow(cent1.getY() - cent2.getY(), 2));
 			double t1 = Math.pow(radius1, 2) - Math.pow(radius2, 2) + Math.pow(d, 2);
 			double d1 = t1 / (2 * d);
-			double h = Math.sqrt(Math.pow(radius1, 2) - Math.pow(d1, 2));
+			double h = Math.sqrt(Math.abs(Math.pow(radius1, 2) - Math.pow(d1, 2)));
 			double x3 = cent1.getX() + (d1 * (cent2.getX() - cent1.getX())) / d;
 			double y3 = cent1.getY() + (d1 * (cent2.getY() - cent1.getY())) / d;
 			double x4 = x3 + (h * (cent2.getY() - cent1.getY())) / d;

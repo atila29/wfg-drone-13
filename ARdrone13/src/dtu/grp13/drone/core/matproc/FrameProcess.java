@@ -20,6 +20,7 @@ import dtu.grp13.drone.core.PositionSystem;
 import dtu.grp13.drone.cube.CubeDetector;
 import dtu.grp13.drone.cube.Filterable;
 import dtu.grp13.drone.qrcode.QRAnalyzer;
+import dtu.grp13.drone.vector.Vector2;
 
 public class FrameProcess extends AbstractProcess {
 	CubeDetector c;
@@ -86,7 +87,8 @@ public class FrameProcess extends AbstractProcess {
 		try {
 			String qrResult = "W02.04";
 			List<Rect> rects = qa.findQrEdges(a, img);
-			ps.calcIntersection(qrResult, rects);
+			Vector2 position = ps.calcIntersection(qrResult, rects);
+			System.out.println("Pos: " + position);
 			
 		} 
 //		catch (NotFoundException e) {
