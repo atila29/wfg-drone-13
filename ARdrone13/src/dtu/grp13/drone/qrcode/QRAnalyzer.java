@@ -22,6 +22,7 @@ import com.google.zxing.ChecksumException;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.LuminanceSource;
+import com.google.zxing.MultiFormatReader;
 import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
@@ -36,10 +37,10 @@ public class QRAnalyzer {
 		Image img = WFGUtilities.toBufferedImage(src);
 		LuminanceSource source = new BufferedImageLuminanceSource((BufferedImage) img);
 		BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-		QRCodeReader reader = new QRCodeReader();
-		Map<DecodeHintType, Object> hintsMap = new EnumMap<DecodeHintType, Object>(DecodeHintType.class);
-		hintsMap.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+		//QRCodeReader reader = new QRCodeReader();
+		MultiFormatReader reader = new MultiFormatReader();
 		Result scanResult = reader.decode(bitmap);
+		
 		System.out.println(scanResult.getText());
 		
 		return scanResult.getText();
@@ -69,7 +70,7 @@ public class QRAnalyzer {
 				Rect rect = Imgproc.boundingRect(edges.get(i));
 				double ratio = (double) rect.height / (double) rect.width;
 
-				if (ratio > 1.3 && ratio < 2.0 && rect.height > 80.0) {
+				if (ratio > 1.3 && ratio < 2.0 && rect.height > 80.0 && rect.height < 200) {
 					rectList.add(rect);
 				}
 			}

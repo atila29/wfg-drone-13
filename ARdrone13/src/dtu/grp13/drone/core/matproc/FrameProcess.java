@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
@@ -83,11 +84,15 @@ public class FrameProcess extends AbstractProcess {
 		Imgproc.Canny(grey, grey, 5, 50);*/
 	
 		try {
-			String qrResult = qa.scanQr(a);
-			System.out.println(qrResult);
-		} catch (NotFoundException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
+			String qrResult = "W02.04";
+			List<Rect> rects = qa.findQrEdges(a, img);
+			ps.calcIntersection(qrResult, rects);
+			
+		} 
+//		catch (NotFoundException e) {
+//			e.printStackTrace();
+//		} 
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 

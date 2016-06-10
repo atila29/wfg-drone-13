@@ -3,6 +3,8 @@ package dtu.grp13.drone.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import dtu.grp13.drone.vector.Vector2;
+
 public class WallmarkLinkedList {
 	private Wallmark first;
 	private Wallmark last;
@@ -20,7 +22,7 @@ public class WallmarkLinkedList {
 			return last;
 		}
 		// bør fejlhåndteres
-		return wallList.get(wallList.indexOf(name));
+		return wallList.get(wallList.indexOf(new Wallmark(name, new Vector2(0, 0))));
 	}
 	
 	public Wallmark getLeft(String name){
