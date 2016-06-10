@@ -23,7 +23,6 @@ public class PositionSystem {
 	private double horizontalRadians = 1.30899694;
 	private double widthRes = 1280;
 	private Map<String, Vector2> wallMarks;
-	private WallmarkLinkedList linkedWallMarks;
 	private double b = (widthRes / 2) / (Math.tan(horizontalRadians / 2));
 
 	public Vector2 getVec(String name) {
@@ -32,7 +31,6 @@ public class PositionSystem {
 
 	public PositionSystem() throws IOException {
 		wallMarks = new HashMap<>();
-		linkedWallMarks = new WallmarkLinkedList();
 
 		String csvMarks = "./resources/WallCoordinates.csv";
 		BufferedReader reader = null;
@@ -48,7 +46,6 @@ public class PositionSystem {
 				double x = Double.parseDouble(splitedLine[1].equals("-") ? "-1" : splitedLine[1]);
 				double y = Double.parseDouble(splitedLine[2].equals("-") ? "-1" : splitedLine[2]);
 				wallMarks.put(splitedLine[0], new Vector2(x, y));
-				linkedWallMarks.add(new Wallmark(splitedLine[0], new Vector2(x, y)));
 			}
 
 		} catch (FileNotFoundException e) {
@@ -58,13 +55,48 @@ public class PositionSystem {
 		}
 
 	}
+	
+	public String getRight(String name) {
+		String n = name.replace("W", "");
+		int w = Integer.parseInt(n.split("\\.")[0]);
+		int wn = Integer.parseInt(n.split("\\.")[1]);
+		
+		if(wn == 4){
+			if(w == 3){
+				return "W00.00";
+			}
+			else 
+				return "W0"+(w+1) + ".00";
+		}
+		else {
+			return "W0"+w+".0"+(1+wn);
+		}
+	}
+	
+	public String getLeft(String name) {
+		String n = name.replace("W", "");
+		n = n.replace("0", "");
+		int w = Integer.parseInt(n.split("\\.")[0]);
+		int wn = Integer.parseInt(n.split("\\.")[1]);
+		
+		if(wn == 0){
+			if(w == 0){
+				return "W03.04";
+			}
+			else 
+				return "W0"+(w-1) + ".00";
+		}
+		else {
+			return "W0"+w+".0"+(wn-1);
+		}
+	}
 
 	// Index 0 er venstre og index 1 er højre
 	public double[] calcDistance(String qr) {
 		System.out.println("Qr: " + qr);
 		Vector2 qrVec = getVec(qr);
-		Vector2 leftVec = linkedWallMarks.get(qr).getLeft().getCoordinate();
-		Vector2 rightVec = linkedWallMarks.get(qr).getRight().getCoordinate();
+		Vector2 leftVec = getVec(getLeft(qr));
+		Vector2 rightVec = getVec(getRight(qr));
 
 		double[] distArray = new double[2];
 
