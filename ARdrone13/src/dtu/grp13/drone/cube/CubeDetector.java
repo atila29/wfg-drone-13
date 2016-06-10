@@ -55,61 +55,7 @@ public class CubeDetector {
 		return QR;
 	}
 
-	public void getQr(Mat src, Mat dst) {
-		List<MatOfPoint> edges = new ArrayList<MatOfPoint>();
-		Mat s = src.clone();
-		// lidt billedebahandling
-		Imgproc.cvtColor(s, s, Imgproc.COLOR_BGR2GRAY);
-		Imgproc.GaussianBlur(s, s, new Size(3, 3), 3);
-		Imgproc.Canny(s, s, 100, 200); // læs op på, noget med lysforhold
-
-		Imgproc.findContours(s, edges, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
-		List<Rect> rectList = new ArrayList<>();
-		for (int i = 0; i < edges.size(); i++) {
-			MatOfPoint2f mop2 = new MatOfPoint2f();
-			edges.get(i).convertTo(mop2, CvType.CV_32FC1);
-			double marg = 0.01f;
-			double ep = marg * Imgproc.arcLength(mop2, true);
-			Imgproc.approxPolyDP(mop2, mop2, ep, true);
-			mop2.convertTo(edges.get(i), CvType.CV_32S);
-
-			if (edges.get(i).total() == 4) {
-
-				Rect rect = Imgproc.boundingRect(edges.get(i));
-				double ratio = (double) rect.height / (double) rect.width;
-
-				if (ratio > 1.3 && ratio < 2.0 && rect.height > 80.0) {
-					rectList.add(rect);
-				}
-			}
-
-		}
-		double difHeight;
-		double difWidth;
-		for (int i = 0; i < rectList.size(); i++) {
-			for (int j = 0; j < rectList.size(); j++) {
-				if (i == j) {
-					continue;
-				}
-				difWidth = Math.abs(rectList.get(i).x - rectList.get(j).x);
-				difHeight = Math.abs(rectList.get(i).y - rectList.get(j).y);
-				//System.out.println("Index i: " + i + " DifH: " + difHeight + " DifW: " + difWidth);
-
-				if (difWidth < 20) {
-					//Imgproc.rectangle(dst, rectList.get(i).tl(), rectList.get(i).br(), colorOfRects);
-					//Imgproc.drawMarker(dst, new Point(rectList.get(i).x, rectList.get(i).y), new Scalar(0, 255, 0));
-					rectList.remove(j);
-					//break search;
-				}
-			}
-		}
-		System.out.println(rectList.size());
-		
-		for (int i = 0; i < rectList.size(); i++) {
-			Imgproc.rectangle(dst, rectList.get(i).tl(), rectList.get(i).br(), colorOfRects);
-			Imgproc.drawMarker(dst, new Point(rectList.get(i).x, rectList.get(i).y), new Scalar(0, 255, 0));
-		}
-	}
+	
 
 	public List<Rect> isolateInterestingCubes(List<Rect> rects, int dif) {
 		List<Rect> ret = new ArrayList<Rect>();

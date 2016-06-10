@@ -1,5 +1,6 @@
 package dtu.grp13.drone.core.matproc;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,15 +10,32 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
+import com.google.zxing.ChecksumException;
+import com.google.zxing.FormatException;
+import com.google.zxing.NotFoundException;
+import com.google.zxing.Result;
+
+import dtu.grp13.drone.core.PositionSystem;
 import dtu.grp13.drone.cube.CubeDetector;
 import dtu.grp13.drone.cube.Filterable;
+import dtu.grp13.drone.qrcode.QRAnalyzer;
 
 public class FrameProcess extends AbstractProcess {
+	CubeDetector c;
+	QRAnalyzer qa;
+	PositionSystem ps;
 	private Mat currentFrame;
 	List<Filterable> filtre = new ArrayList<>();
 	
 	public FrameProcess(){
 		super();
+		qa = new QRAnalyzer();
+		try {
+			ps = new PositionSystem();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		filtre.add(new Filterable(){
 			@Override
 			public String getName() {
@@ -63,9 +81,16 @@ public class FrameProcess extends AbstractProcess {
 		Imgproc.cvtColor(currentFrame, grey, Imgproc.COLOR_BGRA2GRAY); 
 		Imgproc.GaussianBlur(grey, grey, new Size(3,3),0,0);
 		Imgproc.Canny(grey, grey, 5, 50);*/
-		CubeDetector c = new CubeDetector();
+	
+		try {
+			String qrResult = qa.scanQr(a);
+			System.out.println(qrResult);
+		} catch (NotFoundException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-		c.getQr(currentFrame, img);
 
 		// LOGIK END
 
