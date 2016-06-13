@@ -90,6 +90,42 @@ public class PositionSystem {
 			return "W0"+w+".0"+(wn-1);
 		}
 	}
+	
+	public List<Rect> sortResults(List<Rect> qrCordList, int fra, int til) {
+		// code from
+		// http://www.programcreek.com/2012/11/quicksort-array-in-java/
+		if (fra >= til){
+			return qrCordList;
+		}
+		int start = fra + (til - fra) / 2;
+		Rect current = qrCordList.get(start);
+
+
+		int i = fra, j = til;
+		while (i <= j) {
+			while (qrCordList.get(i).x < current.x) {
+				i++;
+			}
+			while (qrCordList.get(j).x > current.x) {
+				j--;
+			}
+			if (i <= j) {
+				Rect temp = qrCordList.get(i);
+				qrCordList.set(i, qrCordList.get(j));
+				qrCordList.set(j, temp);
+				i++;
+				j--;
+			}
+		}
+		if (fra < j){
+			sortResults(qrCordList, fra, j);
+		}
+		if (til > i){
+			sortResults(qrCordList, i, til);
+		} 
+		
+		return qrCordList;
+	}
 
 	// Index 0 er venstre og index 1 er højre
 	public double[] calcDistance(String qr) {
@@ -110,12 +146,13 @@ public class PositionSystem {
 	}
 
 	// Index 0 er venstre beta og index 1 er højre beta
-	public double[] calcBeta(List<Rect> qrCordList) {
+	public double[] calcBeta(List<Rect> cords) {
 
 		List<Double> betaList = new ArrayList<Double>();
 		double beta = 0.0;
 		double t = 0;
 		double[] betaArray = new double[2];
+		List<Rect> qrCordList = sortResults(cords, 0, cords.size()-1);
 
 		for (int i = 0; i < qrCordList.size(); i++) {
 
@@ -126,6 +163,7 @@ public class PositionSystem {
 			}
 			beta = Math.atan(t / b);
 			betaList.add(beta);
+			System.out.println();
 
 		}
 		if (qrCordList.get(1).x > 640) {
@@ -180,7 +218,7 @@ public class PositionSystem {
 	public Vector2 calcIntersection(String qr, List<Rect> qrCordList) {
 
 		if (qrCordList.size() == 3) {
-
+			
 			double[] distArray = calcDistance(qr);
 			double[] betaArray = calcBeta(qrCordList);
 			
@@ -192,7 +230,7 @@ public class PositionSystem {
 			//Vector2 cent2 = calcCenter(qrCordList.get(1), qrCordList.get(2), distArray[1], betaArray[1]);
 			
 			Vector2 cent1 = calcCenter(leftVec, qrVec, distArray[0], betaArray[0]);
-			Vector2 cent2 = calcCenter(rightVec, qrVec, distArray[1], betaArray[1]);
+			Vector2 cent2 = calcCenter(qrVec, rightVec, distArray[1], betaArray[1]);
 			double radius1 = calcRadius(distArray[0], betaArray[0]);
 			double radius2 = calcRadius(distArray[1], betaArray[1]);
 			
@@ -201,8 +239,6 @@ public class PositionSystem {
 //			radius1 = 6.245;
 //			radius2 = 5.628;
 			
-			
-
 			double d = Math.sqrt(Math.pow(cent1.getX() - cent2.getX(), 2) + Math.pow(cent1.getY() - cent2.getY(), 2));
 			double t1 = Math.pow(radius1, 2) - Math.pow(radius2, 2) + Math.pow(d, 2);
 			double d1 = t1 / (2 * d);
