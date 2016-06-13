@@ -21,8 +21,8 @@ import dtu.grp13.drone.vector.Vector2;
 
 public class PositionSystem {
 
-	private double horizontalRadians = 1.32899694;
-	//private double horizontalRadians = 1.42899694;
+	//private double horizontalRadians = 1.32899694;
+	private double horizontalRadians = 1.02899694;
 	private double widthRes = 1280;
 	private Map<String, Vector2> wallMarks;
 	private double b = (widthRes / 2) / (Math.tan(horizontalRadians / 2));
@@ -126,7 +126,7 @@ public class PositionSystem {
 			double y = qrCordList.get(i).y + qrCordList.get(i).height/2;
 			qrCordList.get(i).x = (int) x;
 			qrCordList.get(i).y = (int) y;
-			//System.out.println("index = " + i + " value = " + qrCordList.get(i).x);
+			System.out.println("index = " + i + " value = " + qrCordList.get(i).x);
 
 			if (qrCordList.get(i).x > 640) {
 				t = qrCordList.get(i).x - 640;
@@ -140,9 +140,9 @@ public class PositionSystem {
 		if (qrCordList.get(1).x > 640) {
 			betaArray[1] = betaList.get(2) - betaList.get(1);
 			if (qrCordList.get(0).x > 640) {
-				betaArray[0] = betaList.get(2) - betaList.get(0);
+				betaArray[0] = betaList.get(1) - betaList.get(0);
 			} else {
-				betaArray[0] = betaList.get(2) + betaList.get(0);
+				betaArray[0] = betaList.get(1) + betaList.get(0);
 			}
 
 		} else if (qrCordList.get(1).x < 640) {
