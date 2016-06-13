@@ -13,12 +13,16 @@ import dtu.grp13.drone.core.matproc.FrameProcess;
 import dtu.grp13.drone.core.matproc.IDroneSetup;
 import dtu.grp13.drone.core.matproc.ModeController;
 import dtu.grp13.drone.core.matproc.TestProcess;
+import dtu.grp13.drone.position.PositionFrame;
+import dtu.grp13.drone.vector.Vector2;
 
 public class Main {
 
 	public static void main(String[] args) {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		ModeController mc = new ModeController(new FrameProcess());
+		PositionFrame xFrame = new PositionFrame();
+		xFrame.setDronePosition(new Vector2(500,500));
 //		mc.useWebcam();
 //		mc.useDrone(new IDroneSetup() {
 //			
