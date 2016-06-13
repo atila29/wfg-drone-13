@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.RecursiveAction;
 
 import javax.imageio.ImageIO;
 
@@ -99,7 +100,7 @@ public class QRAnalyzer {
 				Rect rect = Imgproc.boundingRect(edges.get(i));
 				double ratio = (double) rect.height / (double) rect.width;
 
-				if (ratio > 1.3 && ratio < 2.5 && rect.height > 80.0 && rect.height < 200) {
+				if (ratio > 1.3 && ratio < 2.5 && rect.height > 80.0 && rect.height < 200 && rect.y > 200 && rect.y < 520) {
 					rectList.add(rect);
 				}
 			}
@@ -122,6 +123,7 @@ public class QRAnalyzer {
 		}
 		
 		for (int i = 0; i < rectList.size(); i++) {
+
 			Imgproc.rectangle(dst, rectList.get(i).tl(), rectList.get(i).br(), new Scalar(255, 0, 0));
 			Imgproc.drawMarker(dst, new Point(rectList.get(i).x, rectList.get(i).y), new Scalar(0, 255, 0));
 		}

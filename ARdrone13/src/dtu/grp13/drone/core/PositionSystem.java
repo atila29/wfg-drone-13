@@ -21,7 +21,8 @@ import dtu.grp13.drone.vector.Vector2;
 
 public class PositionSystem {
 
-	private double horizontalRadians = 1.30899694;
+	private double horizontalRadians = 1.32899694;
+	//private double horizontalRadians = 1.42899694;
 	private double widthRes = 1280;
 	private Map<String, Vector2> wallMarks;
 	private double b = (widthRes / 2) / (Math.tan(horizontalRadians / 2));
@@ -121,6 +122,11 @@ public class PositionSystem {
 		List<Rect> qrCordList = WFGUtilities.sortResults(cords, 0, cords.size()-1);
 
 		for (int i = 0; i < qrCordList.size(); i++) {
+			double x = qrCordList.get(i).x + qrCordList.get(i).width/2;
+			double y = qrCordList.get(i).y + qrCordList.get(i).height/2;
+			qrCordList.get(i).x = (int) x;
+			qrCordList.get(i).y = (int) y;
+			//System.out.println("index = " + i + " value = " + qrCordList.get(i).x);
 
 			if (qrCordList.get(i).x > 640) {
 				t = qrCordList.get(i).x - 640;
@@ -190,6 +196,9 @@ public class PositionSystem {
 			Vector2 qrVec = getVec(qr);
 			Vector2 leftVec = getVec(getLeft(qr));
 			Vector2 rightVec = getVec(getRight(qr));
+//			System.out.println("Left = " + leftVec.getX());
+//			System.out.println("Mid = " + qrVec.getX());
+//			System.out.println("Right = " + rightVec.getX());
 
 			//Vector2 cent1 = calcCenter(qrCordList.get(0), qrCordList.get(1), distArray[0], betaArray[0]);
 			//Vector2 cent2 = calcCenter(qrCordList.get(1), qrCordList.get(2), distArray[1], betaArray[1]);
@@ -198,6 +207,8 @@ public class PositionSystem {
 			Vector2 cent2 = calcCenter(qrVec, rightVec, distArray[1], betaArray[1]);
 			double radius1 = calcRadius(distArray[0], betaArray[0]);
 			double radius2 = calcRadius(distArray[1], betaArray[1]);
+			System.out.println("beta1 = " + betaArray[0]);
+			System.out.println("beta2 = " + betaArray[1]);
 			
 //			cent1 = new Vector2(5.995, -1.748);
 //			cent2 = new Vector2(5.433, 5.467);

@@ -20,26 +20,26 @@ public class Main {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		ModeController mc = new ModeController(new FrameProcess());
 //		mc.useWebcam();
-		mc.useDrone(new IDroneSetup() {
-			
-			@Override
-			public void setup(ARDrone drone) {
-				drone.reset();
-				drone.getCommandManager().setWifiMode(WifiMode.STATION);
-				drone.getCommandManager().setVideoBitrateControl(VideoBitRateMode.DISABLED);
-				drone.getCommandManager().setVideoBitrate(4000);
-				drone.getCommandManager().setVideoCodecFps(15);
-				drone.getCommandManager().setVideoCodec(VideoCodec.H264_720P);
-				//drone.getCommandManager().setVideoChannel(VideoChannel.NEXT);
-				drone.getCommandManager().setVideoChannel(VideoChannel.HORI);
-			}
-		});
-//		try {
-//			mc.useStaticImage("./resources/pic6.jpg");
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+//		mc.useDrone(new IDroneSetup() {
+//			
+//			@Override
+//			public void setup(ARDrone drone) {
+//				drone.reset();
+//				drone.getCommandManager().setWifiMode(WifiMode.STATION);
+//				drone.getCommandManager().setVideoBitrateControl(VideoBitRateMode.DISABLED);
+//				drone.getCommandManager().setVideoBitrate(4000);
+//				drone.getCommandManager().setVideoCodecFps(15);
+//				drone.getCommandManager().setVideoCodec(VideoCodec.H264_720P);
+//				//drone.getCommandManager().setVideoChannel(VideoChannel.NEXT);
+//				drone.getCommandManager().setVideoChannel(VideoChannel.HORI);
+//			}
+//		});
+		try {
+			mc.useStaticImage("./resources/pic4.jpg");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 
 	}
