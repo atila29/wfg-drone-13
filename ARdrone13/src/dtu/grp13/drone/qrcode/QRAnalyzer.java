@@ -63,15 +63,6 @@ public class QRAnalyzer {
 		//Imgproc.resize(qr, qr, new Size(500, 707));
 
 
-		File outputfile = new File("image.jpg");
-		try {
-			ImageIO.write((RenderedImage) WFGUtilities.toBufferedImage(qr), "jpg", outputfile);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-
 		Image img = WFGUtilities.toBufferedImage(qr);
 		LuminanceSource source = new BufferedImageLuminanceSource((BufferedImage) img);
 		BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
