@@ -2,10 +2,15 @@ package dtu.grp13.drone.qrcode;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.imageio.ImageIO;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -29,12 +34,44 @@ import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
 
+import dtu.grp13.drone.core.PositionSystem;
 import dtu.grp13.drone.util.WFGUtilities;
 
 public class QRAnalyzer {
 
 	public String scanQr(Mat src) throws NotFoundException, ChecksumException, FormatException {
 		Image img = WFGUtilities.toBufferedImage(src);
+		LuminanceSource source = new BufferedImageLuminanceSource((BufferedImage) img);
+		BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+		//QRCodeReader reader = new QRCodeReader();
+		MultiFormatReader reader = new MultiFormatReader();
+		Result scanResult = reader.decode(bitmap);
+		
+		System.out.println(scanResult.getText());
+		
+		return scanResult.getText();
+
+	}
+	
+	public Rect getMidRect(List<Rect> rects) throws IOException {
+		return new PositionSystem().sortResults(rects, 0, rects.size()-1).get(1);
+	}
+	 
+	public String scanQr(Mat src, Rect rect) throws NotFoundException, ChecksumException, FormatException {
+		
+		Mat qr =  src.submat(rect);
+
+
+		File outputfile = new File("image.jpg");
+		try {
+			ImageIO.write((RenderedImage) WFGUtilities.toBufferedImage(qr), "jpg", outputfile);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+		Image img = WFGUtilities.toBufferedImage(qr);
 		LuminanceSource source = new BufferedImageLuminanceSource((BufferedImage) img);
 		BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
 		//QRCodeReader reader = new QRCodeReader();
