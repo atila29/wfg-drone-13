@@ -27,12 +27,14 @@ public class PositionFrame {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("c_system");
 		frame.getContentPane().add(panel);
+		frame.setResizable(false);
+		frame.setLocation(1000, 0);
 		frame.setVisible(true);
-		origo = new Vector2(0, 1060);
+		origo = new Vector2(0, 450);
 		flip = new Matrix2(2,2, 1,0,
 								0,-1);
-		scale = new Matrix2(2,2, 1, 0,
-								 0,	 1);
+		scale = new Matrix2(2,2, 0.4, 0,
+								 0,	 0.4);
 		transformValue = flip.dot(scale);
 		frame.pack();
 	}
