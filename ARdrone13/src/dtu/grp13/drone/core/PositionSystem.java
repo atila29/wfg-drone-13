@@ -21,8 +21,8 @@ import dtu.grp13.drone.vector.Vector2;
 
 public class PositionSystem {
 
-	//private double horizontalRadians = 1.32899694;
-	private double horizontalRadians = 1.02899694;
+	//private double horizontalRadians = 1.32899694; // 75 grader
+	private double horizontalRadians = 1.39949138; // 80 grader
 	private double widthRes = 1280;
 	private Map<String, Vector2> wallMarks;
 	private double b = (widthRes / 2) / (Math.tan(horizontalRadians / 2));
@@ -126,7 +126,7 @@ public class PositionSystem {
 			double y = qrCordList.get(i).y + qrCordList.get(i).height/2;
 			qrCordList.get(i).x = (int) x;
 			qrCordList.get(i).y = (int) y;
-			System.out.println("index = " + i + " value = " + qrCordList.get(i).x);
+			//System.out.println("index = " + i + " value = " + qrCordList.get(i).x);
 
 			if (qrCordList.get(i).x > 640) {
 				t = qrCordList.get(i).x - 640;
@@ -134,6 +134,7 @@ public class PositionSystem {
 				t = 640 - qrCordList.get(i).x;
 			}
 			beta = Math.atan(t / b);
+			System.out.println("i = " + i + " beta = " + beta);
 			betaList.add(beta);
 
 		}
@@ -177,7 +178,6 @@ public class PositionSystem {
 	
 	public Vector2 calcCenter(Vector2 v1, Vector2 v2, double afstand, double vinkel) {
 		
-
 		double var0 = Math.sqrt(Math.pow(Math.abs(-v2.getY() + v1.getY()), 2) + Math.pow(Math.abs(-v2.getX() + v1.getX()), 2));
 		double var1 = Math.sqrt(Math.pow(afstand, 2) / Math.pow(Math.sin(vinkel), 2) - Math.pow(afstand, 2));
 		double x = 0.5 * (v2.getY() - v1.getY()) / var0 * var1 + (0.5 * v1.getX()) + (0.5 * v2.getX());
@@ -192,6 +192,8 @@ public class PositionSystem {
 			
 			double[] distArray = calcDistance(qr);
 			double[] betaArray = calcBeta(qrCordList);
+//			betaArray[0] = 0.519409985;
+//			betaArray[1] = 0.416261027;
 			
 			Vector2 qrVec = getVec(qr);
 			Vector2 leftVec = getVec(getLeft(qr));
