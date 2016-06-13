@@ -54,7 +54,7 @@ public class QRAnalyzer {
 	}
 	
 	public Rect getMidRect(List<Rect> rects) throws IOException {
-		return new PositionSystem().sortResults(rects, 0, rects.size()-1).get(1);
+		return WFGUtilities.sortResults(rects, 0, rects.size()-1).get(1);
 	}
 	 
 	public String scanQr(Mat src, Rect rect) throws NotFoundException, ChecksumException, FormatException {

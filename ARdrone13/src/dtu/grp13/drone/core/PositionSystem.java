@@ -14,6 +14,7 @@ import org.opencv.core.Rect;
 
 import com.google.zxing.Result;
 
+import dtu.grp13.drone.util.WFGUtilities;
 import dtu.grp13.drone.util.Wallmark;
 import dtu.grp13.drone.util.WallmarkLinkedList;
 import dtu.grp13.drone.vector.Vector2;
@@ -91,41 +92,7 @@ public class PositionSystem {
 		}
 	}
 	
-	public List<Rect> sortResults(List<Rect> qrCordList, int fra, int til) {
-		// code from
-		// http://www.programcreek.com/2012/11/quicksort-array-in-java/
-		if (fra >= til){
-			return qrCordList;
-		}
-		int start = fra + (til - fra) / 2;
-		Rect current = qrCordList.get(start);
 
-
-		int i = fra, j = til;
-		while (i <= j) {
-			while (qrCordList.get(i).x < current.x) {
-				i++;
-			}
-			while (qrCordList.get(j).x > current.x) {
-				j--;
-			}
-			if (i <= j) {
-				Rect temp = qrCordList.get(i);
-				qrCordList.set(i, qrCordList.get(j));
-				qrCordList.set(j, temp);
-				i++;
-				j--;
-			}
-		}
-		if (fra < j){
-			sortResults(qrCordList, fra, j);
-		}
-		if (til > i){
-			sortResults(qrCordList, i, til);
-		} 
-		
-		return qrCordList;
-	}
 
 	// Index 0 er venstre og index 1 er højre
 	public double[] calcDistance(String qr) {
@@ -152,7 +119,7 @@ public class PositionSystem {
 		double beta = 0.0;
 		double t = 0;
 		double[] betaArray = new double[2];
-		List<Rect> qrCordList = sortResults(cords, 0, cords.size()-1);
+		List<Rect> qrCordList = WFGUtilities.sortResults(cords, 0, cords.size()-1);
 
 		for (int i = 0; i < qrCordList.size(); i++) {
 
