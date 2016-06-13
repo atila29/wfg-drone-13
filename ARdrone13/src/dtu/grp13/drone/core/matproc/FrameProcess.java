@@ -85,12 +85,13 @@ public class FrameProcess extends AbstractProcess {
 		Imgproc.Canny(grey, grey, 5, 50);*/
 	
 		try {
-			String qrResult = "W02.04";
+			
 			List<Rect> rects = qa.findQrEdges(a, img);
-			qrResult = qa.scanQr(currentFrame, qa.getMidRect(rects));
+			if (rects.size() == 3) {
+			String qrResult = qa.scanQr(currentFrame, qa.getMidRect(rects));
 			Vector2 position = ps.calcIntersection(qrResult, rects);
 			System.out.println("Pos: " + position);
-			
+			}
 		} 
 //		catch (NotFoundException e) {
 //			e.printStackTrace();

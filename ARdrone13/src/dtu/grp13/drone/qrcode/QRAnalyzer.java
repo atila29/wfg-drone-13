@@ -60,6 +60,7 @@ public class QRAnalyzer {
 	public String scanQr(Mat src, Rect rect) throws NotFoundException, ChecksumException, FormatException {
 		
 		Mat qr =  src.submat(rect);
+		//Imgproc.resize(qr, qr, new Size(500, 707));
 
 
 		File outputfile = new File("image.jpg");
@@ -107,7 +108,7 @@ public class QRAnalyzer {
 				Rect rect = Imgproc.boundingRect(edges.get(i));
 				double ratio = (double) rect.height / (double) rect.width;
 
-				if (ratio > 1.3 && ratio < 2.0 && rect.height > 80.0 && rect.height < 200) {
+				if (ratio > 1.3 && ratio < 2.5 && rect.height > 120.0 && rect.height < 200) {
 					rectList.add(rect);
 				}
 			}
@@ -121,19 +122,19 @@ public class QRAnalyzer {
 				}
 				difWidth = Math.abs(rectList.get(i).x - rectList.get(j).x);
 				difHeight = Math.abs(rectList.get(i).y - rectList.get(j).y);
-				//System.out.println("Index i: " + i + " DifH: " + difHeight + " DifW: " + difWidth);
+				
 
 				if (difWidth < 20) {
 					rectList.remove(j);
 				}
 			}
 		}
-		System.out.println(rectList.size());
 		
 		for (int i = 0; i < rectList.size(); i++) {
 			Imgproc.rectangle(dst, rectList.get(i).tl(), rectList.get(i).br(), new Scalar(255, 0, 0));
 			Imgproc.drawMarker(dst, new Point(rectList.get(i).x, rectList.get(i).y), new Scalar(0, 255, 0));
 		}
+		System.out.println("Rect count = " + rectList.size());
 		
 		return rectList;
 	}

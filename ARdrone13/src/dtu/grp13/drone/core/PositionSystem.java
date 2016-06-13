@@ -130,7 +130,6 @@ public class PositionSystem {
 			}
 			beta = Math.atan(t / b);
 			betaList.add(beta);
-			System.out.println();
 
 		}
 		if (qrCordList.get(1).x > 640) {
@@ -149,7 +148,7 @@ public class PositionSystem {
 				betaArray[1] = betaList.get(1) + betaList.get(2);
 			}
 		}
-		System.out.println(betaArray[0] + " --- " + betaArray[1]);
+		//System.out.println(betaArray[0] + " --- " + betaArray[1]);
 
 		return betaArray;
 	}
@@ -178,7 +177,7 @@ public class PositionSystem {
 		double var1 = Math.sqrt(Math.pow(afstand, 2) / Math.pow(Math.sin(vinkel), 2) - Math.pow(afstand, 2));
 		double x = 0.5 * (v2.getY() - v1.getY()) / var0 * var1 + (0.5 * v1.getX()) + (0.5 * v2.getX());
 		double y = 0.5 * (-v2.getX() + v1.getX()) / var0 * var1 + (0.5 * v1.getY()) + (0.5 * v2.getY());
-		System.out.println("x: " + x + " --- y: " + y);
+		//System.out.println("x: " + x + " --- y: " + y);
 		return new Vector2(x, y);
 	}
 
