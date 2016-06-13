@@ -76,7 +76,6 @@ public class PositionSystem {
 	
 	public String getLeft(String name) {
 		String n = name.replace("W", "");
-		n = n.replace("0", "");
 		int w = Integer.parseInt(n.split("\\.")[0]);
 		int wn = Integer.parseInt(n.split("\\.")[1]);
 		

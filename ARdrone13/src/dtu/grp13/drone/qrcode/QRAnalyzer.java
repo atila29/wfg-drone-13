@@ -99,7 +99,7 @@ public class QRAnalyzer {
 				Rect rect = Imgproc.boundingRect(edges.get(i));
 				double ratio = (double) rect.height / (double) rect.width;
 
-				if (ratio > 1.3 && ratio < 2.5 && rect.height > 120.0 && rect.height < 200) {
+				if (ratio > 1.3 && ratio < 2.5 && rect.height > 80.0 && rect.height < 200) {
 					rectList.add(rect);
 				}
 			}
