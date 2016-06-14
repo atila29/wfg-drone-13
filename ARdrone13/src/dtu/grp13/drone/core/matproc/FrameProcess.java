@@ -17,6 +17,7 @@ import com.google.zxing.NotFoundException;
 import com.google.zxing.Result;
 
 import dtu.grp13.drone.core.PositionSystem;
+import dtu.grp13.drone.core.matproc.procs.IMatProcess;
 import dtu.grp13.drone.cube.CubeDetector;
 import dtu.grp13.drone.cube.Filterable;
 import dtu.grp13.drone.qrcode.QRAnalyzer;
@@ -26,86 +27,28 @@ public class FrameProcess extends AbstractProcess {
 	CubeDetector c;
 	QRAnalyzer qa;
 	PositionSystem ps;
-	private Mat currentFrame;
 	List<Filterable> filtre = new ArrayList<>();
+	IMatProcess proc;
 	
-	public FrameProcess(){
+	public FrameProcess(IMatProcess proc){
 		super();
 		qa = new QRAnalyzer();
+		this.proc = proc;
 		try {
 			ps = new PositionSystem();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		c = new CubeDetector();
-		
-		filtre.add(new Filterable(){
-			@Override
-			public String getName() {
-				return "green";
-			}
-
-			@Override
-			public void processColor(Mat src, Mat dst) {
-				Core.inRange(src, new Scalar(0, 50, 0), new Scalar(50, 255, 50), dst);
-			}
-		});
-//		filtre.add(new Filterable(){
-//			@Override
-//			public String getName() {
-//				return "green";
-//			}
-//
-//			@Override
-//			public void processColor(Mat src, Mat dst) {
-//				Core.inRange(src, new Scalar(0, 255, 0), new Scalar(120, 255, 120), dst);
-//			}
-//		});
-
-		filtre.add(new Filterable(){
-			@Override
-			public String getName() {
-				return "red";
-			}
-
-			@Override
-			public void processColor(Mat src, Mat dst) {
-				Core.inRange(src, new Scalar(0, 0, 50), new Scalar(40, 40, 255), dst);
-			}
-		});
 	}
 
 	@Override
 	public Mat processMat(Mat a) {
-		currentFrame = a;
-		// LOGIK
-		Mat img = currentFrame.clone();
-		/*Mat grey = new Mat();
-		Imgproc.cvtColor(currentFrame, grey, Imgproc.COLOR_BGRA2GRAY); 
-		Imgproc.GaussianBlur(grey, grey, new Size(3,3),0,0);
-		Imgproc.Canny(grey, grey, 5, 50);*/
-	
-//		try {
-//			
-//			List<Rect> rects = qa.findQrEdges(a, img);
-//			if (rects.size() == 3) {
-//			String qrResult = qa.scanQr(currentFrame, qa.getMidRect(rects));
-//			Vector2 position = ps.calcIntersection(qrResult, rects);
-//			System.out.println("Pos: " + position);
-//			}
-//		} 
-////		catch (NotFoundException e) {
-////			e.printStackTrace();
-////		} 
-//		catch (Exception e) {
-//			e.printStackTrace();
-//		}
+		return proc.processMat(a);
+	}
 
-		c.findSpecificCubeColor(currentFrame, img, filtre);
-
-		// LOGIK END
-
-		return img;
+	@Override
+	public void changeProcess(IMatProcess proc) {
+		this.proc = proc;
 	}
 
 
