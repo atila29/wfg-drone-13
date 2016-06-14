@@ -24,6 +24,7 @@ public class CameraCalibration {
 	public static void main(String[] args) {
 		System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
 		int xsize = 6, ysize = 9;
+		Mat savedImage = new Mat();
 		
 		List<Mat> imagePoint = new ArrayList<Mat>(), rvecs = new ArrayList<Mat>(), tvecs = new ArrayList<Mat>();
 		for(int x = 0; x<xsize; x++) {
@@ -43,17 +44,24 @@ public class CameraCalibration {
 			Size size = new Size(xsize, ysize);
 			boolean found = Calib3d.findChessboardCorners(image, size, corners);
 			if(found) {
+		
+				grayImg.copyTo(savedImage);
 				Imgproc.cornerSubPix(grayImg, corners, new Size(11,11), new Size(-1,-1), new TermCriteria(TermCriteria.EPS|TermCriteria.MAX_ITER, 30, 0.1));
 				cornerList.add(corners);
+	
 			}
-			Calib3d.drawChessboardCorners(image, new Size(11,11), corners, found);
+			Calib3d.drawChessboardCorners(image, size, corners, found);
 			Imgcodecs.imwrite("resources\\checkboard\\drawnimg"+i+".jpg", image);
 			System.out.println(i + " done");
 		}
-		Mat cameraMatrix = Mat.eye(new Size(xsize,ysize), CvType.CV_64F);
-		Mat distCoeffs =  Mat.zeros(new Size(0,0), CvType.CV_64F);
-		Calib3d.calibrateCamera(cornerList, imagePoint, new Size(xsize,ysize), cameraMatrix,distCoeffs, rvecs, tvecs);
+		
+		Mat cameraMatrix = Mat.eye(new Size(3,3), CvType.CV_64F);
+		Mat distCoeffs =  new Mat();
+		cameraMatrix.put(0, 0, 1);
+		cameraMatrix.put(1, 1, 1);
+		Calib3d.calibrateCamera(cornerList, imagePoint, savedImage.size(), cameraMatrix, distCoeffs, rvecs, tvecs);
 		Mat imgIn = Imgcodecs.imread("resources\\pic9.jpg");
+		
 		
 		Imgproc.undistort(imgIn, imgIn, cameraMatrix, distCoeffs);
 		Imgcodecs.imwrite("resources\\drawming.jpg",imgIn);
