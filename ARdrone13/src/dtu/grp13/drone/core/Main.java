@@ -22,7 +22,7 @@ public class Main {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		ModeController mc = new ModeController(new FrameProcess());
 		PositionFrame xFrame = new PositionFrame();
-		xFrame.setDronePosition(new Vector2(500,500));
+		xFrame.setDronePosition(new Vector2(0,108));
 //		mc.useWebcam();
 //		mc.useDrone(new IDroneSetup() {
 //			

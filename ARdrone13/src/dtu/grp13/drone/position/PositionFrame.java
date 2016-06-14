@@ -1,5 +1,6 @@
 package dtu.grp13.drone.position;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
@@ -30,11 +31,11 @@ public class PositionFrame {
 		frame.setResizable(false);
 		frame.setLocation(1000, 0);
 		frame.setVisible(true);
-		origo = new Vector2(0, 450);
+		origo = new Vector2(0, 523);
 		flip = new Matrix2(2,2, 1,0,
 								0,-1);
-		scale = new Matrix2(2,2, 0.4, 0,
-								 0,	 0.4);
+		scale = new Matrix2(2,2, 0.5, 0,
+								 0,	 0.5);
 		transformValue = flip.dot(scale);
 		frame.pack();
 	}
@@ -79,7 +80,8 @@ public class PositionFrame {
 			if(coor != null) {
 				int x = (int)coor.getX();
 				int y = (int)coor.getY();
-				g.drawOval(x, y, 10, 10);
+				g.setColor(new Color(255, 0, 0));
+				g.fillOval(x, y, 12, 12);
 			}
 		}
 	}
