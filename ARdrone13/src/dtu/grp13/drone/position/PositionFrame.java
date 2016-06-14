@@ -78,8 +78,8 @@ public class PositionFrame {
 		public void paintComponent(Graphics g) {
 			g.drawImage(img, 0, 0, null);
 			if(coor != null) {
-				int x = (int)coor.getX();
-				int y = (int)coor.getY();
+				int x = (int)coor.getX()-6;
+				int y = (int)coor.getY()-6;
 				g.setColor(new Color(255, 0, 0));
 				g.fillOval(x, y, 12, 12);
 			}

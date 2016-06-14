@@ -37,6 +37,7 @@ public class FrameProcess extends AbstractProcess {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		c = new CubeDetector();
 		
 		filtre.add(new Filterable(){
 			@Override
@@ -84,22 +85,23 @@ public class FrameProcess extends AbstractProcess {
 		Imgproc.GaussianBlur(grey, grey, new Size(3,3),0,0);
 		Imgproc.Canny(grey, grey, 5, 50);*/
 	
-		try {
-			
-			List<Rect> rects = qa.findQrEdges(a, img);
-			if (rects.size() == 3) {
-			String qrResult = qa.scanQr(currentFrame, qa.getMidRect(rects));
-			Vector2 position = ps.calcIntersection(qrResult, rects);
-			System.out.println("Pos: " + position);
-			}
-		} 
-//		catch (NotFoundException e) {
-//			e.printStackTrace();
+//		try {
+//			
+//			List<Rect> rects = qa.findQrEdges(a, img);
+//			if (rects.size() == 3) {
+//			String qrResult = qa.scanQr(currentFrame, qa.getMidRect(rects));
+//			Vector2 position = ps.calcIntersection(qrResult, rects);
+//			System.out.println("Pos: " + position);
+//			}
 //		} 
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+////		catch (NotFoundException e) {
+////			e.printStackTrace();
+////		} 
+//		catch (Exception e) {
+//			e.printStackTrace();
+//		}
 
+		c.findSpecificCubeColor(currentFrame, img, filtre);
 
 		// LOGIK END
 
