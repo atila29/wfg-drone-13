@@ -20,4 +20,5 @@ public interface ICommandThread {
 	public void stepLeft() throws InterruptedException;
 	public void stepRight() throws InterruptedException;
 	public void next() throws InterruptedException;
+	public void stabilize() throws InterruptedException;
 }

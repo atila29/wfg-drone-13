@@ -192,4 +192,15 @@ public class CommandThread implements ICommandThread{
 		t.start();
 		t.join();
 	}
+
+	@Override
+	public void stabilize() throws InterruptedException {
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				drone.getCommandManager().flatTrim();
+			}});
+		t.start();
+		t.join();
+	}
 }

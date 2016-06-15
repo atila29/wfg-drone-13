@@ -19,6 +19,7 @@ public class ProgramManager {
 	
 	public void takeOffDrone() throws InterruptedException{
 		ct.takeOff();
+		ct.stabilize();
 	}
 	
 	public void emergencyDrone(){
@@ -31,6 +32,7 @@ public class ProgramManager {
 	
 	public Vector2 findPosition() {
 		try {
+			ct.up(20, 200);
 			ct.up(20, 200);
 			while(position == null) {
 				ct.rotateClockwise(15);

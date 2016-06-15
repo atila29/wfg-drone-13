@@ -17,7 +17,7 @@ public class CubeProc implements IMatProcess{
 	CubeDetector c;
 	
 	public CubeProc(){
-c = new CubeDetector();
+		c = new CubeDetector();
 		
 		filtre.add(new Filterable(){
 			@Override
