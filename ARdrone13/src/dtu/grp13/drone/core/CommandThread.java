@@ -125,7 +125,7 @@ public class CommandThread implements ICommandThread{
 	
 	@Override
 	public void findPosition() throws InterruptedException {
-		new Thread(() -> {
+		Thread t = new Thread(() -> {
 			try {
 				this.up(15, 500);
 				this.up(15, 500);
@@ -136,8 +136,9 @@ public class CommandThread implements ICommandThread{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}).start();
-		
+		});
+		t.start();
+		t.join();
 	}
 
 	@Override
