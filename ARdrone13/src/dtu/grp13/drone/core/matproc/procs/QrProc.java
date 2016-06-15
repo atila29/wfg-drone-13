@@ -9,6 +9,7 @@ import org.opencv.core.Rect;
 import com.google.zxing.NotFoundException;
 
 import dtu.grp13.drone.core.PositionSystem;
+import dtu.grp13.drone.core.ProgramManager;
 import dtu.grp13.drone.qrcode.QRAnalyzer;
 import dtu.grp13.drone.vector.Vector2;
 
@@ -16,8 +17,10 @@ public class QrProc implements IMatProcess{
 	private QRAnalyzer qa;
 	private PositionSystem ps;
 	private Mat currentFrame;
+	private ProgramManager pm;
 	
-	public QrProc() {
+	public QrProc(ProgramManager pm) {
+		this.pm = pm;
 		qa = new QRAnalyzer();
 		try {
 			ps = new PositionSystem();
@@ -37,6 +40,7 @@ public class QrProc implements IMatProcess{
 			String qrResult = qa.scanQr(currentFrame, qa.getMidRect(rects));
 			Vector2 position = ps.calcIntersection(qrResult, rects);
 			System.out.println("Pos: " + position);
+			pm.positionFound(position);
 			}
 		} 
 		catch (NotFoundException e) {

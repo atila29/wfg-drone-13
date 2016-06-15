@@ -127,7 +127,7 @@ public class QRAnalyzer {
 			Imgproc.rectangle(dst, rectList.get(i).tl(), rectList.get(i).br(), new Scalar(255, 0, 0));
 			Imgproc.drawMarker(dst, new Point(rectList.get(i).x, rectList.get(i).y), new Scalar(0, 255, 0));
 		}
-		System.out.println("Rect count = " + rectList.size());
+		//System.out.println("Rect count = " + rectList.size());
 		
 		return rectList;
 	}

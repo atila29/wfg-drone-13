@@ -1,6 +1,7 @@
 package dtu.grp13.drone.core;
 
 import de.yadrone.base.IARDrone;
+import de.yadrone.base.command.VideoChannel;
 
 public class CommandThread implements ICommandThread{	
 	private IARDrone drone;
@@ -122,24 +123,6 @@ public class CommandThread implements ICommandThread{
 		t.join();
 		
 	}
-	
-	@Override
-	public void findPosition() throws InterruptedException {
-		Thread t = new Thread(() -> {
-			try {
-				this.up(15, 500);
-				this.up(15, 500);
-				this.up(15, 500);
-				this.hover(5000);
-				this.hover(5000);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		});
-		t.start();
-		t.join();
-	}
 
 	@Override
 	public void freeze(int milsec) throws InterruptedException {
@@ -147,6 +130,64 @@ public class CommandThread implements ICommandThread{
 			@Override
 			public void run() {
 				drone.getCommandManager().freeze().doFor(milsec);
+			}});
+		t.start();
+		t.join();
+	}
+
+	@Override
+	public void emegency() {
+		this.drone.getCommandManager().emergency();
+	}
+
+	@Override
+	public void rotateClockwise(int angle) throws InterruptedException {
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				drone.getCommandManager().spinRight(15).doFor(angle*100);
+			}});
+		t.start();
+		t.join();
+	}
+
+	@Override
+	public void rotateCounterClockwise(int angle) throws InterruptedException {
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				drone.getCommandManager().spinLeft(15).doFor(angle*100);
+			}});
+		t.start();
+		t.join();
+	}
+
+	@Override
+	public void stepForward() throws InterruptedException {
+		this.forward(10, 200);
+	}
+
+	@Override
+	public void stepBackward() throws InterruptedException {
+		this.backward(20, 200);
+	}
+
+	@Override
+	public void stepLeft() throws InterruptedException {
+		this.left(20, 200);
+	}
+
+	@Override
+	public void stepRight() throws InterruptedException {
+		this.right(20, 200);
+	}
+
+	@Override
+	public void next() throws InterruptedException {
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				drone.getCommandManager().setVideoChannel(VideoChannel.NEXT);
 			}});
 		t.start();
 		t.join();

@@ -11,17 +11,18 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import dtu.grp13.drone.core.CommandThread;
+import dtu.grp13.drone.core.ProgramManager;
 
 
 
 public class ControlFrame {
 	private MyPanel panel;
 	private JFrame frame;
-	private CommandThread ct;
+	private ProgramManager pm;
 	
 	
-	public ControlFrame(CommandThread ct){
-		this.ct = ct;
+	public ControlFrame(ProgramManager pm){
+		this.pm = pm;
 		panel = new MyPanel();
 		frame = new JFrame();
 		frame.getContentPane().setLayout(new FlowLayout());
@@ -70,7 +71,7 @@ public class ControlFrame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					try {
-						ct.takeOff();
+						pm.takeOffDrone();
 					} catch (InterruptedException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -82,8 +83,7 @@ public class ControlFrame {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
-					
+					pm.findPosition();
 				}
 			});
 			
@@ -92,7 +92,7 @@ public class ControlFrame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					try {
-						ct.land();
+						pm.landDrone();
 					} catch (InterruptedException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -104,13 +104,7 @@ public class ControlFrame {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					ct.notifyAll();
-					try {
-						ct.land();
-					} catch (InterruptedException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					pm.emergencyDrone();
 				}
 			});
 			

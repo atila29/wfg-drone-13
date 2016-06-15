@@ -25,7 +25,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-		FrameProcess proc = new FrameProcess(new QrProc());
+		ProgramManager programManager = new ProgramManager();
+		FrameProcess proc = new FrameProcess(new QrProc(programManager));
 		ModeController mc = new ModeController(proc);
 		PositionFrame xFrame = new PositionFrame();
 //		xFrame.setDronePosition(new Vector2(926,324));
@@ -45,7 +46,9 @@ public class Main {
 		});
 		
 		CommandThread cmd = new CommandThread(drone);
-		ControlFrame cf = new ControlFrame(cmd);
+		programManager.setProc(proc);
+		programManager.setCmd(cmd);
+		ControlFrame cf = new ControlFrame(programManager);
 //		try {
 //			//cmd.waitFor(5000);
 //			cmd.takeOff();

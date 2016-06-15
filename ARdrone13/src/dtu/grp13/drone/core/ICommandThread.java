@@ -10,7 +10,14 @@ public interface ICommandThread {
 	public void waitFor(int milsec) throws InterruptedException;
 	public void hover(int milsec) throws InterruptedException;
 	public void freeze(int milsec) throws InterruptedException;
-	public void findPosition() throws InterruptedException;
 	public void up(int speed, int milsec) throws InterruptedException;
 	public void down(int speed, int milsec) throws InterruptedException;
+	public void emegency();
+	public void rotateClockwise(int angle) throws InterruptedException;
+	public void rotateCounterClockwise(int angle) throws InterruptedException;
+	public void stepForward() throws InterruptedException;
+	public void stepBackward() throws InterruptedException;
+	public void stepLeft() throws InterruptedException;
+	public void stepRight() throws InterruptedException;
+	public void next() throws InterruptedException;
 }
