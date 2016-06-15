@@ -174,22 +174,19 @@ public class PositionSystem {
 	public Vector2 calcIntersection(String qr, List<Rect> qrCordList) {
 
 		if (qrCordList.size() == 3) {
-			double[] distArray = calcDistance(qr);
-			double[] betaArray = calcBeta(qrCordList);
-			// Test code
-			// betaArray[0] = 0.519409985;
-			// betaArray[1] = 0.416261027;
-
 			Vector2 qrVec = getVec(qr);
 			Vector2 leftVec = getVec(getLeft(qr));
 			Vector2 rightVec = getVec(getRight(qr));
 
-			Vector2 cent1 = calcCenter(leftVec, qrVec, distArray[0], betaArray[0]);
-			Vector2 cent2 = calcCenter(qrVec, rightVec, distArray[1], betaArray[1]);
-			double radius1 = calcRadius(distArray[0], betaArray[0]);
-			double radius2 = calcRadius(distArray[1], betaArray[1]);
-			System.out.println("beta1 = " + betaArray[0]);
-			System.out.println("beta2 = " + betaArray[1]);
+			double[] distArray = calcDistance(qr);
+			double[] angleArray = calcBeta(qrCordList);
+
+			Vector2 cent1 = calcCenter(leftVec, qrVec, distArray[0], angleArray[0]);
+			Vector2 cent2 = calcCenter(qrVec, rightVec, distArray[1], angleArray[1]);
+			double radius1 = calcRadius(distArray[0], angleArray[0]);
+			double radius2 = calcRadius(distArray[1], angleArray[1]);
+			System.out.println("beta1 = " + angleArray[0]);
+			System.out.println("beta2 = " + angleArray[1]);
 
 			// Test code
 			// cent1 = new Vector2(5.995, -1.748);
