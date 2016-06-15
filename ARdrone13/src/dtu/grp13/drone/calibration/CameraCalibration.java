@@ -23,34 +23,44 @@ public class CameraCalibration {
 	
 	public static void main(String[] args) {
 		System.loadLibrary( Core.NATIVE_LIBRARY_NAME );
-		int xsize = 6, ysize = 9;
+		MatOfPoint3f obj = new MatOfPoint3f();
+		MatOfPoint2f imageCorners = new MatOfPoint2f();
+		int numCornersHor = 9;
+		int numCornersVer  = 6;
+		int numSquares = numCornersHor * numCornersVer;
+		
 		Mat savedImage = new Mat();
 		
-		List<Mat> imagePoint = new ArrayList<Mat>(), rvecs = new ArrayList<Mat>(), tvecs = new ArrayList<Mat>();
-		for(int x = 0; x<xsize; x++) {
-			for(int y = 0; y<ysize; y++) {
-				MatOfPoint3f points = new MatOfPoint3f(new Point3(x,y,0));
-				imagePoint.add(points);
-			}
+		List<Mat> rvecs = new ArrayList<Mat>();
+		List<Mat> tvecs = new ArrayList<Mat>();
+		List<Mat> imagePoints = new ArrayList<>();
+		List<Mat> objectPoints = new ArrayList<>();
+		
+		
+		for(int j = 0; j < numSquares; j++) {
+			obj.push_back(new MatOfPoint3f(new Point3(j / numCornersHor, j % numCornersVer, 0.0f)));
+			objectPoints.add(obj);
 		}
 		
-		List<Mat> cornerList = new ArrayList<Mat>();
 		for( int i = 1 ; i<=12; i++) {
 			Mat image = Imgcodecs.imread("resources\\calibration\\cali"+i+".jpg");
-			Mat grayImg = new Mat();
-			Imgproc.cvtColor(image, grayImg, Imgproc.COLOR_BGRA2GRAY);
+			Mat grayImage = new Mat();
+			Imgproc.cvtColor(image, grayImage, Imgproc.COLOR_BGRA2GRAY);
 			
-			MatOfPoint2f corners = new MatOfPoint2f();
-			Size size = new Size(xsize, ysize);
-			boolean found = Calib3d.findChessboardCorners(image, size, corners);
+			Size boardsize = new Size(numCornersHor, numCornersVer );
+			boolean found = Calib3d.findChessboardCorners(grayImage, boardsize, imageCorners);
 			if(found) {
-		
-				grayImg.copyTo(savedImage);
-				Imgproc.cornerSubPix(grayImg, corners, new Size(11,11), new Size(-1,-1), new TermCriteria(TermCriteria.EPS|TermCriteria.MAX_ITER, 30, 0.1));
-				cornerList.add(corners);
+				
+				
+				TermCriteria term = new TermCriteria(TermCriteria.EPS | TermCriteria.MAX_ITER, 30, 0.1);
+				Imgproc.cornerSubPix(grayImage, imageCorners, new Size(11,11), new Size(-1,-1), term);
+				grayImage.copyTo(savedImage);
+				
+				imagePoints.add(imageCorners);
+				
 	
 			}
-			Calib3d.drawChessboardCorners(image, size, corners, found);
+			Calib3d.drawChessboardCorners(image, boardsize, imageCorners, found);
 			Imgcodecs.imwrite("resources\\checkboard\\drawnimg"+i+".jpg", image);
 			System.out.println(i + " done");
 		}
@@ -59,7 +69,7 @@ public class CameraCalibration {
 		Mat distCoeffs =  new Mat();
 		cameraMatrix.put(0, 0, 1);
 		cameraMatrix.put(1, 1, 1);
-		Calib3d.calibrateCamera(cornerList, imagePoint, savedImage.size(), cameraMatrix, distCoeffs, rvecs, tvecs);
+		Calib3d.calibrateCamera(objectPoints, imagePoints, savedImage.size(), cameraMatrix, distCoeffs, rvecs, tvecs);
 		Mat imgIn = Imgcodecs.imread("resources\\pic9.jpg");
 		
 		
