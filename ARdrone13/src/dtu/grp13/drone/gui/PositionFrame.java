@@ -1,4 +1,4 @@
-package dtu.grp13.drone.position;
+package dtu.grp13.drone.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -29,7 +29,7 @@ public class PositionFrame {
 		frame.setTitle("c_system");
 		frame.getContentPane().add(panel);
 		frame.setResizable(false);
-		frame.setLocation(1000, 0);
+		frame.setLocation(1295, 0);
 		frame.setVisible(true);
 		origo = new Vector2(0, 523);
 		flip = new Matrix2(2,2, 1,0,
