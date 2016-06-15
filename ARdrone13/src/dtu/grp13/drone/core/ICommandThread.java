@@ -9,5 +9,8 @@ public interface ICommandThread {
 	public void land() throws InterruptedException;
 	public void waitFor(int milsec) throws InterruptedException;
 	public void hover(int milsec) throws InterruptedException;
-
+	public void freeze(int milsec) throws InterruptedException;
+	public void findPosition() throws InterruptedException;
+	public void up(int speed, int milsec) throws InterruptedException;
+	public void down(int speed, int milsec) throws InterruptedException;
 }

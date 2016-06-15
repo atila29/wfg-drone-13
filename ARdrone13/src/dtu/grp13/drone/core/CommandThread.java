@@ -98,4 +98,56 @@ public class CommandThread implements ICommandThread{
 		t.start();
 		t.join();
 	}
+
+	@Override
+	public void up(int speed, int milsec) throws InterruptedException {
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				drone.getCommandManager().up(speed).doFor(milsec);
+			}});
+		t.start();
+		t.join();
+		
+	}
+
+	@Override
+	public void down(int speed, int milsec) throws InterruptedException {
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				drone.getCommandManager().up(speed).doFor(milsec);
+			}});
+		t.start();
+		t.join();
+		
+	}
+	
+	@Override
+	public void findPosition() throws InterruptedException {
+		new Thread(() -> {
+			try {
+				this.up(15, 500);
+				this.up(15, 500);
+				this.up(15, 500);
+				this.hover(5000);
+				this.hover(5000);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}).start();
+		
+	}
+
+	@Override
+	public void freeze(int milsec) throws InterruptedException {
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				drone.getCommandManager().freeze().doFor(milsec);
+			}});
+		t.start();
+		t.join();
+	}
 }

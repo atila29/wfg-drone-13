@@ -29,25 +29,37 @@ public class Main {
 //		PositionFrame xFrame = new PositionFrame();
 //		xFrame.setDronePosition(new Vector2(926,324));
 //		mc.useWebcam();
-//		mc.useDrone(new IDroneSetup() {
-//			@Override
-//			public void setup(ARDrone drone) {
-//				drone.reset();
-//				drone.getCommandManager().setWifiMode(WifiMode.STATION);
-//				drone.getCommandManager().setVideoBitrateControl(VideoBitRateMode.DISABLED);
-//				drone.getCommandManager().setVideoBitrate(4000);
-//				drone.getCommandManager().setVideoCodecFps(15);
-//				drone.getCommandManager().setVideoCodec(VideoCodec.H264_720P);
-//				//drone.getCommandManager().setVideoChannel(VideoChannel.NEXT);
-//				drone.getCommandManager().setVideoChannel(VideoChannel.VERT);
-//			}
-//		});
+		ARDrone drone = mc.useDrone(new IDroneSetup() {
+			@Override
+			public void setup(ARDrone drone) {
+				drone.reset();
+				drone.getCommandManager().setWifiMode(WifiMode.STATION);
+				drone.getCommandManager().setVideoBitrateControl(VideoBitRateMode.DISABLED);
+				drone.getCommandManager().setVideoBitrate(4000);
+				drone.getCommandManager().setVideoCodecFps(15);
+				drone.getCommandManager().setVideoCodec(VideoCodec.H264_720P);
+				//drone.getCommandManager().setVideoChannel(VideoChannel.NEXT);
+				drone.getCommandManager().setVideoChannel(VideoChannel.HORI);
+			}
+		});
+		
+		CommandThread cmd = new CommandThread(drone);
 		try {
-			mc.useStaticImage("./resources/pic9.jpg");
-		} catch (IOException e) {
+			//cmd.waitFor(5000);
+			cmd.takeOff();
+			cmd.findPosition();
+			cmd.land();
+		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+//		try {
+//			mc.useStaticImage("./resources/pic9.jpg");
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 
 	}
