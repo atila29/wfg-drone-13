@@ -21,6 +21,7 @@ import org.opencv.features2d.FeatureDetector;
 import org.opencv.features2d.Features2d;
 import org.opencv.imgproc.Imgproc;
 
+import dtu.grp13.drone.core.matproc.procs.ICubeFoundAsync;
 import dtu.grp13.drone.vector.Vector2;
 
 public class CubeDetector {
@@ -122,7 +123,7 @@ public class CubeDetector {
 		return new Scalar(val);
 	}
 
-	public void findSpecificCubeColor(Mat src, Mat dst, List<Filterable> filterList){
+	public void findSpecificCubeColor(Mat src, Mat dst, List<Filterable> filterList, ICubeFoundAsync async){
 		for(Filterable f : filterList) {
 			Mat s = src.clone();
 			f.processColor(s, s);
@@ -131,6 +132,7 @@ public class CubeDetector {
 				if(rects.get(i).height > rects.get(i).width-5 && rects.get(i).height < rects.get(i).width+5) {
 					Imgproc.putText(dst, f.getName(), rects.get(i).tl(), Core.FONT_HERSHEY_PLAIN, 1, textColor,2);
 					Imgproc.rectangle(dst, rects.get(i).tl(), rects.get(i).br(), new Scalar(255, 0, 0));
+					async.retColor(f.getName());
 				}
 			}
 		}

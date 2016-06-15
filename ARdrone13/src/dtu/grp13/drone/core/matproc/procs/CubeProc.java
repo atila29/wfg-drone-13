@@ -7,6 +7,7 @@ import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 
+import dtu.grp13.drone.core.ProgramManager;
 import dtu.grp13.drone.cube.CubeDetector;
 import dtu.grp13.drone.cube.Filterable;
 import dtu.grp13.drone.vector.Vector2;
@@ -14,10 +15,12 @@ import dtu.grp13.drone.vector.Vector2;
 public class CubeProc implements IMatProcess{
 	private List<Filterable> filtre = new ArrayList<>();
 	private Mat currentFrame;
-	CubeDetector c;
+	private CubeDetector c;
+	private ProgramManager pm;
 	
-	public CubeProc(){
+	public CubeProc(ProgramManager pm){
 		c = new CubeDetector();
+		this.pm = pm;
 		
 		filtre.add(new Filterable(){
 			@Override
@@ -48,7 +51,13 @@ public class CubeProc implements IMatProcess{
 		currentFrame = a;
 		// LOGIK
 		Mat img = currentFrame.clone();
-		c.findSpecificCubeColor(currentFrame, img, filtre);
+		c.findSpecificCubeColor(currentFrame, img, filtre, new ICubeFoundAsync() {
+			
+			@Override
+			public void retColor(String color) {
+				pm.cubeFound(color);
+			}
+		});
 		return img;
 	}
 

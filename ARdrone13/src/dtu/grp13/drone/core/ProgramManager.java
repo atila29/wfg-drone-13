@@ -8,6 +8,7 @@ public class ProgramManager {
 	private CommandThread ct;
 	private Vector2 position;
 	private Processable proc;
+	private String cube;
 	
 	public void setProc(Processable proc){
 		this.proc = proc;
@@ -15,6 +16,10 @@ public class ProgramManager {
 	
 	public void positionFound(Vector2 pos){
 		this.position = pos;
+	}
+	
+	public void cubeFound(String color) {
+		this.cube = color;
 	}
 	
 	public void takeOffDrone() throws InterruptedException{
@@ -30,32 +35,79 @@ public class ProgramManager {
 		ct.land();
 	}
 	
-	public Vector2 findPosition() {
+	public void findPosition(Runnable after) {
 		try {
 			ct.up(20, 200);
 			ct.up(20, 200);
-			while(position == null) {
-				ct.rotateClockwise(15);
-				ct.hover(1000);
-			}
+			ct.up(20, 200);
+			ct.up(20, 200);
+			ct.up(20, 200);
+			ct.up(20, 200);
+			new Thread(() -> {
+				while(position == null) {
+					try {
+						ct.rotateClockwise(10);
+						ct.hover(1000);
+						ct.hover(1000);
+						Thread.sleep(100);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				after.run();
+			}).start();
+
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		return position;
+	}
+	
+	public void changeCam(){
+		try {
+			ct.next();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private ProgramManager getThis(){
+		return this;
 	}
 	
 	public void firstCycle(){
-		try {
-			findPosition();
-			ct.next();
-			proc.changeProcess(new CubeProc());
-			ct.hover(5000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		findPosition(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					ct.next();
+					proc.changeProcess(new CubeProc(getThis()));
+					ct.down(20, 800);
+					new Thread(() -> {
+						while(cube == null) {
+							try {
+								ct.hover(5000);
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						try {
+							ct.land();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}).start();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+		});
 	}
 	
 	public void setCmd(CommandThread ct) {

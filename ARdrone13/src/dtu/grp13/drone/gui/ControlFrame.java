@@ -41,22 +41,26 @@ public class ControlFrame {
 		Button bEmergency;
 		Button bStart;
 		Button bStop;
+		Button bChangeCam;
 		
 		public MyPanel(){
 			this.bStart = new Button();
 			this.bEmergency = new Button();
 			this.bTakeOff = new Button();
 			this.bStop = new Button();
+			this.bChangeCam = new Button();
 			
 			this.bStart.setLabel("START");
 			this.bEmergency.setLabel("EMERGENCY");
 			this.bTakeOff.setLabel("TAKEOFF");
 			this.bStop.setLabel("STOP");
+			this.bChangeCam.setLabel("CCAM");
 			
 			this.bStart.setPreferredSize(new Dimension(100,50));
 			this.bStop.setPreferredSize(new Dimension(100,50));
 			this.bEmergency.setPreferredSize(new Dimension(100,50));
 			this.bTakeOff.setPreferredSize(new Dimension(100,50));
+			this.bChangeCam.setPreferredSize(new Dimension(100,50));
 			
 			this.bEmergency.setBackground(Color.RED);
 			this.bStart.setBackground(Color.GREEN);
@@ -65,6 +69,7 @@ public class ControlFrame {
 			this.add(bStart);
 			this.add(bStop);
 			this.add(bEmergency);
+			this.add(bChangeCam);
 			
 			this.bTakeOff.addActionListener(new ActionListener() {
 				
@@ -83,7 +88,7 @@ public class ControlFrame {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					pm.findPosition();
+					pm.firstCycle();
 				}
 			});
 			
@@ -108,7 +113,13 @@ public class ControlFrame {
 				}
 			});
 			
-			
+			this.bChangeCam.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					pm.changeCam();
+				}
+			});
 		}
 	}
 }
