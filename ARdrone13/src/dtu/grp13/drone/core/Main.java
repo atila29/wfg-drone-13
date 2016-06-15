@@ -17,7 +17,8 @@ import dtu.grp13.drone.core.matproc.TestProcess;
 import dtu.grp13.drone.core.matproc.procs.CubeProc;
 import dtu.grp13.drone.core.matproc.procs.IMatProcess;
 import dtu.grp13.drone.core.matproc.procs.QrProc;
-import dtu.grp13.drone.position.PositionFrame;
+import dtu.grp13.drone.gui.ControlFrame;
+import dtu.grp13.drone.gui.PositionFrame;
 import dtu.grp13.drone.vector.Vector2;
 
 public class Main {
@@ -26,17 +27,17 @@ public class Main {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		FrameProcess proc = new FrameProcess(new QrProc());
 		ModeController mc = new ModeController(proc);
-//		PositionFrame xFrame = new PositionFrame();
+		PositionFrame xFrame = new PositionFrame();
 //		xFrame.setDronePosition(new Vector2(926,324));
 //		mc.useWebcam();
 		ARDrone drone = mc.useDrone(new IDroneSetup() {
 			@Override
 			public void setup(ARDrone drone) {
-				drone.reset();
+				//drone.reset();
 				drone.getCommandManager().setWifiMode(WifiMode.STATION);
 				drone.getCommandManager().setVideoBitrateControl(VideoBitRateMode.DISABLED);
 				drone.getCommandManager().setVideoBitrate(4000);
-				drone.getCommandManager().setVideoCodecFps(15);
+				//drone.getCommandManager().setVideoCodecFps(15);
 				drone.getCommandManager().setVideoCodec(VideoCodec.H264_720P);
 				//drone.getCommandManager().setVideoChannel(VideoChannel.NEXT);
 				drone.getCommandManager().setVideoChannel(VideoChannel.HORI);
@@ -44,15 +45,16 @@ public class Main {
 		});
 		
 		CommandThread cmd = new CommandThread(drone);
-		try {
-			//cmd.waitFor(5000);
-			cmd.takeOff();
-			cmd.findPosition();
-			cmd.land();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		ControlFrame cf = new ControlFrame(cmd);
+//		try {
+//			//cmd.waitFor(5000);
+//			cmd.takeOff();
+//			cmd.findPosition();
+//			cmd.land();
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 //		try {
 //			mc.useStaticImage("./resources/pic9.jpg");
