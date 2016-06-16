@@ -21,12 +21,14 @@ import dtu.grp13.drone.vector.Vector2;
 
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		ProgramManager programManager = new ProgramManager();
-		FrameProcess proc = new FrameProcess(new QrProc(programManager));
+		PositionSystem positionSystem = new PositionSystem();
+		FrameProcess proc = new FrameProcess(new QrProc(programManager, positionSystem));
 		ModeController mc = new ModeController(proc);
 		PositionFrame xFrame = new PositionFrame();
+		xFrame.drawWallMarks(positionSystem.getWallmarks());
 //		xFrame.setDronePosition(new Vector2(926,324));
 //		mc.useWebcam();
 		ARDrone drone = mc.useDrone(new IDroneSetup() {

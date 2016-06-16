@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,6 +61,10 @@ public class PositionSystem {
 		} finally {
 			reader.close();
 		}
+	}
+	
+	public List<Vector2> getWallmarks(){
+		return new ArrayList<Vector2>(wallMarks.values());
 	}
 
 	public String getRight(String name) {
