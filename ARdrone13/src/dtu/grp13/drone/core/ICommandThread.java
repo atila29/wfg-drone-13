@@ -21,4 +21,6 @@ public interface ICommandThread {
 	public void stepRight() throws InterruptedException;
 	public void next() throws InterruptedException;
 	public void stabilize() throws InterruptedException;
+	public void qrHeight() throws InterruptedException;
+	public void cubeHeight() throws InterruptedException;
 }

@@ -122,6 +122,40 @@ public class CubeDetector {
 
 		return new Scalar(val);
 	}
+	
+	public void searchForCubeColor(Mat src, Mat dst, ICubeFoundAsync async) {
+		List<MatOfPoint> edges = new ArrayList<MatOfPoint>();
+		Mat s = src.clone();
+		// lidt billedebahandling
+		Imgproc.cvtColor(s, s, Imgproc.COLOR_BGR2GRAY);
+		Imgproc.GaussianBlur(s, s, new Size(5, 5), 0);
+		Imgproc.Canny(s, s, 20, 35); // læs op på, noget med lysforhold
+
+		Imgproc.findContours(s, edges, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
+		List<Rect> rectList = new ArrayList<>();
+		for (int i = 0; i < edges.size(); i++) {
+			MatOfPoint2f mop2 = new MatOfPoint2f();
+			edges.get(i).convertTo(mop2, CvType.CV_32FC1);
+			double marg = 0.01f;
+			double ep = marg * Imgproc.arcLength(mop2, true);
+			Imgproc.approxPolyDP(mop2, mop2, ep, true);
+			mop2.convertTo(edges.get(i), CvType.CV_32S);
+//			Imgproc.drawContours(dst, edges, i, new Scalar(0,255,0));
+			if (edges.get(i).total() == 4) {
+				
+				Rect rect = Imgproc.boundingRect(edges.get(i));
+				double ratio = (double) rect.height / (double) rect.width;
+
+//				if (ratio > 0.9 && ratio < 1.1 && rect.height > 80.0 && rect.height < 700 && rect.y > 100 && rect.y < 520) {
+					rectList.add(rect);
+//				}
+			}
+		}
+		for(Rect r : rectList){
+			Imgproc.rectangle(dst, r.tl(), r.br(), new Scalar(0,255,0));
+		}
+		
+	}
 
 	public void findSpecificCubeColor(Mat src, Mat dst, List<Filterable> filterList, ICubeFoundAsync async){
 		for(Filterable f : filterList) {

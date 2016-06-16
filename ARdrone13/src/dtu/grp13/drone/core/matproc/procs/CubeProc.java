@@ -58,6 +58,14 @@ public class CubeProc implements IMatProcess{
 				pm.cubeFound(color);
 			}
 		});
+//		c.searchForCubeColor(currentFrame, img, new ICubeFoundAsync() {
+//			
+//			@Override
+//			public void retColor(String color) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//		});
 		return img;
 	}
 
