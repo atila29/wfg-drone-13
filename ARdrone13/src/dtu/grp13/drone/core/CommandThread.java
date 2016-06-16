@@ -206,29 +206,4 @@ public class CommandThread implements ICommandThread{
 		t.join();
 	}
 
-	@Override
-	public void qrHeight() throws InterruptedException {
-		Thread t = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				drone.getCommandManager().setMinAltitude(150);
-				drone.getCommandManager().setMinAltitude(170);
-				drone.getCommandManager().flatTrim();
-			}});
-		t.start();
-		t.join();
-	}
-
-	@Override
-	public void cubeHeight() throws InterruptedException {
-		Thread t = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				drone.getCommandManager().setMinAltitude(40);
-				drone.getCommandManager().setMinAltitude(60);
-				drone.getCommandManager().flatTrim();
-			}});
-		t.start();
-		t.join();
-	}
 }

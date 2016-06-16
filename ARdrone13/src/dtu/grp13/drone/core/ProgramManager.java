@@ -42,28 +42,21 @@ public class ProgramManager {
 	}
 	
 	public void findPosition(Runnable after) {
-		try {
-			ct.qrHeight();
-			new Thread(() -> {
-				while(position == null) {
-					try {
-						ct.rotateClockwise(10);
-						ct.hover(1000);
-						ct.hover(1000);
-						Thread.sleep(100);
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+		new Thread(() -> {
+			while(position == null) {
+				try {
+					ct.rotateClockwise(10);
+					ct.hover(1000);
+					ct.hover(1000);
+					Thread.sleep(100);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-				xFrame.setDronePosition(position);
-				after.run();
-			}).start();
-
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			}
+			xFrame.setDronePosition(position);
+			after.run();
+		}).start();
 	}
 	
 	public void changeCam(){
@@ -90,7 +83,6 @@ public class ProgramManager {
 				try {
 					ct.next();
 					proc.changeProcess(new CubeProc(getThis()));
-					ct.cubeHeight();
 					new Thread(() -> {
 						while(cube == null) {
 							try {
