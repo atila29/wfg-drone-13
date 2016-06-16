@@ -84,7 +84,7 @@ public class QRAnalyzer {
 		// lidt billedebahandling
 		Imgproc.cvtColor(s, s, Imgproc.COLOR_BGR2GRAY);
 		Imgproc.GaussianBlur(s, s, new Size(5, 5), 0);
-		Imgproc.Canny(s, s, 35, 100); // læs op på, noget med lysforhold
+		Imgproc.Canny(s, s, 35, 100 ); // læs op på, noget med lysforhold
 
 		Imgproc.findContours(s, edges, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
 		List<Rect> rectList = new ArrayList<>();
@@ -129,7 +129,6 @@ public class QRAnalyzer {
 			Imgproc.drawMarker(dst, new Point(rectList.get(i).x, rectList.get(i).y), new Scalar(0, 255, 0));
 		}
 		System.out.println("Rect count = " + rectList.size());
-		System.out.println("height: " + rectList.get(0).height + " width: " + rectList.get(0).width);
 		
 		return rectList;
 	}

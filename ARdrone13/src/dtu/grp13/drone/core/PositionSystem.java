@@ -226,6 +226,8 @@ public class PositionSystem {
 	
 	public Vector2 calcPosition(String qr, List<Rect> qrCordList) {
 		
+		
+		
 		List<Rect> sortedCords = WFGUtilities.sortResults(qrCordList, 0, qrCordList.size() - 1);
 		
 		Vector2 p1 = getVec(qr);
