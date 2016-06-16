@@ -6,10 +6,8 @@ import org.opencv.core.Core;
 import org.opencv.core.Mat;
 
 import de.yadrone.base.ARDrone;
-import de.yadrone.base.command.VideoBitRateMode;
 import de.yadrone.base.command.VideoChannel;
 import de.yadrone.base.command.VideoCodec;
-import de.yadrone.base.command.WifiMode;
 import dtu.grp13.drone.core.matproc.FrameProcess;
 import dtu.grp13.drone.core.matproc.IDroneSetup;
 import dtu.grp13.drone.core.matproc.ModeController;
@@ -35,8 +33,6 @@ public class Main {
 			@Override
 			public void setup(ARDrone drone) {
 				//drone.reset();
-				drone.getCommandManager().setWifiMode(WifiMode.STATION);
-				drone.getCommandManager().setVideoBitrateControl(VideoBitRateMode.DISABLED);
 				drone.getCommandManager().setVideoBitrate(4000);
 				//drone.getCommandManager().setVideoCodecFps(15);
 				drone.getCommandManager().setVideoCodec(VideoCodec.H264_720P);
@@ -60,7 +56,7 @@ public class Main {
 //		}
 		
 //		try {
-//			mc.useStaticImage("./resources/pic9.jpg");
+//			mc.useStaticImage("./resources/focal/focal3.jpg");
 //		} catch (IOException e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();

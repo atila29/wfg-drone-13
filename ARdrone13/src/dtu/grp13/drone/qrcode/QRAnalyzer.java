@@ -82,8 +82,8 @@ public class QRAnalyzer {
 		Mat s = src.clone();
 		// lidt billedebahandling
 		Imgproc.cvtColor(s, s, Imgproc.COLOR_BGR2GRAY);
-		Imgproc.GaussianBlur(s, s, new Size(3, 3), 3);
-		Imgproc.Canny(s, s, 100, 200); // læs op på, noget med lysforhold
+		Imgproc.GaussianBlur(s, s, new Size(5, 5), 0);
+		Imgproc.Canny(s, s, 35, 125); // læs op på, noget med lysforhold
 
 		Imgproc.findContours(s, edges, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
 		List<Rect> rectList = new ArrayList<>();
@@ -100,7 +100,7 @@ public class QRAnalyzer {
 				Rect rect = Imgproc.boundingRect(edges.get(i));
 				double ratio = (double) rect.height / (double) rect.width;
 
-				if (ratio > 1.3 && ratio < 2.5 && rect.height > 80.0 && rect.height < 200 && rect.y > 100 && rect.y < 520) {
+				if (ratio > 1.3 && ratio < 2.5 && rect.height > 80.0 && rect.height < 700 && rect.y > 100 && rect.y < 520) {
 					rectList.add(rect);
 				}
 			}
@@ -124,10 +124,11 @@ public class QRAnalyzer {
 		
 		for (int i = 0; i < rectList.size(); i++) {
 
-			Imgproc.rectangle(dst, rectList.get(i).tl(), rectList.get(i).br(), new Scalar(255, 0, 0));
+			Imgproc.rectangle(dst, rectList.get(i).tl(), rectList.get(i).br(), new Scalar(255, 0, 0), 4);
 			Imgproc.drawMarker(dst, new Point(rectList.get(i).x, rectList.get(i).y), new Scalar(0, 255, 0));
 		}
-		//System.out.println("Rect count = " + rectList.size());
+		System.out.println("Rect count = " + rectList.size());
+		System.out.println("height: " + rectList.get(0).height + " width: " + rectList.get(0).width);
 		
 		return rectList;
 	}
