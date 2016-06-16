@@ -106,7 +106,7 @@ public class QRAnalyzer {
 				}
 			}
 		}
-		
+		List<Integer> indexList = new ArrayList<>();
 		double difWidth;
 		for (int i = 0; i < rectList.size(); i++) {
 			for (int j = 0; j < rectList.size(); j++) {
@@ -116,11 +116,17 @@ public class QRAnalyzer {
 				difWidth = Math.abs(rectList.get(i).x - rectList.get(j).x);
 
 				if (difWidth < 20 && rectList.get(j).height > rectList.get(i).height) {
-					rectList.remove(j);
-					j--;
+					if (!indexList.contains(i)) {
+						indexList.add(i);
+					}
 					
 				}
 			}
+		}
+		Rect[] lll = (Rect[]) rectList.toArray();
+		for (int i = 0; i < indexList.size(); i++) {
+			rectList.remove(indexList.get(i));
+			lll[i] = null;
 		}
 		
 		for (int i = 0; i < rectList.size(); i++) {
