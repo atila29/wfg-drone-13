@@ -19,14 +19,10 @@ public class QrProc implements IMatProcess{
 	private Mat currentFrame;
 	private ProgramManager pm;
 	
-	public QrProc(ProgramManager pm) {
+	public QrProc(ProgramManager pm, PositionSystem posSys) {
 		this.pm = pm;
 		qa = new QRAnalyzer();
-		try {
-			ps = new PositionSystem();
-		} catch (IOException e) {
-			e.printStackTrace();
-}
+		ps = posSys;
 	}
 	
 	@Override

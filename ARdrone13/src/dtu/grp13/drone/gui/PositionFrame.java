@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -20,6 +21,7 @@ public class PositionFrame {
 	private JFrame frame;
 	private Vector2 origo;
 	private Matrix2 flip, scale, transformValue;
+	private List<Vector2> wallmarks;
 	
 	public PositionFrame() {
 		panel = new MyPanel();
@@ -42,6 +44,10 @@ public class PositionFrame {
 	
 	public Vector2 transform(Vector2 v) {
 		return transformValue.mul(v).add(origo);
+	}
+	
+	public void drawWallMarks(List<Vector2> wallmarks) {
+		this.wallmarks = wallmarks;
 	}
 	
 	public void setDronePosition(Vector2 c) {
@@ -82,6 +88,14 @@ public class PositionFrame {
 				int y = (int)coor.getY()-6;
 				g.setColor(new Color(255, 0, 0));
 				g.fillOval(x, y, 12, 12);
+			}
+			if(wallmarks != null){
+				for(Vector2 v : wallmarks){
+					int x = (int)v.getX()-6;
+					int y = (int)v.getY()-6;
+					g.setColor(new Color(255, 255, 255));
+					g.fillOval(x, y, 12, 12);
+				}
 			}
 		}
 	}
