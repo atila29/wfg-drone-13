@@ -6,7 +6,7 @@ import dtu.grp13.drone.gui.PositionFrame;
 import dtu.grp13.drone.vector.Vector2;
 
 public class ProgramManager {
-	private CommandThread ct;
+	private ICommandThread ct;
 	private Vector2 position;
 	private Processable proc;
 	private String cube;
@@ -128,7 +128,7 @@ public class ProgramManager {
 		});
 	}
 	
-	public void setCmd(CommandThread ct) {
+	public void setCmd(ICommandThread ct) {
 		this.ct = ct;
 	}
 }

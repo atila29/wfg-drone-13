@@ -43,7 +43,8 @@ public class Main {
 			}
 		});
 //		
-		CommandThread cmd = new CommandThread(drone);
+		//CommandThread cmd = new CommandThread(drone);
+		CommandScheduler cmd = new CommandScheduler(drone);
 		programManager.setProc(proc);
 		programManager.setCmd(cmd);
 		programManager.setxFrame(xFrame);
