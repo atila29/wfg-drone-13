@@ -41,7 +41,7 @@ import dtu.grp13.drone.util.WFGUtilities;
 
 public class QRAnalyzer {
 
-	public String scanQr(Mat src) throws NotFoundException, ChecksumException, FormatException {
+	public Result scanQr(Mat src) throws NotFoundException, ChecksumException, FormatException {
 		Image img = WFGUtilities.toBufferedImage(src);
 		LuminanceSource source = new BufferedImageLuminanceSource((BufferedImage) img);
 		BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
@@ -51,7 +51,7 @@ public class QRAnalyzer {
 		
 		System.out.println(scanResult.getText());
 		
-		return scanResult.getText();
+		return scanResult;
 
 	}
 	
@@ -59,7 +59,7 @@ public class QRAnalyzer {
 		return WFGUtilities.sortResults(rects, 0, rects.size()-1).get(1);
 	}
 	 
-	public String scanQr(Mat src, Rect rect) throws NotFoundException, ChecksumException, FormatException {
+	public Result scanQr(Mat src, Rect rect) throws NotFoundException, ChecksumException, FormatException {
 		
 		Mat qr =  src.submat(rect);
 		//Imgproc.resize(qr, qr, new Size(500, 707));
@@ -74,7 +74,7 @@ public class QRAnalyzer {
 		
 		System.out.println(scanResult.getText());
 		
-		return scanResult.getText();
+		return scanResult;
 
 	}
 	

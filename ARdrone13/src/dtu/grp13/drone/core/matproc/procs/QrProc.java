@@ -7,6 +7,7 @@ import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 
 import com.google.zxing.NotFoundException;
+import com.google.zxing.Result;
 
 import dtu.grp13.drone.core.PositionSystem;
 import dtu.grp13.drone.core.ProgramManager;
@@ -33,8 +34,8 @@ public class QrProc implements IMatProcess{
 		try {
 			List<Rect> rects = qa.findQrEdges(a, img);
 			if (rects.size() == 2) {
-			String qrResult = qa.scanQr(currentFrame, qa.getMidRect(rects));
-			Vector2 position = ps.calcPosition(qrResult, rects);
+			Result qrResult = qa.scanQr(currentFrame, qa.getMidRect(rects));
+			Vector2 position = ps.calcPosition(rects, qrResult);
 			System.out.println("Pos: " + position);
 			pm.positionFound(position);
 			
