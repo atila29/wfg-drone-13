@@ -31,22 +31,22 @@ public class Main {
 		xFrame.drawWallMarks(positionSystem.getWallmarks());
 //		xFrame.setDronePosition(new Vector2(926,324));
 //		mc.useWebcam();
-//		ARDrone drone = mc.useDrone(new IDroneSetup() {
-//			@Override
-//			public void setup(ARDrone drone) {
-//				//drone.reset();
-//				drone.getCommandManager().setVideoBitrate(4000);
-//				//drone.getCommandManager().setVideoCodecFps(15);
-//				drone.getCommandManager().setVideoCodec(VideoCodec.H264_720P);
-//				//drone.getCommandManager().setVideoChannel(VideoChannel.NEXT);
-//				drone.getCommandManager().setVideoChannel(VideoChannel.HORI);
-//			}
-//		});
+		ARDrone drone = mc.useDrone(new IDroneSetup() {
+			@Override
+			public void setup(ARDrone drone) {
+				//drone.reset();
+				drone.getCommandManager().setVideoBitrate(4000);
+				//drone.getCommandManager().setVideoCodecFps(15);
+				drone.getCommandManager().setVideoCodec(VideoCodec.H264_720P);
+				//drone.getCommandManager().setVideoChannel(VideoChannel.NEXT);
+				drone.getCommandManager().setVideoChannel(VideoChannel.HORI);
+			}
+		});
 //		
-//		CommandThread cmd = new CommandThread(drone);
+		CommandThread cmd = new CommandThread(drone);
 		programManager.setProc(proc);
-//		programManager.setCmd(cmd);
-//		ControlFrame cf = new ControlFrame(programManager);
+		programManager.setCmd(cmd);
+		ControlFrame cf = new ControlFrame(programManager);
 //		try {
 //			//cmd.waitFor(5000);
 //			cmd.takeOff();
@@ -56,13 +56,13 @@ public class Main {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-		
-		try {
-			mc.useStaticImage("./resources/pic4.jpg");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		
+//		try {
+//			mc.useStaticImage("./resources/pic4.jpg");
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 
 	}

@@ -2,6 +2,7 @@ package dtu.grp13.drone.core;
 
 import dtu.grp13.drone.core.matproc.Processable;
 import dtu.grp13.drone.core.matproc.procs.CubeProc;
+import dtu.grp13.drone.gui.PositionFrame;
 import dtu.grp13.drone.vector.Vector2;
 
 public class ProgramManager {
@@ -9,6 +10,11 @@ public class ProgramManager {
 	private Vector2 position;
 	private Processable proc;
 	private String cube;
+	private PositionFrame xFrame;
+	
+	public void setxFrame(PositionFrame xFrame) {
+		this.xFrame = xFrame;
+	}
 	
 	public void setProc(Processable proc){
 		this.proc = proc;
@@ -37,12 +43,7 @@ public class ProgramManager {
 	
 	public void findPosition(Runnable after) {
 		try {
-			ct.up(20, 200);
-			ct.up(20, 200);
-			ct.up(20, 200);
-			ct.up(20, 200);
-			ct.up(20, 200);
-			ct.up(20, 200);
+			ct.qrHeight();
 			new Thread(() -> {
 				while(position == null) {
 					try {
@@ -55,6 +56,7 @@ public class ProgramManager {
 						e.printStackTrace();
 					}
 				}
+				xFrame.setDronePosition(position);
 				after.run();
 			}).start();
 
@@ -77,6 +79,10 @@ public class ProgramManager {
 		return this;
 	}
 	
+	public void testCycleTwo(){
+		
+	}
+	
 	public void firstCycle(){
 		findPosition(new Runnable() {
 			@Override
@@ -84,7 +90,7 @@ public class ProgramManager {
 				try {
 					ct.next();
 					proc.changeProcess(new CubeProc(getThis()));
-					ct.down(20, 800);
+					ct.cubeHeight();
 					new Thread(() -> {
 						while(cube == null) {
 							try {
