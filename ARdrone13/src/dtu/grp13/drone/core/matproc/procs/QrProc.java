@@ -34,9 +34,10 @@ public class QrProc implements IMatProcess{
 			List<Rect> rects = qa.findQrEdges(a, img);
 			if (rects.size() == 3) {
 			String qrResult = qa.scanQr(currentFrame, qa.getMidRect(rects));
-			Vector2 position = ps.calcIntersection(qrResult, rects);
+			Vector2 position = ps.calcPosition(qrResult, rects);
 			System.out.println("Pos: " + position);
 			pm.positionFound(position);
+			
 			}
 		} 
 		catch (NotFoundException e) {
