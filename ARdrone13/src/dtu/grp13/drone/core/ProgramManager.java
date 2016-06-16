@@ -22,6 +22,7 @@ public class ProgramManager {
 	
 	public void positionFound(Vector2 pos){
 		this.position = pos;
+		System.out.println("sket1");
 	}
 	
 	public void cubeFound(String color) {
@@ -43,6 +44,13 @@ public class ProgramManager {
 	
 	public void findPosition(Runnable after) {
 		new Thread(() -> {
+			try {
+				ct.up(20, 500);
+				Thread.sleep(550);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			while(position == null) {
 				try {
 					ct.rotateClockwise(10);
@@ -54,6 +62,7 @@ public class ProgramManager {
 					e.printStackTrace();
 				}
 			}
+			System.out.println("sket");
 			xFrame.setDronePosition(position);
 			after.run();
 		}).start();
@@ -73,7 +82,17 @@ public class ProgramManager {
 	}
 	
 	public void testCycleTwo(){
-		
+		new Thread(() -> {
+			try {
+				ct.stepForward();
+				ct.stepForward();
+				ct.stepBackward();
+				ct.stepBackward();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}).start();
 	}
 	
 	public void firstCycle(){
@@ -82,6 +101,7 @@ public class ProgramManager {
 			public void run() {
 				try {
 					ct.next();
+					Thread.sleep(1000);
 					proc.changeProcess(new CubeProc(getThis()));
 					new Thread(() -> {
 						while(cube == null) {

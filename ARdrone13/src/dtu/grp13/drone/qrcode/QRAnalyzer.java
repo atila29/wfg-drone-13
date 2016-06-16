@@ -140,7 +140,7 @@ public class QRAnalyzer {
 //		}
 		
 		for (int i = 0; i < rectList.size(); i++) {
-			System.out.println("height: " + rectList.get(i).height + " width: " + rectList.get(i).width);
+			//System.out.println("height: " + rectList.get(i).height + " width: " + rectList.get(i).width);
 			Imgproc.rectangle(dst, rectList.get(i).tl(), rectList.get(i).br(), new Scalar(255, 0, 0), 1);
 			Imgproc.drawMarker(dst, new Point(rectList.get(i).x, rectList.get(i).y), new Scalar(0, 255, 0));
 		}

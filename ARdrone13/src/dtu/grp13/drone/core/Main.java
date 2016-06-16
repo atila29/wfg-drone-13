@@ -46,6 +46,7 @@ public class Main {
 		CommandThread cmd = new CommandThread(drone);
 		programManager.setProc(proc);
 		programManager.setCmd(cmd);
+		programManager.setxFrame(xFrame);
 		ControlFrame cf = new ControlFrame(programManager);
 //		try {
 //			//cmd.waitFor(5000);

@@ -88,7 +88,8 @@ public class ControlFrame {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					pm.firstCycle();
+					//pm.firstCycle();
+					pm.testCycleTwo();
 				}
 			});
 			
