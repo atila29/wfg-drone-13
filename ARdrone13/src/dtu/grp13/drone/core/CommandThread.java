@@ -5,6 +5,12 @@ import de.yadrone.base.command.VideoChannel;
 import de.yadrone.base.navdata.Altitude;
 import de.yadrone.base.navdata.AltitudeListener;
 
+/*
+ * TEST:
+ * Hvis denne ikke virker, så brug en concurrentBlockingScheduler. 
+ * 
+ */
+
 public class CommandThread implements ICommandThread{	
 	private IARDrone drone;
 	
@@ -52,7 +58,13 @@ public class CommandThread implements ICommandThread{
 		Thread t = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				drone.getCommandManager().goRight(speed).waitFor(milsec);
+				try {
+					drone.getCommandManager().goRight(speed);
+					Thread.currentThread().sleep(milsec);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}});
 		t.start();
 		t.join();
@@ -104,7 +116,6 @@ public class CommandThread implements ICommandThread{
 			public void run() {
 				drone.getCommandManager().waitFor(milsec);
 			}});
-		Thread.sleep(milsec);
 		t.start();
 		t.join();
 	}
@@ -114,7 +125,13 @@ public class CommandThread implements ICommandThread{
 		Thread t = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				drone.getCommandManager().hover().doFor(milsec);
+				try {
+					drone.getCommandManager().hover();
+					Thread.currentThread().sleep(milsec);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}});
 		t.start();
 		t.join();
@@ -125,7 +142,13 @@ public class CommandThread implements ICommandThread{
 		Thread t = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				drone.getCommandManager().up(speed).doFor(milsec);
+				try {
+					drone.getCommandManager().up(speed);
+					Thread.currentThread().sleep(milsec);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}});
 		t.start();
 		t.join();
@@ -137,7 +160,13 @@ public class CommandThread implements ICommandThread{
 		Thread t = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				drone.getCommandManager().up(speed).doFor(milsec);
+				try {
+					drone.getCommandManager().up(speed);
+					Thread.currentThread().sleep(milsec);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}});
 		t.start();
 		t.join();
@@ -149,7 +178,13 @@ public class CommandThread implements ICommandThread{
 		Thread t = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				drone.getCommandManager().freeze().doFor(milsec);
+				try {
+					drone.getCommandManager().freeze();
+					Thread.currentThread().sleep(milsec);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}});
 		t.start();
 		t.join();
@@ -160,6 +195,7 @@ public class CommandThread implements ICommandThread{
 		this.drone.getCommandManager().emergency();
 	}
 
+	// måske de resterende også burde indeholde en sleep, dette skal testes!
 	@Override
 	public void rotateClockwise(int angle) throws InterruptedException {
 		Thread t = new Thread(new Runnable() {
