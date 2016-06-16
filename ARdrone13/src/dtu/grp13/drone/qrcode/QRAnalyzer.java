@@ -107,6 +107,7 @@ public class QRAnalyzer {
 			}
 		}
 		List<Integer> indexList = new ArrayList<>();
+		Rect[] rList = rectList.toArray(new Rect[rectList.size()]);
 		double difWidth;
 		for (int i = 0; i < rectList.size(); i++) {
 			for (int j = 0; j < rectList.size(); j++) {
@@ -117,17 +118,26 @@ public class QRAnalyzer {
 
 				if (difWidth < 20 && rectList.get(j).height > rectList.get(i).height) {
 					if (!indexList.contains(i)) {
+						rList[i] = null;
 						indexList.add(i);
 					}
 					
 				}
 			}
 		}
-		Rect[] lll = (Rect[]) rectList.toArray();
-		for (int i = 0; i < indexList.size(); i++) {
-			rectList.remove(indexList.get(i));
-			lll[i] = null;
+		List<Rect> cRectList = new ArrayList<Rect>();
+		//rectList.clear();
+		for(int i = 0; i < rList.length; i++) {
+			if(rList[i] != null)
+				cRectList.add(rectList.get(i));
 		}
+		rectList = cRectList;
+		
+//		Rect[] lll = (Rect[]) rectList.toArray();
+//		for (int i = 0; i < indexList.size(); i++) {
+//			rectList.remove(indexList.get(i));
+//			lll[i] = null;
+//		}
 		
 		for (int i = 0; i < rectList.size(); i++) {
 			System.out.println("height: " + rectList.get(i).height + " width: " + rectList.get(i).width);
