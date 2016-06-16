@@ -18,7 +18,13 @@ public class CommandThread implements ICommandThread{
 		Thread t = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				drone.getCommandManager().forward(speed).waitFor(milsec);
+				try {
+					drone.getCommandManager().forward(speed);
+					Thread.currentThread().sleep(milsec);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}});
 		t.start();
 		t.join();
@@ -29,7 +35,13 @@ public class CommandThread implements ICommandThread{
 		Thread t = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				drone.getCommandManager().goLeft(speed).waitFor(milsec);
+				try {
+					drone.getCommandManager().goLeft(speed);
+					Thread.currentThread().sleep(milsec);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}});
 		t.start();
 		t.join();
@@ -51,7 +63,13 @@ public class CommandThread implements ICommandThread{
 		Thread t = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				drone.getCommandManager().backward(speed).waitFor(milsec);
+				try {
+					drone.getCommandManager().backward(speed);
+					Thread.currentThread().sleep(milsec);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}});
 		t.start();
 		t.join();
@@ -204,6 +222,11 @@ public class CommandThread implements ICommandThread{
 			}});
 		t.start();
 		t.join();
+	}
+
+	@Override
+	public void stop() throws InterruptedException {
+		drone.stop();
 	}
 
 }

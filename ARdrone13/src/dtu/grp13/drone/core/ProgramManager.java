@@ -88,6 +88,8 @@ public class ProgramManager {
 				ct.stepForward();
 				ct.stepBackward();
 				ct.stepBackward();
+				ct.hover(2000);
+				ct.land();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
