@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -105,19 +106,20 @@ public class QRAnalyzer {
 				}
 			}
 		}
-		double difHeight;
+		
 		double difWidth;
+		System.out.println("rect size = " + rectList.size());
 		for (int i = 0; i < rectList.size(); i++) {
 			for (int j = 0; j < rectList.size(); j++) {
 				if (i == j) {
 					continue;
 				}
 				difWidth = Math.abs(rectList.get(i).x - rectList.get(j).x);
-				difHeight = Math.abs(rectList.get(i).y - rectList.get(j).y);
-				
 
 				if (difWidth < 20) {
 					rectList.remove(j);
+					j--;
+					
 				}
 			}
 		}
