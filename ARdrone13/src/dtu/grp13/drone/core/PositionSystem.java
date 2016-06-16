@@ -12,6 +12,7 @@ import java.util.Vector;
 
 import javax.management.loading.PrivateClassLoader;
 
+import org.opencv.core.Point;
 import org.opencv.core.Rect;
 
 import com.google.zxing.Result;
@@ -25,6 +26,8 @@ public class PositionSystem {
 
 	// private double horizontalRadians = 1.32899694; // 75 grader
 	private double horizontalRadians = 1.39949138; // 80 grader
+	private double focal = 1118.581907;
+	private double paperHeight = 40.9;
 	private double widthRes = 1280;
 	private double b = (widthRes / 2) / (Math.tan(horizontalRadians / 2));
 	private Map<String, Vector2> wallMarks;
@@ -104,6 +107,13 @@ public class PositionSystem {
 
 		return distArray;
 
+	}
+	
+	public double calcDistance(Vector2 p1, Vector2 p2) {
+		double dist = Math
+				.sqrt(Math.pow(p1.getX() - p2.getX(), 2) + Math.pow(p1.getY() - p2.getY(), 2));
+
+		return dist;
 	}
 
 	// Index 0 er venstre beta og index 1 er højre beta
@@ -206,6 +216,29 @@ public class PositionSystem {
 
 		}
 		return null;
+	}
+	
+	public Vector2 calcPosition(String qr, List<Rect> qrCordList) {
+		
+		Vector2 p1 = getVec(qr);
+		Vector2 p2 = getVec(getLeft(qr));
+		double distp1p2 = calcDistance(p1, p2);
+		double distp3p2 = (paperHeight*focal)/qrCordList.get(0).height;
+		double distp3p1 = (paperHeight*focal)/qrCordList.get(1).height;
+		
+		double a = (distp3p1*distp3p1 - distp3p2*distp3p2 + distp1p2*distp1p2) / (2*distp1p2);
+        double h = Math.sqrt(distp3p1*distp3p1 - a*a);
+
+        Vector2 temp = new Vector2(p1.getX() + a*(p2.getX() - p1.getX()) / distp1p2, p1.getY() + a*(p2.getY() - p1.getY()) / distp1p2);
+        Vector2 v3 = new Vector2(temp.getX() - h * (p2.getX() - p1.getY()) / distp1p2, temp.getY() + h * (p2.getX() - p1.getX()) / distp1p2);
+        Vector2 v4 = new Vector2(temp.getX() - h * (p2.getY() - p1.getY()) / distp1p2, temp.getY() + h * (p2.getX() - p1.getX()) / distp1p2);;
+        
+		if (v3.getX() < 0 || v3.getY() < 0) {
+			return v4;
+		} else {
+			return v3;
+		}
+		
 	}
 
 }
