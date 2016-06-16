@@ -116,7 +116,7 @@ public class QRAnalyzer {
 				}
 				difWidth = Math.abs(rectList.get(i).x - rectList.get(j).x);
 
-				if (difWidth < 20) {
+				if (difWidth < 20 && rectList.get(j).height > rectList.get(i).height) {
 					rectList.remove(j);
 					j--;
 					
@@ -126,7 +126,7 @@ public class QRAnalyzer {
 		
 		for (int i = 0; i < rectList.size(); i++) {
 
-			Imgproc.rectangle(dst, rectList.get(i).tl(), rectList.get(i).br(), new Scalar(255, 0, 0), 4);
+			Imgproc.rectangle(dst, rectList.get(i).tl(), rectList.get(i).br(), new Scalar(255, 0, 0), 1);
 			Imgproc.drawMarker(dst, new Point(rectList.get(i).x, rectList.get(i).y), new Scalar(0, 255, 0));
 		}
 		System.out.println("Rect count = " + rectList.size());

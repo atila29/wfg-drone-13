@@ -228,23 +228,20 @@ public class PositionSystem {
 		
 		List<Rect> sortedCords = WFGUtilities.sortResults(qrCordList, 0, qrCordList.size() - 1);
 		
-		System.out.println(sortedCords.get(0).height);
-		System.out.println(sortedCords.get(1).height);
-		System.out.println(sortedCords.get(2).x);
 		Vector2 p1 = getVec(qr);
-		Vector2 p2 = getVec(getLeft(qr));
+		Vector2 p2 = getVec(getRight(qr));
 		double distp1p2 = calcDistance(p1, p2);
-		double distp3p2 = (paperHeight*focal)/sortedCords.get(0).height;
+		double distp3p2 = (paperHeight*focal)/sortedCords.get(2).height;
 		double distp3p1 = (paperHeight*focal)/sortedCords.get(1).height;
 		System.out.println("dist to middle: " + distp3p1);
-		System.out.println("dist to left: " + distp3p2);
+		System.out.println("dist to right: " + distp3p2);
 		
 		double a = (distp3p1*distp3p1 - distp3p2*distp3p2 + distp1p2*distp1p2) / (2*distp1p2);
         double h = Math.sqrt(distp3p1*distp3p1 - a*a);
 
         Vector2 temp = new Vector2(p1.getX() + a*(p2.getX() - p1.getX()) / distp1p2, p1.getY() + a*(p2.getY() - p1.getY()) / distp1p2);
-        Vector2 v3 = new Vector2(temp.getX() - h * (p2.getX() - p1.getY()) / distp1p2, temp.getY() + h * (p2.getX() - p1.getX()) / distp1p2);
-        Vector2 v4 = new Vector2(temp.getX() - h * (p2.getY() - p1.getY()) / distp1p2, temp.getY() + h * (p2.getX() - p1.getX()) / distp1p2);;
+        Vector2 v3 = new Vector2(temp.getX() - h * (p2.getY() - p1.getY()) / distp1p2, temp.getY() + h * (p2.getX() - p1.getX()) / distp1p2);
+        Vector2 v4 = new Vector2(temp.getX() + h * (p2.getY() - p1.getY()) / distp1p2, temp.getY() - h * (p2.getX() - p1.getX()) / distp1p2);;
         System.out.println("V3 x: " + v3.getX() + " y: " + v3.getY());
         System.out.println("V4 x: " + v4.getX() + " y: " + v4.getY());
         

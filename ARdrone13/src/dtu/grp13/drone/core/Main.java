@@ -58,7 +58,7 @@ public class Main {
 //		}
 		
 		try {
-			mc.useStaticImage("./resources/pic6.jpg");
+			mc.useStaticImage("./resources/pic4.jpg");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
