@@ -32,7 +32,7 @@ public class QrProc implements IMatProcess{
 		Mat img = currentFrame.clone();
 		try {
 			List<Rect> rects = qa.findQrEdges(a, img);
-			if (rects.size() == 3) {
+			if (rects.size() == 2) {
 			String qrResult = qa.scanQr(currentFrame, qa.getMidRect(rects));
 			Vector2 position = ps.calcPosition(qrResult, rects);
 			System.out.println("Pos: " + position);
