@@ -225,9 +225,6 @@ public class PositionSystem {
 	}
 	
 	public Vector2 calcPosition(String qr, List<Rect> qrCordList) {
-		
-		
-		
 		List<Rect> sortedCords = WFGUtilities.sortResults(qrCordList, 0, qrCordList.size() - 1);
 		
 		Vector2 p1 = getVec(qr);
@@ -235,8 +232,8 @@ public class PositionSystem {
 		double distp1p2 = calcDistance(p1, p2);
 		double distp3p2 = (paperHeight*focal)/sortedCords.get(2).height;
 		double distp3p1 = (paperHeight*focal)/sortedCords.get(1).height;
-		System.out.println("dist to middle: " + distp3p1);
-		System.out.println("dist to right: " + distp3p2);
+//		System.out.println("dist to middle: " + distp3p1);
+//		System.out.println("dist to right: " + distp3p2);
 		
 		double a = (distp3p1*distp3p1 - distp3p2*distp3p2 + distp1p2*distp1p2) / (2*distp1p2);
         double h = Math.sqrt(distp3p1*distp3p1 - a*a);
