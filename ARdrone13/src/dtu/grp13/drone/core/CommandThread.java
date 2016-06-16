@@ -184,12 +184,12 @@ public class CommandThread implements ICommandThread{
 
 	@Override
 	public void stepForward() throws InterruptedException {
-		this.forward(10, 200);
+		this.forward(20, 800);
 	}
 
 	@Override
 	public void stepBackward() throws InterruptedException {
-		this.backward(20, 200);
+		this.backward(20, 800);
 	}
 
 	@Override
