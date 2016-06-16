@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -21,7 +22,7 @@ public class PositionFrame {
 	private JFrame frame;
 	private Vector2 origo;
 	private Matrix2 flip, scale, transformValue;
-	private List<Vector2> wallmarks;
+	
 	
 	public PositionFrame() {
 		panel = new MyPanel();
@@ -47,7 +48,12 @@ public class PositionFrame {
 	}
 	
 	public void drawWallMarks(List<Vector2> wallmarks) {
-		this.wallmarks = wallmarks;
+		List<Vector2> transformedMarks = new ArrayList<Vector2>();
+		for(Vector2 v : wallmarks){
+			transformedMarks.add(transform(v));
+		}
+		panel.setWallmarks(transformedMarks);
+		frame.pack();
 	}
 	
 	public void setDronePosition(Vector2 c) {
@@ -58,6 +64,7 @@ public class PositionFrame {
 	private class MyPanel extends JPanel {
 		private Vector2 coor;
 		private Image img;
+		private List<Vector2> wallmarks;
 		
 		
 		public MyPanel(){
@@ -73,6 +80,11 @@ public class PositionFrame {
 			setMaximumSize(size);
 			setSize(size);
 			setLayout(null);
+		}
+		
+		public void setWallmarks(List<Vector2> wallmarks) {
+			this.wallmarks = wallmarks;
+			this.repaint();
 		}
 		
 		public void setCoor(Vector2 coor){
@@ -93,7 +105,7 @@ public class PositionFrame {
 				for(Vector2 v : wallmarks){
 					int x = (int)v.getX()-6;
 					int y = (int)v.getY()-6;
-					g.setColor(new Color(255, 255, 255));
+					g.setColor(new Color(0, 0, 0));
 					g.fillOval(x, y, 12, 12);
 				}
 			}

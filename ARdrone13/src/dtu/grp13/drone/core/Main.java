@@ -28,6 +28,7 @@ public class Main {
 		FrameProcess proc = new FrameProcess(new QrProc(programManager, positionSystem));
 		ModeController mc = new ModeController(proc);
 		PositionFrame xFrame = new PositionFrame();
+		xFrame.drawWallMarks(positionSystem.getWallmarks());
 //		xFrame.setDronePosition(new Vector2(926,324));
 //		mc.useWebcam();
 		ARDrone drone = mc.useDrone(new IDroneSetup() {
