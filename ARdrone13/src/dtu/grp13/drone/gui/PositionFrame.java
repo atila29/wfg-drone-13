@@ -23,7 +23,6 @@ public class PositionFrame {
 	private Vector2 origo;
 	private Matrix2 flip, scale, transformValue;
 	
-	
 	public PositionFrame() {
 		panel = new MyPanel();
 		frame = new JFrame();
@@ -40,6 +39,7 @@ public class PositionFrame {
 		scale = new Matrix2(2,2, 0.5, 0,
 								 0,	 0.5);
 		transformValue = flip.dot(scale);
+		
 		frame.pack();
 	}
 	
@@ -56,6 +56,12 @@ public class PositionFrame {
 		frame.pack();
 	}
 	
+	public void drawCube(Cube cube){
+		panel.addCube(cube);
+		frame.repaint();
+	}
+	
+	
 	public void setDronePosition(Vector2 c) {
 		panel.setCoor(transform(c));
 		frame.pack();
@@ -65,7 +71,7 @@ public class PositionFrame {
 		private Vector2 coor;
 		private Image img;
 		private List<Vector2> wallmarks;
-		
+		private List<Cube> cubes;
 		
 		public MyPanel(){
 			try {
@@ -80,6 +86,12 @@ public class PositionFrame {
 			setMaximumSize(size);
 			setSize(size);
 			setLayout(null);
+			cubes = new ArrayList<Cube>();
+		}
+		
+		public void addCube(Cube cube){
+			cubes.add(new Cube(cube.getColor(), transform(cube.getCoordinate())));
+			this.repaint();
 		}
 		
 		public void setWallmarks(List<Vector2> wallmarks) {
@@ -109,7 +121,20 @@ public class PositionFrame {
 					g.fillOval(x, y, 12, 12);
 				}
 			}
+			if(cubes != null){
+				for(Cube c : cubes){
+					int x = (int)c.getCoordinate().getX();
+					int y = (int)c.getCoordinate().getY();
+					
+					if(c.getColor().equals("red")){
+						g.setColor(new Color(255, 0, 0));
+					}else if(c.getColor().equals("green")){
+						g.setColor(new Color(0, 255, 0));
+					}
+					g.fillOval(x, y, 12, 12);
+				}
+			}
+			
 		}
 	}
-	
 }

@@ -167,6 +167,7 @@ public class CubeDetector {
 					Imgproc.putText(dst, f.getName(), rects.get(i).tl(), Core.FONT_HERSHEY_PLAIN, 1, textColor,2);
 					Imgproc.rectangle(dst, rects.get(i).tl(), rects.get(i).br(), new Scalar(255, 0, 0));
 					async.retColor(f.getName());
+					
 				}
 			}
 		}
