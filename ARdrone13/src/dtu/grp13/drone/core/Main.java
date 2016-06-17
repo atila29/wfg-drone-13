@@ -1,7 +1,6 @@
 package dtu.grp13.drone.core;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -17,7 +16,6 @@ import dtu.grp13.drone.core.matproc.procs.CubeProc;
 import dtu.grp13.drone.core.matproc.procs.IMatProcess;
 import dtu.grp13.drone.core.matproc.procs.QrProc;
 import dtu.grp13.drone.gui.ControlFrame;
-import dtu.grp13.drone.gui.Cube;
 import dtu.grp13.drone.gui.PositionFrame;
 import dtu.grp13.drone.vector.Vector2;
 
@@ -32,10 +30,6 @@ public class Main {
 		PositionFrame xFrame = new PositionFrame();
 		xFrame.drawWallMarks(positionSystem.getWallmarks());
 //		xFrame.setDronePosition(new Vector2(926,324));
-		xFrame.drawCube(new Cube("red", new Vector2(500,500)));
-		xFrame.drawCube(new Cube("red", new Vector2(800,300)));
-		xFrame.drawCube(new Cube("green", new Vector2(100,800)));
-		
 //		mc.useWebcam();
 		ARDrone drone = mc.useDrone(new IDroneSetup() {
 			@Override
