@@ -85,8 +85,11 @@ public class ProgramManager {
 		new Thread(() -> {
 			try {
 				ct.stepForward();
+				ct.hover(1000);
 				ct.stepForward();
+				ct.hover(1000);
 				ct.stepBackward();
+				ct.hover(1000);
 				ct.stepBackward();
 				ct.hover(2000);
 				ct.land();
