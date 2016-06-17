@@ -48,6 +48,7 @@ public class Main {
 		programManager.setProc(proc);
 		programManager.setCmd(cmd);
 		programManager.setxFrame(xFrame);
+		programManager.setPosSystem(positionSystem);
 		ControlFrame cf = new ControlFrame(programManager);
 //		try {
 //			//cmd.waitFor(5000);

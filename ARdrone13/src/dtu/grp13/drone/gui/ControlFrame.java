@@ -7,8 +7,10 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.AbstractAction;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 
 import dtu.grp13.drone.core.CommandThread;
 import dtu.grp13.drone.core.ProgramManager;
@@ -33,6 +35,8 @@ public class ControlFrame {
 		frame.setLocation(1295, 565);
 		frame.setVisible(true);
 		frame.pack();
+		
+		
 	}
 	
 	
@@ -119,6 +123,74 @@ public class ControlFrame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					pm.changeCam();
+				}
+			});
+			
+			this.getInputMap().put(KeyStroke.getKeyStroke("H"), "speed_down");
+			this.getInputMap().put(KeyStroke.getKeyStroke("J"), "speed_up");
+			this.getInputMap().put(KeyStroke.getKeyStroke("Y"), "time_down");
+			this.getInputMap().put(KeyStroke.getKeyStroke("U"), "time_up");
+			
+			this.getInputMap().put(KeyStroke.getKeyStroke("W"), "forward");
+			this.getInputMap().put(KeyStroke.getKeyStroke("A"), "left");
+			this.getInputMap().put(KeyStroke.getKeyStroke("S"), "backward");
+			this.getInputMap().put(KeyStroke.getKeyStroke("D"), "right");
+			
+			this.getActionMap().put("speed_down", new AbstractAction() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					pm.testSpeedDown();
+				}
+			});
+			this.getActionMap().put("speed_up", new AbstractAction() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					pm.testSpeedUp();
+				}
+			});
+			this.getActionMap().put("time_down", new AbstractAction() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					pm.testTimeDown();
+				}
+			});
+			this.getActionMap().put("time_up", new AbstractAction() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					pm.testTimeUp();
+				}
+			});
+			
+			this.getActionMap().put("forward", new AbstractAction() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					pm.testStepF();
+				}
+			});
+			this.getActionMap().put("left", new AbstractAction() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					pm.testStepL();
+				}
+			});
+			this.getActionMap().put("backward", new AbstractAction() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					pm.testStepB();
+				}
+			});
+			this.getActionMap().put("right", new AbstractAction() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					pm.testStepR();
 				}
 			});
 		}

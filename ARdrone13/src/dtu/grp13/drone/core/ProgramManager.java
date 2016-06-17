@@ -2,6 +2,7 @@ package dtu.grp13.drone.core;
 
 import dtu.grp13.drone.core.matproc.Processable;
 import dtu.grp13.drone.core.matproc.procs.CubeProc;
+import dtu.grp13.drone.core.matproc.procs.QrProc;
 import dtu.grp13.drone.gui.PositionFrame;
 import dtu.grp13.drone.vector.Vector2;
 
@@ -11,6 +12,13 @@ public class ProgramManager {
 	private Processable proc;
 	private String cube;
 	private PositionFrame xFrame;
+	private int cubeCount = 0;
+	private PositionSystem posSystem;
+	private int routeNr = 0;
+	
+	// PURELY TEST
+	private int testSec = 0;
+	private int testSpeed = 0;
 	
 	public void setxFrame(PositionFrame xFrame) {
 		this.xFrame = xFrame;
@@ -20,13 +28,17 @@ public class ProgramManager {
 		this.proc = proc;
 	}
 	
+	public void setPosSystem(PositionSystem possys){
+		this.posSystem = possys;
+	}
+	
 	public void positionFound(Vector2 pos){
 		this.position = pos;
-		System.out.println("sket1");
 	}
 	
 	public void cubeFound(String color) {
 		this.cube = color;
+		cubeCount++;
 	}
 	
 	public void takeOffDrone() throws InterruptedException{
@@ -44,6 +56,7 @@ public class ProgramManager {
 	
 	public void findPosition(Runnable after) {
 		new Thread(() -> {
+			position = null;
 			try {
 				ct.up(20, 500);
 				Thread.sleep(550);
@@ -62,7 +75,6 @@ public class ProgramManager {
 					e.printStackTrace();
 				}
 			}
-			System.out.println("sket");
 			xFrame.setDronePosition(position);
 			after.run();
 		}).start();
@@ -81,8 +93,43 @@ public class ProgramManager {
 		return this;
 	}
 	
-	public void flyToPoint(int x, int y) {
+	public void rotateToWall(int wall) {
+		Runnable callBackFromFindPosition = new Runnable() {
+			@Override
+			public void run() {
+				// her antages det at vi har vores vinkel,
+				// derefter skal vi rotate med udgangspunkt i den vinkel.
+			}
+		};
+		findPosition(callBackFromFindPosition);
+	}
+	
+	public void flyToPoint(Vector2 point) throws InterruptedException {
+		// TODO: lav denne fucking methode
 		
+		Vector2 flight = point.substract(position);
+		int margin = 50;
+		
+		if(flight.getX() < 0) {
+			rotateToWall(3);
+		} else {
+			rotateToWall(1);
+		}
+		
+		while(!(position.getX() < point.getX() - margin && position.getX() > point.getX() + margin)){
+			
+		}
+		
+		
+		
+		
+		if(flight.getY() < 0) {
+			rotateToWall(0);
+			ct.stepForward();
+		} else {
+			rotateToWall(2);
+			ct.stepForward();
+		}
 	}
 	
 	public void testCycleTwo(){
@@ -103,6 +150,69 @@ public class ProgramManager {
 				//ct.hover(2000);
 				ct.land();
 			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}).start();
+	}
+	
+	
+	
+	public void searchRoom() throws InterruptedException{
+		routeNr = 0;
+		cubeCount = 0;
+		flyToPoint(new Vector2(50,50));
+		Runnable callback = new Runnable() {
+			@Override
+			public void run() {
+				try{
+					if((routeNr%2) == 0)
+						rotateToWall(1);
+					else
+						rotateToWall(3);
+					ct.stepForward();
+					ct.stepForward();
+					ct.stepForward();
+					ct.next();
+					Thread.sleep(1000);
+					proc.changeProcess(new CubeProc(getThis()));
+					Thread.sleep(1000);
+					if(position.getX() > 926 - 100){
+						if((routeNr%2) == 0){
+							rotateToWall(1);
+							ct.stepLeft();
+							ct.hover(1000);
+							ct.stepLeft();
+							ct.hover(1000);
+						}
+						else{
+							rotateToWall(3);
+							ct.stepRight();
+							ct.hover(1000);
+							ct.stepRight();
+							ct.hover(1000);
+						}
+						routeNr++;
+					}
+			
+				} catch(InterruptedException e){
+					//todoihdofa
+				}
+			}
+		};
+		new Thread(() -> {
+			try {
+				ct.next();
+				proc.changeProcess(new CubeProc(this));
+				Thread.sleep(1000);
+				ct.hover(2000);
+				while(cubeCount < 40 /*add timer*/){
+					ct.next();
+					Thread.sleep(1000);
+					proc.changeProcess(new QrProc(this, posSystem));
+					findPosition(callback);
+				}
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -145,4 +255,59 @@ public class ProgramManager {
 	public void setCmd(ICommandThread ct) {
 		this.ct = ct;
 	}
+	
+	// TEST
+		public void testSpeedUp(){
+			this.testSpeed = testSpeed +5;
+			System.out.println("[xTEST]speed: " + testSpeed);
+		}
+		
+		public void testSpeedDown(){
+			this.testSpeed = testSpeed - 5;
+			System.out.println("[xTEST]speed: " + testSpeed);
+		}
+		
+		public void testTimeUp() {
+			this.testSec = testSec + 100;
+			System.out.println("[xTEST]time: " + testSec);
+		}
+		
+		public void testTimeDown() {
+			this.testSec = testSec - 100;
+			System.out.println("[xTEST]time: " + testSec);
+		}
+		
+		public void testStepF() {
+			try {
+				ct.forward(testSpeed, testSec);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		public void testStepB() {
+			try {
+				ct.backward(testSpeed, testSec);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		public void testStepL() {
+			try {
+				ct.left(testSpeed, testSec);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		public void testStepR() {
+			try {
+				ct.right(testSpeed, testSec);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		// TEST END
 }
