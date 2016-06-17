@@ -227,19 +227,34 @@ public class PositionSystem {
 	public Vector2 calcPosition(List<Rect> qrCordList, Result qrResult) {
 		List<Rect> sortedCords = WFGUtilities.sortResults(qrCordList, 0, qrCordList.size() - 1);
 		
-		
 		Vector2 p1 = new Vector2(0, 0);
 		Vector2 p2 = new Vector2(0, 0);
+		
+		if (sortedCords.size() == 3) {
+			double leftDif1 = Math.abs(sortedCords.get(1).x - sortedCords.get(0).x);
+			double rightDif2 = Math.abs(sortedCords.get(1).x - sortedCords.get(2).x);
+			
+			if (leftDif1 < rightDif2) {
+				p1 = getVec(qrResult.getText());
+				p2 = getVec(getLeft(qrResult.getText()));
+			} else {
+				p1 = getVec(qrResult.getText());
+				p2 = getVec(getRight(qrResult.getText()));
+			}
+			
+		} else {
+			double dif = qrResult.getResultPoints()[0].getX() - qrCordList.get(0).x;
+			if (dif < 20) {
+				p1 = getVec(qrResult.getText());
+				p2 = getVec(getRight(qrResult.getText()));
+			} else {
+				p1 = getVec(qrResult.getText());
+				p2 = getVec(getLeft(qrResult.getText()));
+			}
+		}
+
 //		double distp3p1 = 0.0;
 //		double distp3p2 = 0.0;
-		double dif = qrResult.getResultPoints()[0].getX() - qrCordList.get(0).x;
-		if (dif < 20) {
-			p1 = getVec(qrResult.getText());
-			p2 = getVec(getRight(qrResult.getText()));
-		} else {
-			p1 = getVec(qrResult.getText());
-			p2 = getVec(getLeft(qrResult.getText()));
-		}
 		
 		double distp1p2 = calcDistance(p1, p2);
 		double distp3p1 = (paperHeight*focal)/sortedCords.get(0).height;
