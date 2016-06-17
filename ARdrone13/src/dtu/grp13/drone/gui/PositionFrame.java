@@ -96,15 +96,15 @@ public class PositionFrame {
 		public void paintComponent(Graphics g) {
 			g.drawImage(img, 0, 0, null);
 			if(coor != null) {
-				int x = (int)coor.getX()-6;
-				int y = (int)coor.getY()-6;
+				int x = (int)coor.getX()+6;
+				int y = (int)coor.getY()+6;
 				g.setColor(new Color(255, 0, 0));
 				g.fillOval(x, y, 12, 12);
 			}
 			if(wallmarks != null){
 				for(Vector2 v : wallmarks){
 					int x = (int)v.getX()-6;
-					int y = (int)v.getY()-6;
+					int y = (int)v.getY();
 					g.setColor(new Color(0, 0, 0));
 					g.fillOval(x, y, 12, 12);
 				}
