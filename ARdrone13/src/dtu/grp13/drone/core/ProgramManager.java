@@ -81,6 +81,10 @@ public class ProgramManager {
 		return this;
 	}
 	
+	public void flyToPoint(int x, int y) {
+		
+	}
+	
 	public void testCycleTwo(){
 		new Thread(() -> {
 			try {
