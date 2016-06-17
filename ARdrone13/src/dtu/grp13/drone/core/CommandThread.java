@@ -27,6 +27,8 @@ public class CommandThread implements ICommandThread{
 				try {
 					drone.getCommandManager().forward(speed);
 					Thread.currentThread().sleep(milsec);
+					drone.getCommandManager().hover().doFor(100);
+					
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -44,6 +46,7 @@ public class CommandThread implements ICommandThread{
 				try {
 					drone.getCommandManager().goLeft(speed);
 					Thread.currentThread().sleep(milsec);
+					drone.getCommandManager().hover().doFor(100);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -61,6 +64,7 @@ public class CommandThread implements ICommandThread{
 				try {
 					drone.getCommandManager().goRight(speed);
 					Thread.currentThread().sleep(milsec);
+					drone.getCommandManager().hover().doFor(100);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -78,6 +82,7 @@ public class CommandThread implements ICommandThread{
 				try {
 					drone.getCommandManager().backward(speed);
 					Thread.currentThread().sleep(milsec);
+					drone.getCommandManager().hover().doFor(100);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -93,6 +98,7 @@ public class CommandThread implements ICommandThread{
 			@Override
 			public void run() {
 				drone.getCommandManager().takeOff();
+				drone.getCommandManager().flatTrim().doFor(1000);
 			}});
 		t.start();
 		t.join();
@@ -145,6 +151,7 @@ public class CommandThread implements ICommandThread{
 				try {
 					drone.getCommandManager().up(speed);
 					Thread.currentThread().sleep(milsec);
+					drone.getCommandManager().hover().doFor(100);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -220,22 +227,22 @@ public class CommandThread implements ICommandThread{
 
 	@Override
 	public void stepForward() throws InterruptedException {
-		this.forward(20, 800);
+		this.forward(20, 500);
 	}
 
 	@Override
 	public void stepBackward() throws InterruptedException {
-		this.backward(20, 800);
+		this.backward(20, 500);
 	}
 
 	@Override
 	public void stepLeft() throws InterruptedException {
-		this.left(20, 200);
+		this.left(20, 500);
 	}
 
 	@Override
 	public void stepRight() throws InterruptedException {
-		this.right(20, 200);
+		this.right(20, 500);
 	}
 
 	@Override

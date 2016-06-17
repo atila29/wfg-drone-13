@@ -84,13 +84,18 @@ public class ProgramManager {
 	public void testCycleTwo(){
 		new Thread(() -> {
 			try {
+				ct.up(10, 500);
+				ct.hover(2000);
 				ct.stepForward();
-				ct.hover(1000);
+				ct.hover(2000);
+				ct.stepBackward();
+				ct.hover(2000);
+				ct.stepLeft();
+				ct.hover(2000);
+				ct.stepRight();
+				ct.hover(2000);
+				ct.rotateClockwise(20);
 				ct.stepForward();
-				ct.hover(1000);
-				ct.stepBackward();
-				ct.hover(1000);
-				ct.stepBackward();
 				ct.hover(2000);
 				ct.land();
 			} catch (InterruptedException e) {
