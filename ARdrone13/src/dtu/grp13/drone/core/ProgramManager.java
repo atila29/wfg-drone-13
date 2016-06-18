@@ -3,6 +3,7 @@ package dtu.grp13.drone.core;
 import dtu.grp13.drone.core.matproc.Processable;
 import dtu.grp13.drone.core.matproc.procs.CubeProc;
 import dtu.grp13.drone.core.matproc.procs.QrProc;
+import dtu.grp13.drone.cube.Cube;
 import dtu.grp13.drone.gui.PositionFrame;
 import dtu.grp13.drone.vector.Vector2;
 
@@ -39,6 +40,7 @@ public class ProgramManager {
 	public void cubeFound(String color) {
 		this.cube = color;
 		cubeCount++;
+		xFrame.drawCube(new Cube(color, position));
 	}
 	
 	public void takeOffDrone() throws InterruptedException{
@@ -171,9 +173,8 @@ public class ProgramManager {
 					else
 						rotateToWall(3);
 					ct.stepForward();
-					ct.stepForward();
-					ct.stepForward();
 					ct.next();
+					ct.hover(2000);
 					Thread.sleep(1000);
 					proc.changeProcess(new CubeProc(getThis()));
 					Thread.sleep(1000);
@@ -182,13 +183,9 @@ public class ProgramManager {
 							rotateToWall(1);
 							ct.stepLeft();
 							ct.hover(1000);
-							ct.stepLeft();
-							ct.hover(1000);
 						}
 						else{
 							rotateToWall(3);
-							ct.stepRight();
-							ct.hover(1000);
 							ct.stepRight();
 							ct.hover(1000);
 						}

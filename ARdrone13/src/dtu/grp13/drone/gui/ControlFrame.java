@@ -30,13 +30,11 @@ public class ControlFrame {
 	private ProgramManager pm;
 	private NavDataManager navdata;
 	private BatteryListener bl;
-	private int battery = 0;
 	
 	
 	public ControlFrame(ProgramManager pm, NavDataManager navData){
 		this.pm = pm;
 		this.navdata = navData;
-		navdata.addBatteryListener(bl);
 		panel = new MyPanel();
 		frame = new JFrame();
 		frame.getContentPane().setLayout(new FlowLayout());
@@ -61,8 +59,6 @@ public class ControlFrame {
 		JLabel batteryStatus;
 		
 		public MyPanel(){
-//			Timer timer = new Timer();
-			bl.batteryLevelChanged(battery);
 			this.bStart = new Button();
 			this.bEmergency = new Button();
 			this.bTakeOff = new Button();
@@ -75,22 +71,29 @@ public class ControlFrame {
 			this.bTakeOff.setLabel("TAKEOFF");
 			this.bStop.setLabel("STOP");
 			this.bChangeCam.setLabel("CCAM");
-			this.batteryStatus.setText(String.valueOf(battery));
-//			TimerTask task = new TimerTask() {
-//		        @Override
-//		        public void run() {
-					batteryStatus.setText(String.valueOf(battery));
-//		            }
-//		    };
-//		    timer.scheduleAtFixedRate(task, 5000, 5000);
-			
+			this.batteryStatus.setText("Battery: ");
+
 			this.bStart.setPreferredSize(new Dimension(100,50));
 			this.bStop.setPreferredSize(new Dimension(100,50));
 			this.bEmergency.setPreferredSize(new Dimension(100,50));
 			this.bTakeOff.setPreferredSize(new Dimension(100,50));
 			this.bChangeCam.setPreferredSize(new Dimension(100,50));
 			this.batteryStatus.setPreferredSize(new Dimension(100,50));
-			
+			bl = new BatteryListener() {
+				
+				@Override
+				public void voltageChanged(int arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+				@Override
+				public void batteryLevelChanged(int arg0) {
+					batteryStatus.setText("Battery: " + String.valueOf(arg0));
+				}
+			};
+			navdata.addBatteryListener(bl);
+
 			this.bEmergency.setBackground(Color.RED);
 			this.bStart.setBackground(Color.GREEN);
 			

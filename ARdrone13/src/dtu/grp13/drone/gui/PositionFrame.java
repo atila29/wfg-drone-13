@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import dtu.grp13.drone.cube.Cube;
 import dtu.grp13.drone.vector.Matrix2;
 import dtu.grp13.drone.vector.Vector2;
 
