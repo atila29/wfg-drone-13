@@ -270,8 +270,8 @@ public class PositionSystem {
         Vector2 temp = new Vector2(p1.getX() + a*(p2.getX() - p1.getX()) / distp1p2, p1.getY() + a*(p2.getY() - p1.getY()) / distp1p2);
         Vector2 v3 = new Vector2(temp.getX() - h * (p2.getY() - p1.getY()) / distp1p2, temp.getY() + h * (p2.getX() - p1.getX()) / distp1p2);
         Vector2 v4 = new Vector2(temp.getX() + h * (p2.getY() - p1.getY()) / distp1p2, temp.getY() - h * (p2.getX() - p1.getX()) / distp1p2);
-        System.out.println("V3 x: " + v3.getX() + " y: " + v3.getY());
-        System.out.println("V4 x: " + v4.getX() + " y: " + v4.getY());
+//        System.out.println("V3 x: " + v3.getX() + " y: " + v3.getY());
+//        System.out.println("V4 x: " + v4.getX() + " y: " + v4.getY());
         
         
 		if (v3.getX() < 0 || v3.getY() < 0 || v3.getX() > 926 || v3.getY() > 1060) {
@@ -297,9 +297,9 @@ public class PositionSystem {
 		} else {
 			t = 640 - qrRect.x;
 			beta = Math.atan(t / b);
-			System.out.println("rect x: " + qrRect.x);
-			System.out.println("t = " + t);
-			System.out.println("beta = " + beta);
+//			System.out.println("rect x: " + qrRect.x);
+//			System.out.println("t = " + t);
+//			System.out.println("beta = " + beta);
 		}
 
 		tempOrient = tempOrient.rotate(beta);

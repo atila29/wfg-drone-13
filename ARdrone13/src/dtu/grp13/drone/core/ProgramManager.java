@@ -105,6 +105,13 @@ public class ProgramManager {
 				// her antages det at vi har vores vinkel,
 				// derefter skal vi rotate med udgangspunkt i den vinkel.
 				
+				double spinTime = (4);
+				
+				if(orientation < 180){
+					
+				} else {
+					
+				}
 			}
 		};
 		findPosition(callBackFromFindPosition);

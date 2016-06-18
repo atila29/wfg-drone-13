@@ -116,7 +116,7 @@ public class QRAnalyzer {
 
 				if (ratio > 1.3 && ratio < 2.5 && rect.height > 80.0 && rect.height < 700 && rect.y > 100 && rect.y < 520) {
 					rectList.add(rect);
-					System.out.println("rect x: " + rect.x + " y: " + rect.y);
+					//System.out.println("rect x: " + rect.x + " y: " + rect.y);
 				}
 			}
 		}
