@@ -277,5 +277,28 @@ public class PositionSystem {
 		}
 		
 	}
+	
+	
+	public Vector2 findOrientation(Vector2 position, Result qrResult) {
+		Vector2 qrVec = getVec(qrResult.getText());
+		Vector2 tempOrient = position.substract(qrVec);
+		
+		double t = 0.0;
+		double beta = 0.0;
+		if (qrResult.getResultPoints()[0].getX() > 640) {
+			t = qrResult.getResultPoints()[0].getX() - 640;
+			beta = - Math.atan(t / b);
+		} else {
+			t = 640 - qrResult.getResultPoints()[0].getX();
+			beta = Math.atan(t / b);
+		}
+
+		
+		
+		
+		return new Vector2(0, 0);
+	}
+	
+	
 
 }

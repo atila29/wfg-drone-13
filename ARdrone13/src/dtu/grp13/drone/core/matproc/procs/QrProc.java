@@ -36,6 +36,8 @@ public class QrProc implements IMatProcess{
 			if (rects.size() >= 2 && rects.size() <= 3) {
 			Result qrResult = qa.scanQr(currentFrame, qa.getMidRect(rects));
 			Vector2 position = ps.calcPosition(rects, qrResult);
+			Vector2 orientation = ps.findOrientation(position, qrResult);
+			
 			System.out.println("Pos: " + position);
 			pm.positionFound(position);
 			

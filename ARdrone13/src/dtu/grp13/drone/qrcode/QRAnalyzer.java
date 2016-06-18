@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 import java.util.concurrent.RecursiveAction;
 
 import javax.imageio.ImageIO;
@@ -38,6 +39,7 @@ import com.google.zxing.qrcode.QRCodeReader;
 
 import dtu.grp13.drone.core.PositionSystem;
 import dtu.grp13.drone.util.WFGUtilities;
+import dtu.grp13.drone.vector.Vector2;
 
 public class QRAnalyzer {
 
@@ -158,6 +160,5 @@ public class QRAnalyzer {
 		
 		return rectList;
 	}
-	
 	
 }
