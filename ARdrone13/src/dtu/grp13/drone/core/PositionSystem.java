@@ -14,6 +14,7 @@ import java.util.Vector;
 import javax.management.loading.PrivateClassLoader;
 import javax.swing.plaf.synth.SynthStyle;
 
+import org.apache.commons.net.io.SocketInputStream;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 
@@ -279,18 +280,23 @@ public class PositionSystem {
 	}
 	
 	
-	public double findOrientation(Vector2 position, Result qrResult) {
-		Vector2 qrVec = getVec(qrResult.getText());
+	public double findOrientation(Vector2 position, Rect qrRect, String qr) {
+		Vector2 qrVec = getVec(qr);
 		Vector2 tempOrient = qrVec.substract(position);
+		
+		//System.out.println("Orient --- " + tempOrient.toString());
 		
 		double t = 0.0;
 		double beta = 0.0;
-		if (qrResult.getResultPoints()[0].getX() > 640) {
-			t = qrResult.getResultPoints()[0].getX() - 640;
+		if (qrRect.x > 640) {
+			t = qrRect.x - 640;
 			beta = - Math.atan(t / b);
 		} else {
-			t = 640 - qrResult.getResultPoints()[0].getX();
+			t = 640 - qrRect.x;
 			beta = Math.atan(t / b);
+			System.out.println("rect x: " + qrRect.x);
+			System.out.println("t = " + t);
+			System.out.println("beta = " + beta);
 		}
 
 		tempOrient = tempOrient.rotate(beta);

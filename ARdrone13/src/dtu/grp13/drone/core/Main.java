@@ -32,24 +32,24 @@ public class Main {
 		xFrame.drawWallMarks(positionSystem.getWallmarks());
 //		xFrame.setDronePosition(new Vector2(926,324));
 //		mc.useWebcam();
-		ARDrone drone = mc.useDrone(new IDroneSetup() {
-			@Override
-			public void setup(ARDrone drone) {
-				//drone.reset();
-				drone.getCommandManager().setVideoBitrate(4000);
-				//drone.getCommandManager().setVideoCodecFps(15);
-				drone.getCommandManager().setVideoCodec(VideoCodec.H264_720P);
-				//drone.getCommandManager().setVideoChannel(VideoChannel.NEXT);
-				drone.getCommandManager().setVideoChannel(VideoChannel.HORI);
-			}
-		});
-		
-		ICommandThread cmd = new CommandThread(drone);
-		programManager.setProc(proc);
-		programManager.setCmd(cmd);
-		programManager.setxFrame(xFrame);
-		programManager.setPosSystem(positionSystem);
-		ControlFrame cf = new ControlFrame(programManager, drone.getNavDataManager());
+//		ARDrone drone = mc.useDrone(new IDroneSetup() {
+//			@Override
+//			public void setup(ARDrone drone) {
+//				//drone.reset();
+//				drone.getCommandManager().setVideoBitrate(4000);
+//				//drone.getCommandManager().setVideoCodecFps(15);
+//				drone.getCommandManager().setVideoCodec(VideoCodec.H264_720P);
+//				//drone.getCommandManager().setVideoChannel(VideoChannel.NEXT);
+//				drone.getCommandManager().setVideoChannel(VideoChannel.HORI);
+//			}
+//		});
+//		
+//		ICommandThread cmd = new CommandThread(drone);
+//		programManager.setProc(proc);
+//		programManager.setCmd(cmd);
+//		programManager.setxFrame(xFrame);
+//		programManager.setPosSystem(positionSystem);
+//		ControlFrame cf = new ControlFrame(programManager, drone.getNavDataManager());
 //		try {
 //			//cmd.waitFor(5000);
 //			cmd.takeOff();
@@ -60,12 +60,12 @@ public class Main {
 //			e.printStackTrace();
 //		}
 //		
-//		try {
-//			mc.useStaticImage("./resources/circles/circ3.jpg");
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		try {
+			mc.useStaticImage("./resources/pic7.jpg");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 
 	}

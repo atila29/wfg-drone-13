@@ -34,12 +34,14 @@ public class QrProc implements IMatProcess{
 		try {
 			List<Rect> rects = qa.findQrEdges(a, img);
 			if (rects.size() >= 2 && rects.size() <= 3) {
-				Result qrResult = qa.scanQr(currentFrame, qa.getMidRect(rects));
+				Rect qrRect = qa.getMidRect(rects);
+				Result qrResult = qa.scanQr(currentFrame, qrRect);
 				Vector2 position = ps.calcPosition(rects, qrResult);
-				double orientation = ps.findOrientation(position, qrResult);
-				
+				//double orientation = ps.findOrientation(position, qrResult);
+				double orientation = ps.findOrientation(position, qrRect, qrResult.getText());
 				System.out.println("Pos: " + position);
 				System.out.println("Orientation: " + (orientation/(2*Math.PI))*360);
+				//System.out.println("Orientation: " + orientation.toString());
 				pm.positionFound(position, orientation);
 				
 			}
