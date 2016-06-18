@@ -274,4 +274,42 @@ public class CommandThread implements ICommandThread{
 		drone.stop();
 	}
 
+	@Override
+	public void rotateClockwise(int speed, int time)
+			throws InterruptedException {
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					drone.getCommandManager().spinRight(speed);
+					Thread.currentThread().sleep(time);
+					drone.getCommandManager().hover().doFor(100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}});
+		t.start();
+		t.join();
+	}
+
+	@Override
+	public void rotateCounterClockwise(int speed, int time)
+			throws InterruptedException {
+		Thread t = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					drone.getCommandManager().spinLeft(speed);
+					Thread.currentThread().sleep(time);
+					drone.getCommandManager().hover().doFor(100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}});
+		t.start();
+		t.join();
+	}
+
 }

@@ -279,9 +279,9 @@ public class PositionSystem {
 	}
 	
 	
-	public Vector2 findOrientation(Vector2 position, Result qrResult) {
+	public double findOrientation(Vector2 position, Result qrResult) {
 		Vector2 qrVec = getVec(qrResult.getText());
-		Vector2 tempOrient = position.substract(qrVec);
+		Vector2 tempOrient = qrVec.substract(position);
 		
 		double t = 0.0;
 		double beta = 0.0;
@@ -293,10 +293,8 @@ public class PositionSystem {
 			beta = Math.atan(t / b);
 		}
 
-		
-		
-		
-		return new Vector2(0, 0);
+		tempOrient = tempOrient.rotate(beta);
+		return tempOrient.getAngle(new Vector2(0,1));
 	}
 	
 	

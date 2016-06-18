@@ -26,7 +26,7 @@ public class Main {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		ProgramManager programManager = new ProgramManager();
 		PositionSystem positionSystem = new PositionSystem();
-		FrameProcess proc = new FrameProcess(new CircleProc(programManager));
+		FrameProcess proc = new FrameProcess(new QrProc(programManager, positionSystem));
 		ModeController mc = new ModeController(proc);
 		PositionFrame xFrame = new PositionFrame();
 		xFrame.drawWallMarks(positionSystem.getWallmarks());

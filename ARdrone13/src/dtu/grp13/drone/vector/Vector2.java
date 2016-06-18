@@ -38,6 +38,23 @@ public class Vector2 {
 	public Vector2 substract(Vector2 v) {
 		return new Vector2(this.x - v.getX(), this.y - v.getY());
 	}
+	
+	public Vector2 rotate(double radians) {
+		double ca = Math.cos(radians);
+		double sa = Math.sin(radians);
+		double x = ca*this.getX()-sa*this.getY();
+		double y = sa * this.getX() + ca* this.getY();
+		return new Vector2(x, y);
+	}
+	
+	public double getAngle(Vector2 v) {
+		double dot = v.getX() * this.getX() + v.getY() * this.getY();
+		double mag1 = Math.sqrt(Math.pow(this.getX(), 2) + Math.pow(this.getY(), 2));
+		double mag2 = Math.sqrt(Math.pow(v.getX(), 2) + Math.pow(v.getY(), 2));
+		double cosa = (dot/(mag1*mag2));
+		double angle = Math.acos(cosa);
+		return angle;
+	}
 
 	public double getX() {
 		return x;

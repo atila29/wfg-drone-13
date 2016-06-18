@@ -22,4 +22,6 @@ public interface ICommandThread {
 	public void next() throws InterruptedException;
 	public void stabilize() throws InterruptedException;
 	public void stop() throws InterruptedException;
+	public void rotateClockwise(int speed, int time) throws InterruptedException;
+	public void rotateCounterClockwise(int speed, int time) throws InterruptedException;
 }

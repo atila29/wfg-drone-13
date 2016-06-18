@@ -197,5 +197,19 @@ private IARDrone drone;
 	public void stop() throws InterruptedException {
 		drone.stop();
 	}
+
+	@Override
+	public void rotateClockwise(int speed, int time)
+			throws InterruptedException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void rotateCounterClockwise(int speed, int time)
+			throws InterruptedException {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

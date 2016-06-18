@@ -165,6 +165,23 @@ public class ControlFrame {
 			this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_S, 0, true), "backward");
 			this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_D, 0, true), "right");
 			
+			this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_Q, 0, true), "rot_l");
+			this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_E, 0, true), "rot_r");
+			
+			this.getActionMap().put("rot_r", new AbstractAction() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					pm.testRotR();
+				}
+			});
+			this.getActionMap().put("rot_l", new AbstractAction() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					pm.testRotL();
+				}
+			});
 			this.getActionMap().put("speed_down", new AbstractAction() {
 				
 				@Override

@@ -16,10 +16,11 @@ public class ProgramManager {
 	private int cubeCount = 0;
 	private PositionSystem posSystem;
 	private int routeNr = 0;
+	private double orientation = -1;
 	
 	// PURELY TEST
-	private int testSec = 400;
-	private int testSpeed = 20;
+	private int testSec = 800;
+	private int testSpeed = 100;
 	
 	public void setxFrame(PositionFrame xFrame) {
 		this.xFrame = xFrame;
@@ -33,8 +34,9 @@ public class ProgramManager {
 		this.posSystem = possys;
 	}
 	
-	public void positionFound(Vector2 pos){
+	public void positionFound(Vector2 pos, double orientation){
 		this.position = pos;
+		this.orientation = orientation;
 	}
 	
 	public void cubeFound(String color) {
@@ -59,6 +61,7 @@ public class ProgramManager {
 	public void findPosition(Runnable after) {
 		new Thread(() -> {
 			position = null;
+			this.orientation = -1;
 			try {
 				ct.up(20, 500);
 				Thread.sleep(550);
@@ -101,6 +104,7 @@ public class ProgramManager {
 			public void run() {
 				// her antages det at vi har vores vinkel,
 				// derefter skal vi rotate med udgangspunkt i den vinkel.
+				
 			}
 		};
 		findPosition(callBackFromFindPosition);
@@ -265,12 +269,12 @@ public class ProgramManager {
 		}
 		
 		public void testTimeUp() {
-			this.testSec = testSec + 100;
+			this.testSec = testSec + 5;
 			System.out.println("[xTEST]time: " + testSec);
 		}
 		
 		public void testTimeDown() {
-			this.testSec = testSec - 100;
+			this.testSec = testSec - 5;
 			System.out.println("[xTEST]time: " + testSec);
 		}
 		
@@ -310,5 +314,22 @@ public class ProgramManager {
 				e.printStackTrace();
 			}
 		}
+		public void testRotL(){
+			try {
+				ct.rotateCounterClockwise(testSpeed, testSec);
+				ct.hover(500);
+			} catch (InterruptedException e){
+				e.printStackTrace();
+			}
+		}
+		public void testRotR(){
+			try {
+				ct.rotateClockwise(testSpeed, testSec);
+				ct.hover(500);
+			} catch (InterruptedException e){
+				e.printStackTrace();
+			}
+		}
+		
 		// TEST END
 }
