@@ -20,8 +20,6 @@ import org.opencv.core.Rect;
 import com.google.zxing.Result;
 
 import dtu.grp13.drone.util.WFGUtilities;
-import dtu.grp13.drone.util.Wallmark;
-import dtu.grp13.drone.util.WallmarkLinkedList;
 import dtu.grp13.drone.vector.Vector2;
 
 public class PositionSystem {
