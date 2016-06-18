@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.JFrame;
@@ -126,15 +127,15 @@ public class ControlFrame {
 				}
 			});
 			
-			this.getInputMap().put(KeyStroke.getKeyStroke("H"), "speed_down");
-			this.getInputMap().put(KeyStroke.getKeyStroke("J"), "speed_up");
-			this.getInputMap().put(KeyStroke.getKeyStroke("Y"), "time_down");
-			this.getInputMap().put(KeyStroke.getKeyStroke("U"), "time_up");
+			this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_H, 0, true), "speed_down");
+			this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_J, 0, true), "speed_up");
+			this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_Y, 0, true), "time_down");
+			this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_U, 0, true), "time_up");
 			
-			this.getInputMap().put(KeyStroke.getKeyStroke("W"), "forward");
-			this.getInputMap().put(KeyStroke.getKeyStroke("A"), "left");
-			this.getInputMap().put(KeyStroke.getKeyStroke("S"), "backward");
-			this.getInputMap().put(KeyStroke.getKeyStroke("D"), "right");
+			this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_W, 0, true), "forward");
+			this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_A, 0, true), "left");
+			this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_S, 0, true), "backward");
+			this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_D, 0, true), "right");
 			
 			this.getActionMap().put("speed_down", new AbstractAction() {
 				

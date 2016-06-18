@@ -13,6 +13,8 @@ import de.yadrone.base.navdata.AltitudeListener;
 
 public class CommandThread implements ICommandThread{	
 	private IARDrone drone;
+	private int speed = 10;
+	private int milsec = 2000;
 	
 	public CommandThread(IARDrone drone) {
 		this.drone = drone;
@@ -227,22 +229,22 @@ public class CommandThread implements ICommandThread{
 
 	@Override
 	public void stepForward() throws InterruptedException {
-		this.forward(20, 500);
+		this.forward(speed, milsec);
 	}
 
 	@Override
 	public void stepBackward() throws InterruptedException {
-		this.backward(20, 500);
+		this.backward(speed, milsec);
 	}
 
 	@Override
 	public void stepLeft() throws InterruptedException {
-		this.left(20, 500);
+		this.left(speed, milsec);
 	}
 
 	@Override
 	public void stepRight() throws InterruptedException {
-		this.right(20, 500);
+		this.right(speed, milsec);
 	}
 
 	@Override

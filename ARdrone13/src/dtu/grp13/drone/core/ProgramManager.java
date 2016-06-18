@@ -17,8 +17,8 @@ public class ProgramManager {
 	private int routeNr = 0;
 	
 	// PURELY TEST
-	private int testSec = 0;
-	private int testSpeed = 0;
+	private int testSec = 400;
+	private int testSpeed = 20;
 	
 	public void setxFrame(PositionFrame xFrame) {
 		this.xFrame = xFrame;
@@ -280,6 +280,7 @@ public class ProgramManager {
 		public void testStepF() {
 			try {
 				ct.forward(testSpeed, testSec);
+				ct.hover(500);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -288,6 +289,7 @@ public class ProgramManager {
 		public void testStepB() {
 			try {
 				ct.backward(testSpeed, testSec);
+				ct.hover(500);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -296,6 +298,7 @@ public class ProgramManager {
 		public void testStepL() {
 			try {
 				ct.left(testSpeed, testSec);
+				ct.hover(500);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -304,6 +307,7 @@ public class ProgramManager {
 		public void testStepR() {
 			try {
 				ct.right(testSpeed, testSec);
+				ct.hover(500);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
