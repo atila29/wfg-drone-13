@@ -61,8 +61,7 @@ public class ControlFrame {
 		JLabel batteryStatus;
 		
 		public MyPanel(){
-			Timer timer = new Timer();
-			int refreshTime = 5;
+//			Timer timer = new Timer();
 			bl.batteryLevelChanged(battery);
 			this.bStart = new Button();
 			this.bEmergency = new Button();
@@ -77,13 +76,13 @@ public class ControlFrame {
 			this.bStop.setLabel("STOP");
 			this.bChangeCam.setLabel("CCAM");
 			this.batteryStatus.setText(String.valueOf(battery));
-			TimerTask task = new TimerTask() {
-		        @Override
-		        public void run() {
+//			TimerTask task = new TimerTask() {
+//		        @Override
+//		        public void run() {
 					batteryStatus.setText(String.valueOf(battery));
-		            }
-		    };
-		    timer.scheduleAtFixedRate(task, 5000, 5000);
+//		            }
+//		    };
+//		    timer.scheduleAtFixedRate(task, 5000, 5000);
 			
 			this.bStart.setPreferredSize(new Dimension(100,50));
 			this.bStop.setPreferredSize(new Dimension(100,50));
