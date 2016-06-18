@@ -12,6 +12,7 @@ import dtu.grp13.drone.core.matproc.FrameProcess;
 import dtu.grp13.drone.core.matproc.IDroneSetup;
 import dtu.grp13.drone.core.matproc.ModeController;
 import dtu.grp13.drone.core.matproc.TestProcess;
+import dtu.grp13.drone.core.matproc.procs.CircleProc;
 import dtu.grp13.drone.core.matproc.procs.CubeProc;
 import dtu.grp13.drone.core.matproc.procs.IMatProcess;
 import dtu.grp13.drone.core.matproc.procs.QrProc;
@@ -25,7 +26,7 @@ public class Main {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		ProgramManager programManager = new ProgramManager();
 		PositionSystem positionSystem = new PositionSystem();
-		FrameProcess proc = new FrameProcess(new QrProc(programManager, positionSystem));
+		FrameProcess proc = new FrameProcess(new CircleProc(programManager));
 		ModeController mc = new ModeController(proc);
 		PositionFrame xFrame = new PositionFrame();
 		xFrame.drawWallMarks(positionSystem.getWallmarks());
@@ -42,8 +43,7 @@ public class Main {
 				drone.getCommandManager().setVideoChannel(VideoChannel.HORI);
 			}
 		});
-//		
-//		CommandThread cmd = new CommandThread(drone);
+		
 		ICommandThread cmd = new CommandThread(drone);
 		programManager.setProc(proc);
 		programManager.setCmd(cmd);
@@ -61,7 +61,7 @@ public class Main {
 //		}
 //		
 //		try {
-//			mc.useStaticImage("./resources/pic4.jpg");
+//			mc.useStaticImage("./resources/circles/circ3.jpg");
 //		} catch (IOException e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();

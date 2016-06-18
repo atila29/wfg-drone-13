@@ -24,7 +24,7 @@ public class CircleDetector {
 		Imgproc.cvtColor(src, hsvImg, Imgproc.COLOR_BGR2HSV);
 		Mat blueImg = new Mat();
 		src.copyTo(blueImg);
-		Core.inRange(hsvImg, new Scalar(100, 0, 0), new Scalar(145, 255, 255), blueImg);
+		Core.inRange(hsvImg, new Scalar(90, 0, 0), new Scalar(150, 255, 255), blueImg);
 	    
 //		Mat gray = new Mat();
 //	    Imgproc.cvtColor(src, gray, Imgproc.COLOR_BGR2GRAY);
@@ -35,9 +35,9 @@ public class CircleDetector {
 //	    int ratio = 3;
 //		Imgproc.Canny(blueImg, dst, lowThreshold, lowThreshold * ratio);
 //
-	    Mat circles = new Mat();
-		Imgproc.GaussianBlur(blueImg, blueImg, new Size(9, 9), 3, 3);
-	    Imgproc.HoughCircles(blueImg, circles, Imgproc.CV_HOUGH_GRADIENT, 1, blueImg.rows()/8, 200, 100, 0, 0);
+		Mat circles = new Mat();
+		Imgproc.GaussianBlur(blueImg, blueImg, new Size(9, 9), 2, 2);
+	    Imgproc.HoughCircles(blueImg, circles, Imgproc.CV_HOUGH_GRADIENT, 1, blueImg.rows()/8, 150, 75, 0, 0);
 	    
 	    double x = 0.0;
 	    double y = 0.0;
