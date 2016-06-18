@@ -49,7 +49,7 @@ public class Main {
 		programManager.setCmd(cmd);
 		programManager.setxFrame(xFrame);
 		programManager.setPosSystem(positionSystem);
-		ControlFrame cf = new ControlFrame(programManager);
+		ControlFrame cf = new ControlFrame(programManager, drone.getNavDataManager());
 //		try {
 //			//cmd.waitFor(5000);
 //			cmd.takeOff();
