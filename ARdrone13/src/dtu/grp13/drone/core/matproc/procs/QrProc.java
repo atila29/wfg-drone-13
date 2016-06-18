@@ -12,6 +12,7 @@ import com.google.zxing.Result;
 import dtu.grp13.drone.core.PositionSystem;
 import dtu.grp13.drone.core.ProgramManager;
 import dtu.grp13.drone.qrcode.QRAnalyzer;
+import dtu.grp13.drone.util.WFGUtilities;
 import dtu.grp13.drone.vector.Vector2;
 
 public class QrProc implements IMatProcess{
@@ -33,12 +34,14 @@ public class QrProc implements IMatProcess{
 		Mat img = currentFrame.clone();
 		try {
 			List<Rect> rects = qa.findQrEdges(a, img);
+			System.out.println("rect size: " + rects.size());
+			List<Rect> sortedCords = WFGUtilities.sortResults(rects, 0, rects.size() - 1);
 			if (rects.size() >= 2 && rects.size() <= 3) {
-				Rect qrRect = qa.getMidRect(rects);
-				Result qrResult = qa.scanQr(currentFrame, qrRect);
-				Vector2 position = ps.calcPosition(rects, qrResult);
+				int qrIndex = qa.getMidIndex(rects);
+				Result qrResult = qa.scanQr(currentFrame, sortedCords.get(qrIndex));
+				Vector2 position = ps.calcPosition(sortedCords, qrResult, qrIndex);
 				//double orientation = ps.findOrientation(position, qrResult);
-				double orientation = ps.findOrientation(position, qrRect, qrResult.getText());
+				double orientation = ps.findOrientation(position, sortedCords.get(qrIndex), qrResult.getText());
 				System.out.println("Pos: " + position);
 				System.out.println("Orientation: " + (orientation/(2*Math.PI))*360);
 				//System.out.println("Orientation: " + orientation.toString());

@@ -57,17 +57,17 @@ public class QRAnalyzer {
 
 	}
 	
-	public Rect getMidRect(List<Rect> rects) throws IOException {
+	public int getMidIndex(List<Rect> rects) throws IOException {
 		List<Rect> sortedRects = WFGUtilities.sortResults(rects, 0, rects.size()-1);
 		if (sortedRects.size() == 3) {
-			return sortedRects.get(1);
+			return 1;
 		} else {
 			double leftDif = Math.abs(sortedRects.get(0).x - 640);
 			double rightDif = Math.abs(sortedRects.get(1).x -640);
 			if (leftDif < rightDif) {
-				return sortedRects.get(0);
+				return 0;
 			} else {
-				return sortedRects.get(1);
+				return 1;
 			}
 		}
 	}
@@ -116,6 +116,7 @@ public class QRAnalyzer {
 
 				if (ratio > 1.3 && ratio < 2.5 && rect.height > 80.0 && rect.height < 700 && rect.y > 100 && rect.y < 520) {
 					rectList.add(rect);
+					System.out.println("rect x: " + rect.x + " y: " + rect.y);
 				}
 			}
 		}
@@ -153,6 +154,7 @@ public class QRAnalyzer {
 //		}
 		
 		for (int i = 0; i < rectList.size(); i++) {
+			//System.out.println("rect x " + rectList.get(i).x + " y: " + rectList.get(i).y);
 			//System.out.println("height: " + rectList.get(i).height + " width: " + rectList.get(i).width);
 			Imgproc.rectangle(dst, rectList.get(i).tl(), rectList.get(i).br(), new Scalar(255, 0, 0), 1);
 			Imgproc.drawMarker(dst, new Point(rectList.get(i).x, rectList.get(i).y), new Scalar(0, 255, 0));

@@ -19,6 +19,7 @@ import org.opencv.core.Point;
 import org.opencv.core.Rect;
 
 import com.google.zxing.Result;
+import com.xuggle.mediatool.event.IFlushEvent;
 
 import dtu.grp13.drone.util.WFGUtilities;
 import dtu.grp13.drone.vector.Vector2;
@@ -223,32 +224,34 @@ public class PositionSystem {
 		return null;
 	}
 	
-	public Vector2 calcPosition(List<Rect> qrCordList, Result qrResult) {
-		List<Rect> sortedCords = WFGUtilities.sortResults(qrCordList, 0, qrCordList.size() - 1);
-		
+	public Vector2 calcPosition(List<Rect> qrCordList, Result qrResult, int p1Index) {
 		Vector2 p1 = new Vector2(0, 0);
 		Vector2 p2 = new Vector2(0, 0);
+		int p2Index = 0;
 		
-		if (sortedCords.size() == 3) {
-			double leftDif1 = Math.abs(sortedCords.get(1).x - sortedCords.get(0).x);
-			double rightDif2 = Math.abs(sortedCords.get(1).x - sortedCords.get(2).x);
+		if (qrCordList.size() == 3) {
+			double leftDif1 = Math.abs(qrCordList.get(1).x - qrCordList.get(0).x);
+			double rightDif2 = Math.abs(qrCordList.get(1).x - qrCordList.get(2).x);
 			
 			if (leftDif1 < rightDif2) {
 				p1 = getVec(qrResult.getText());
 				p2 = getVec(getLeft(qrResult.getText()));
+				p2Index = 0;
 			} else {
 				p1 = getVec(qrResult.getText());
 				p2 = getVec(getRight(qrResult.getText()));
+				p2Index = 2;
 			}
 			
 		} else {
-			double dif = qrResult.getResultPoints()[0].getX() - qrCordList.get(0).x;
-			if (dif < 20) {
+			if (p1Index == 0) {
 				p1 = getVec(qrResult.getText());
 				p2 = getVec(getRight(qrResult.getText()));
+				p2Index = 1;
 			} else {
 				p1 = getVec(qrResult.getText());
 				p2 = getVec(getLeft(qrResult.getText()));
+				p2Index = 1;
 			}
 		}
 
@@ -256,8 +259,8 @@ public class PositionSystem {
 //		double distp3p2 = 0.0;
 		
 		double distp1p2 = calcDistance(p1, p2);
-		double distp3p1 = (paperHeight*focal)/sortedCords.get(0).height;
-		double distp3p2 = (paperHeight*focal)/sortedCords.get(1).height;
+		double distp3p1 = (paperHeight*focal)/qrCordList.get(p1Index).height;
+		double distp3p2 = (paperHeight*focal)/qrCordList.get(p2Index).height;
 //		System.out.println("dist to middle: " + distp3p1);
 //		System.out.println("dist to right: " + distp3p2);
 		
