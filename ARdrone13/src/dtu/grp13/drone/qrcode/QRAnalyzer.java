@@ -131,11 +131,7 @@ public class QRAnalyzer {
 				difWidth = Math.abs(rectList.get(i).x - rectList.get(j).x);
 
 				if (difWidth < 20 && rectList.get(j).height > rectList.get(i).height) {
-					if (!indexList.contains(i)) {
-						rList[i] = null;
-						indexList.add(i);
-					}
-					
+					rList[i] = null;
 				}
 			}
 		}
@@ -143,7 +139,7 @@ public class QRAnalyzer {
 		//rectList.clear();
 		for(int i = 0; i < rList.length; i++) {
 			if(rList[i] != null)
-				cRectList.add(rectList.get(i));
+				cRectList.add(rList[i]);
 		}
 		rectList = cRectList;
 		
