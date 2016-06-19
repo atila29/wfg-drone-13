@@ -170,7 +170,7 @@ public class CommandThread implements ICommandThread{
 			@Override
 			public void run() {
 				try {
-					drone.getCommandManager().up(speed);
+					drone.getCommandManager().down(speed);
 					Thread.currentThread().sleep(milsec);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block

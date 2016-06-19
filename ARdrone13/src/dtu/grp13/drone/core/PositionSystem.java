@@ -268,7 +268,7 @@ public class PositionSystem {
 	
 	public double findOrientation(Vector2 position, Rect qrRect, String qr) {
 		Vector2 qrVec = getVec(qr);
-		Vector2 tempOrient = qrVec.substract(position);
+		Vector2 tempOrient = qrVec.subtract(position);
 		
 		double t = 0.0;
 		double beta = 0.0;

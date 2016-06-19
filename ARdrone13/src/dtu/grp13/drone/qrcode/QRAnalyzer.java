@@ -40,7 +40,7 @@ public class QRAnalyzer {
 		MultiFormatReader reader = new MultiFormatReader();
 		Result scanResult = reader.decode(bitmap);
 
-		System.out.println(scanResult.getText());
+		//System.out.println(scanResult.getText());
 
 		return scanResult;
 	}
@@ -71,7 +71,7 @@ public class QRAnalyzer {
 		MultiFormatReader reader = new MultiFormatReader();
 		Result scanResult = reader.decode(bitmap);
 
-		System.out.println(scanResult.getText());
+		//System.out.println(scanResult.getText());
 
 		return scanResult;
 	}
