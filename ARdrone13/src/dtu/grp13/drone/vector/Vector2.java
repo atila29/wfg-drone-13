@@ -42,8 +42,8 @@ public class Vector2 {
 	public Vector2 rotate(double radians) {
 		double ca = Math.cos(radians);
 		double sa = Math.sin(radians);
-		double x = ca*this.getX()-sa*this.getY();
-		double y = sa * this.getX() + ca* this.getY();
+		double x = ca * this.getX() - sa * this.getY();
+		double y = sa * this.getX() + ca * this.getY();
 		return new Vector2(x, y);
 	}
 	
@@ -71,6 +71,4 @@ public class Vector2 {
 	public void setY(double y) {
 		this.y = y;
 	}
-	
-	
 }
