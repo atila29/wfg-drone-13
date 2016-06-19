@@ -37,6 +37,7 @@ public class ProgramManager {
 	public void positionFound(Vector2 pos, double orientation){
 		this.position = pos;
 		this.orientation = orientation;
+		xFrame.setDronePosition(this.position);
 	}
 	
 	public void cubeFound(String color) {
@@ -80,7 +81,6 @@ public class ProgramManager {
 					e.printStackTrace();
 				}
 			}
-			xFrame.setDronePosition(position);
 			after.run();
 		}).start();
 	}

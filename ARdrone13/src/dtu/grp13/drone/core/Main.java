@@ -47,12 +47,12 @@ public class Main {
 //		ICommandThread cmd = new CommandThread(drone);
 		programManager.setProc(proc);
 //		programManager.setCmd(cmd);
-//		programManager.setxFrame(xFrame);
+		programManager.setxFrame(xFrame);
 		programManager.setPosSystem(positionSystem);
 //		ControlFrame cf = new ControlFrame(programManager, drone.getNavDataManager());
 	
 		try {
-			mc.useStaticImage("./resources/position/pic9.jpg");
+			mc.useStaticImage("./resources/position/pic12.jpg");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
