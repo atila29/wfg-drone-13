@@ -122,7 +122,8 @@ public class ControlFrame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					//pm.firstCycle();
-					pm.testCycleTwo();
+					//pm.testCycleTwo();
+					pm.rotateToWall(2);
 				}
 			});
 			

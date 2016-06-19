@@ -50,7 +50,7 @@ public class QrProc implements IMatProcess{
 			}
 		} 
 		catch (NotFoundException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		} 
 		catch (Exception e) {
 			e.printStackTrace();

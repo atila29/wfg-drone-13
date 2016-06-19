@@ -63,7 +63,7 @@ public class ProgramManager {
 			position = null;
 			this.orientation = -1;
 			try {
-				ct.up(20, 500);
+				ct.up(100, 500);
 				Thread.sleep(550);
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
@@ -104,13 +104,15 @@ public class ProgramManager {
 			public void run() {
 				// her antages det at vi har vores vinkel,
 				// derefter skal vi rotate med udgangspunkt i den vinkel.
-				
-				double spinTime = (4);
-				
-				if(orientation < 180){
-					
-				} else {
-					
+				double dOrientation = (orientation/(2 * Math.PI)) * 360;
+				double degreesToWall = (wall * 90) + dOrientation;
+				try {
+						int time = (int)(((850+(7*wall))/90) * degreesToWall);
+						ct.rotateClockwise(100, time);
+						ct.hover(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		};
