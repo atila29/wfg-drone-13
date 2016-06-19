@@ -48,11 +48,11 @@ public class Main {
 		programManager.setProc(proc);
 //		programManager.setCmd(cmd);
 //		programManager.setxFrame(xFrame);
-//		programManager.setPosSystem(positionSystem);
+		programManager.setPosSystem(positionSystem);
 //		ControlFrame cf = new ControlFrame(programManager, drone.getNavDataManager());
 	
 		try {
-			mc.useStaticImage("./resources/position/pic1.jpg");
+			mc.useStaticImage("./resources/position/pic9.jpg");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

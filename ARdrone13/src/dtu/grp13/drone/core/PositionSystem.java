@@ -278,10 +278,12 @@ public class PositionSystem {
 		} else {
 			t = 640 - qrRect.x;
 			beta = Math.atan(t / b);
-			System.out.println("rect x: " + qrRect.x);
-			System.out.println("t = " + t);
-			System.out.println("beta = " + beta);
+			
 		}
+		System.out.println("rect x: " + qrRect.x);
+		System.out.println("t = " + t);
+		System.out.println("beta = " + Math.toDegrees(beta));
+		
 		tempOrient = tempOrient.rotate(beta);
 		
 		return tempOrient.getAngle(new Vector2(0,1));

@@ -67,7 +67,7 @@ public class QRAnalyzer {
 		Image img = WFGUtilities.toBufferedImage(qr);
 		LuminanceSource source = new BufferedImageLuminanceSource((BufferedImage) img);
 		BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-		// QRCodeReader reader = new QRCodeReader();
+		//QRCodeReader reader = new QRCodeReader();
 		MultiFormatReader reader = new MultiFormatReader();
 		Result scanResult = reader.decode(bitmap);
 
@@ -107,7 +107,7 @@ public class QRAnalyzer {
 					} else {
 						for (int j = 0; j < rectList.size(); j++) {
 							double dif = Math.abs(rect.x - rectList.get(j).x);
-							if (dif < 20) {
+							if (dif < 40) {
 								keepRect = false;
 							}
 						}
