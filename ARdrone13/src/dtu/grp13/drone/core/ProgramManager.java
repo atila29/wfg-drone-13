@@ -81,6 +81,13 @@ public class ProgramManager {
 					e.printStackTrace();
 				}
 			}
+			try {
+				ct.down(100, 500);
+				Thread.sleep(550);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}).start();
 	}
 	
@@ -105,6 +112,13 @@ public class ProgramManager {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+			}
+			try {
+				ct.down(100, 500);
+				Thread.sleep(550);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 			after.run();
 		}).start();
