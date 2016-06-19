@@ -120,31 +120,13 @@ public class ProgramManager {
 	}
 	
 	public void flyToPoint(Vector2 point) throws InterruptedException {
-		// TODO: lav denne fucking methode
 		
-		Vector2 flight = point.substract(position);
-		int margin = 50;
+		double a = position.getX() - point.getX();
+		double b = position.getY() - point.getY();
+		double distance = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
 		
-		if(flight.getX() < 0) {
-			rotateToWall(3);
-		} else {
-			rotateToWall(1);
-		}
+		double degree = 0;
 		
-		while(!(position.getX() < point.getX() - margin && position.getX() > point.getX() + margin)){
-			
-		}
-		
-		
-		
-		
-		if(flight.getY() < 0) {
-			rotateToWall(0);
-			ct.stepForward();
-		} else {
-			rotateToWall(2);
-			ct.stepForward();
-		}
 	}
 	
 	public void testCycleTwo(){
