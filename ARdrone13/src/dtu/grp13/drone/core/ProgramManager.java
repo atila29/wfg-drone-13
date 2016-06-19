@@ -63,13 +63,6 @@ public class ProgramManager {
 		new Thread(() -> {
 			position = null;
 			this.orientation = -1;
-			try {
-				ct.up(100, 500);
-				Thread.sleep(550);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
 			while(position == null) {
 				try {
 					ct.rotateClockwise(10);
@@ -80,13 +73,6 @@ public class ProgramManager {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			}
-			try {
-				ct.down(100, 500);
-				Thread.sleep(550);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
 			}
 		}).start();
 	}
@@ -140,11 +126,11 @@ public class ProgramManager {
 			public void run() {
 				// her antages det at vi har vores vinkel,
 				// derefter skal vi rotate med udgangspunkt i den vinkel.
-				double dOrientation = (orientation/(2 * Math.PI)) * 360;
+				double dOrientation = Math.toDegrees(orientation);
 				double degreesToWall = (wall * 90) + dOrientation;
 				try {
 						int time = (int)(((850+(7*wall))/90) * degreesToWall);
-						ct.rotateClockwise(100, time);
+						ct.rotateCounterClockwise(100, time);
 						ct.hover(1000);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
@@ -160,8 +146,8 @@ public class ProgramManager {
 			
 			@Override
 			public void run() {
-				double a = position.getX() - point.getX();
-				double b = position.getY() - point.getY();
+				double a = position.getX() + point.getX();
+				double b = position.getY() + point.getY();
 				double distance = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
 				Vector2 stedsvektor = point.subtract(position);
 				double degree = Math.toDegrees(stedsvektor.getAngle(point));
