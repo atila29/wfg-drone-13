@@ -2,18 +2,9 @@ package dtu.grp13.drone.qrcode;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
-import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Vector;
-import java.util.concurrent.RecursiveAction;
-
-import javax.imageio.ImageIO;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -37,9 +28,7 @@ import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
 
-import dtu.grp13.drone.core.PositionSystem;
 import dtu.grp13.drone.util.WFGUtilities;
-import dtu.grp13.drone.vector.Vector2;
 
 public class QRAnalyzer {
 
@@ -54,7 +43,6 @@ public class QRAnalyzer {
 		System.out.println(scanResult.getText());
 
 		return scanResult;
-
 	}
 
 	public int getMidIndex(List<Rect> rects) throws IOException {
@@ -75,7 +63,6 @@ public class QRAnalyzer {
 	public Result scanQr(Mat src, Rect rect) throws NotFoundException, ChecksumException, FormatException {
 
 		Mat qr = src.submat(rect);
-		// Imgproc.resize(qr, qr, new Size(500, 707));
 
 		Image img = WFGUtilities.toBufferedImage(qr);
 		LuminanceSource source = new BufferedImageLuminanceSource((BufferedImage) img);
@@ -87,7 +74,6 @@ public class QRAnalyzer {
 		System.out.println(scanResult.getText());
 
 		return scanResult;
-
 	}
 
 	public List<Rect> findQrEdges(Mat src, Mat dst) {
@@ -124,7 +110,6 @@ public class QRAnalyzer {
 							if (dif < 20) {
 								keepRect = false;
 							}
-
 						}
 						if (keepRect) {
 							rectList.add(rect);
@@ -142,7 +127,6 @@ public class QRAnalyzer {
 			Imgproc.rectangle(dst, rectList.get(i).tl(), rectList.get(i).br(), new Scalar(255, 0, 0), 1);
 			Imgproc.drawMarker(dst, new Point(rectList.get(i).x, rectList.get(i).y), new Scalar(0, 255, 0));
 		}
-
 		return rectList;
 	}
 
