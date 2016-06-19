@@ -52,7 +52,7 @@ public class Main {
 		ControlFrame cf = new ControlFrame(programManager, drone.getNavDataManager());
 	
 //		try {
-//			mc.useStaticImage("./resources/pic4.jpg");
+//			mc.useStaticImage("./resources/position/pic12.jpg");
 //		} catch (IOException e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();

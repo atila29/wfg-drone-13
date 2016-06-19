@@ -22,6 +22,7 @@ import de.yadrone.base.navdata.NavData;
 import de.yadrone.base.navdata.NavDataManager;
 import dtu.grp13.drone.core.CommandThread;
 import dtu.grp13.drone.core.ProgramManager;
+import dtu.grp13.drone.vector.Vector2;
 
 
 
@@ -130,7 +131,14 @@ public class ControlFrame {
 				public void actionPerformed(ActionEvent e) {
 					//pm.firstCycle();
 					//pm.testCycleTwo();
-					pm.rotateToWall(2);
+					//pm.rotateToWall(2);
+					try {
+						pm.initHeight();
+						pm.flyToPoint(new Vector2(500,500));
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			});
 			

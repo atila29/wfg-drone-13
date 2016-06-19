@@ -37,6 +37,7 @@ public class ProgramManager {
 	public void positionFound(Vector2 pos, double orientation){
 		this.position = pos;
 		this.orientation = orientation;
+		xFrame.setDronePosition(this.position);
 	}
 	
 	public void cubeFound(String color) {
@@ -58,7 +59,7 @@ public class ProgramManager {
 		ct.land();
 	}
 	
-	public void findPosition(Runnable after) {
+	public void findPosition() {
 		new Thread(() -> {
 			position = null;
 			this.orientation = -1;
@@ -80,7 +81,31 @@ public class ProgramManager {
 					e.printStackTrace();
 				}
 			}
-			xFrame.setDronePosition(position);
+			try {
+				ct.down(100, 500);
+				Thread.sleep(550);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}).start();
+	}
+	
+	public void findPosition(Runnable after) {
+		new Thread(() -> {
+			position = null;
+			this.orientation = -1;
+			while(position == null) {
+				try {
+					ct.rotateClockwise(10);
+					ct.hover(1000);
+					ct.hover(1000);
+					Thread.sleep(100);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			after.run();
 		}).start();
 	}
@@ -96,6 +121,17 @@ public class ProgramManager {
 	
 	private ProgramManager getThis(){
 		return this;
+	}
+	
+	public void initHeight() {
+		try {
+			ct.up(100, 500);
+			Thread.sleep(550);
+			ct.hover(1000);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 	
 	public void rotateToWall(int wall) {
@@ -120,31 +156,36 @@ public class ProgramManager {
 	}
 	
 	public void flyToPoint(Vector2 point) throws InterruptedException {
-		// TODO: lav denne fucking methode
-		
-		Vector2 flight = point.substract(position);
-		int margin = 50;
-		
-		if(flight.getX() < 0) {
-			rotateToWall(3);
-		} else {
-			rotateToWall(1);
-		}
-		
-		while(!(position.getX() < point.getX() - margin && position.getX() > point.getX() + margin)){
+		Runnable loop = new Runnable() {
 			
-		}
+			@Override
+			public void run() {
+				double a = position.getX() - point.getX();
+				double b = position.getY() - point.getY();
+				double distance = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
+				Vector2 stedsvektor = point.subtract(position);
+				double degree = Math.toDegrees(stedsvektor.getAngle(point));
+				int rotTime = ((int)((830/90)*degree));
+				try {
+					ct.rotateClockwise(100, rotTime);
+					ct.hover(1000);
+					ct.stepForward();
+					ct.hover(1000);
+					if(distance > 60){
+						flyToPoint(point);
+					} else {
+						landDrone();
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+			}
+		};
 		
-		
-		
-		
-		if(flight.getY() < 0) {
-			rotateToWall(0);
-			ct.stepForward();
-		} else {
-			rotateToWall(2);
-			ct.stepForward();
-		}
+		new Thread(() -> {
+			findPosition(loop);
+		}).start();
 	}
 	
 	public void testCycleTwo(){
