@@ -95,13 +95,6 @@ public class ProgramManager {
 		new Thread(() -> {
 			position = null;
 			this.orientation = -1;
-			try {
-				ct.up(100, 500);
-				Thread.sleep(550);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
 			while(position == null) {
 				try {
 					ct.rotateClockwise(10);
@@ -112,13 +105,6 @@ public class ProgramManager {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			}
-			try {
-				ct.down(50, 500);
-				Thread.sleep(550);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
 			}
 			after.run();
 		}).start();
@@ -135,6 +121,17 @@ public class ProgramManager {
 	
 	private ProgramManager getThis(){
 		return this;
+	}
+	
+	public void initHeight() {
+		try {
+			ct.up(100, 500);
+			Thread.sleep(550);
+			ct.hover(1000);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 	
 	public void rotateToWall(int wall) {

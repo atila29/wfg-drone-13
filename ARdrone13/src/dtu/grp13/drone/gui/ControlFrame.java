@@ -126,6 +126,7 @@ public class ControlFrame {
 					//pm.testCycleTwo();
 					//pm.rotateToWall(2);
 					try {
+						pm.initHeight();
 						pm.flyToPoint(new Vector2(500,500));
 					} catch (InterruptedException e1) {
 						// TODO Auto-generated catch block
