@@ -69,15 +69,15 @@ public class ControlFrame {
 			this.bTakeOff.setLabel("TAKEOFF");
 			this.bStop.setLabel("STOP");
 			this.bChangeCam.setLabel("CCAM");
-			this.batteryStatus.setText("<html><font color='red'>Battery: </font></html>");
+			this.batteryStatus.setText("<html><font color='red'>Battery: 00</font></html>");
 
-			this.bStart.setPreferredSize(new Dimension(100,50));
-			this.bStop.setPreferredSize(new Dimension(100,50));
-			this.bEmergency.setPreferredSize(new Dimension(100,50));
-			this.bTakeOff.setPreferredSize(new Dimension(100,50));
-			this.bChangeCam.setPreferredSize(new Dimension(100,50));
-			this.batteryStatus.setPreferredSize(new Dimension(100,50));
-			this.batteryStatus.setFont(new Font("Arial", Font.PLAIN, 20));
+			this.bStart.setPreferredSize(new Dimension(90,50));
+			this.bStop.setPreferredSize(new Dimension(90,50));
+			this.bEmergency.setPreferredSize(new Dimension(90,50));
+			this.bTakeOff.setPreferredSize(new Dimension(90,50));
+			this.bChangeCam.setPreferredSize(new Dimension(90,50));
+			this.batteryStatus.setPreferredSize(new Dimension(90,50));
+			this.batteryStatus.setFont(new Font("Arial", Font.PLAIN, 15));
 			bl = new BatteryListener() {
 				
 				@Override
