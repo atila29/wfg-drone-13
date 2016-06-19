@@ -4,6 +4,7 @@ import java.awt.Button;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -32,7 +33,6 @@ public class ControlFrame {
 	private NavDataManager navdata;
 	private BatteryListener bl;
 	
-	
 	public ControlFrame(ProgramManager pm, NavDataManager navData){
 		this.pm = pm;
 		this.navdata = navData;
@@ -46,11 +46,8 @@ public class ControlFrame {
 		frame.setLocation(1295, 565);
 		frame.setVisible(true);
 		frame.pack();
-		
-		
 	}
-	
-	
+
 	private class MyPanel extends JPanel{
 		Button bTakeOff;
 		Button bEmergency;
@@ -72,14 +69,15 @@ public class ControlFrame {
 			this.bTakeOff.setLabel("TAKEOFF");
 			this.bStop.setLabel("STOP");
 			this.bChangeCam.setLabel("CCAM");
-			this.batteryStatus.setText("Battery: ");
+			this.batteryStatus.setText("<html><font color='red'>Battery: </font></html>");
 
 			this.bStart.setPreferredSize(new Dimension(100,50));
 			this.bStop.setPreferredSize(new Dimension(100,50));
 			this.bEmergency.setPreferredSize(new Dimension(100,50));
 			this.bTakeOff.setPreferredSize(new Dimension(100,50));
 			this.bChangeCam.setPreferredSize(new Dimension(100,50));
-			this.batteryStatus.setPreferredSize(new Dimension(100,50));
+			this.batteryStatus.setPreferredSize(new Dimension(120,50));
+			this.batteryStatus.setFont(new Font("Arial", Font.PLAIN, 24));
 			bl = new BatteryListener() {
 				
 				@Override
@@ -90,10 +88,19 @@ public class ControlFrame {
 				
 				@Override
 				public void batteryLevelChanged(int arg0) {
-					batteryStatus.setText("Battery: " + String.valueOf(arg0));
-				}
+					
+					
+					if(79 < arg0){
+						batteryStatus.setText("<html><font color='green'>Battery: </font></html>" + String.valueOf(arg0));
+					}else if(44 < arg0 && arg0 < 80){
+						batteryStatus.setText("<html><font color='orange'>Battery: </font></html>" + String.valueOf(arg0));
+					}else if(0 < arg0 && arg0 < 45){
+						batteryStatus.setText("<html><font color='red'>Battery: </font></html>" + String.valueOf(arg0));
+					}
+				} 
 			};
 			navdata.addBatteryListener(bl);
+			
 
 			this.bEmergency.setBackground(Color.RED);
 			this.bStart.setBackground(Color.GREEN);
