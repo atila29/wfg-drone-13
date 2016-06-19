@@ -272,15 +272,16 @@ public class PositionSystem {
 		
 		double t = 0.0;
 		double beta = 0.0;
+		double qrMid = qrRect.x + qrRect.width/2;
 		if (qrRect.x > 640) {
-			t = qrRect.x - 640;
+			t = qrMid - 640;
 			beta = - Math.atan(t / b);
 		} else {
-			t = 640 - qrRect.x;
+			t = 640 - qrMid;
 			beta = Math.atan(t / b);
 			
 		}
-		System.out.println("rect x: " + qrRect.x);
+		System.out.println("rect x: " + qrMid);
 		System.out.println("t = " + t);
 		System.out.println("beta = " + Math.toDegrees(beta));
 		
