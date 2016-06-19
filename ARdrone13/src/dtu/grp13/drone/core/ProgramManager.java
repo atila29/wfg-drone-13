@@ -59,6 +59,31 @@ public class ProgramManager {
 		ct.land();
 	}
 	
+	public void findPosition() {
+		new Thread(() -> {
+			position = null;
+			this.orientation = -1;
+			try {
+				ct.up(100, 500);
+				Thread.sleep(550);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			while(position == null) {
+				try {
+					ct.rotateClockwise(10);
+					ct.hover(1000);
+					ct.hover(1000);
+					Thread.sleep(100);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}).start();
+	}
+	
 	public void findPosition(Runnable after) {
 		new Thread(() -> {
 			position = null;
@@ -120,13 +145,32 @@ public class ProgramManager {
 	}
 	
 	public void flyToPoint(Vector2 point) throws InterruptedException {
+		Runnable loop = new Runnable() {
+			
+			@Override
+			public void run() {
+				double a = position.getX() - point.getX();
+				double b = position.getY() - point.getY();
+				double distance = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
+				Vector2 stedsvektor = point.subtract(position);
+				double degree = stedsvektor.getAngle(point);
+				int rotTime = ((int)((830/90)*degree));
+				try {
+					ct.rotateClockwise(100, rotTime);
+					ct.stepForward();
+					if(distance > 60){
+						flyToPoint(point);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+			}
+		};
 		
-		double a = position.getX() - point.getX();
-		double b = position.getY() - point.getY();
-		double distance = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
-		
-		double degree = 0;
-		
+		new Thread(() -> {
+			findPosition(loop);
+		}).start();
 	}
 	
 	public void testCycleTwo(){
