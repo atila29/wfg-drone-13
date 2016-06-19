@@ -97,7 +97,7 @@ public class ControlFrame {
 					}else if(0 < arg0 && arg0 < 45){
 						batteryStatus.setText("<html><font color='red'>Battery: </font></html>" + String.valueOf(arg0));
 					}
-				}
+				} 
 			};
 			navdata.addBatteryListener(bl);
 			
