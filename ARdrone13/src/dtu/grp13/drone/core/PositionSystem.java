@@ -5,21 +5,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
-import javax.management.loading.PrivateClassLoader;
-import javax.swing.plaf.synth.SynthStyle;
-
-import org.apache.commons.net.io.SocketInputStream;
-import org.opencv.core.Point;
 import org.opencv.core.Rect;
 
 import com.google.zxing.Result;
-import com.xuggle.mediatool.event.IFlushEvent;
 
 import dtu.grp13.drone.util.WFGUtilities;
 import dtu.grp13.drone.vector.Vector2;
@@ -40,7 +32,6 @@ public class PositionSystem {
 
 	public PositionSystem() throws IOException {
 		wallMarks = new HashMap<>();
-
 		String csvMarks = "./resources/WallCoordinates.csv";
 		BufferedReader reader = null;
 		String csvSplit = ";";
@@ -112,7 +103,6 @@ public class PositionSystem {
 				.sqrt(Math.pow(qrVec.getX() - rightVec.getX(), 2) + Math.pow(qrVec.getY() - rightVec.getY(), 2));
 
 		return distArray;
-
 	}
 	
 	public double calcDistance(Vector2 p1, Vector2 p2) {
@@ -136,8 +126,6 @@ public class PositionSystem {
 			double y = sortedCords.get(i).y + sortedCords.get(i).height / 2;
 			sortedCords.get(i).x = (int) x;
 			sortedCords.get(i).y = (int) y;
-			// System.out.println("index = " + i + " value = " +
-			// qrCordList.get(i).x);
 
 			if (sortedCords.get(i).x > 640) {
 				t = sortedCords.get(i).x - 640;
@@ -149,6 +137,7 @@ public class PositionSystem {
 			betaList.add(beta);
 
 		}
+		
 		if (sortedCords.get(1).x > 640) {
 			betaArray[1] = betaList.get(2) - betaList.get(1);
 			if (sortedCords.get(0).x > 640) {
@@ -165,14 +154,11 @@ public class PositionSystem {
 				betaArray[1] = betaList.get(1) + betaList.get(2);
 			}
 		}
-		// System.out.println(betaArray[0] + " --- " + betaArray[1]);
-
 		return betaArray;
 	}
 
 	public double calcRadius(double afstand, double vinkel) {
 		double radius = (0.5 * afstand) / Math.sin(vinkel);
-		// System.out.println("Radius: " + radius);
 		return radius;
 	}
 
@@ -183,7 +169,6 @@ public class PositionSystem {
 		double var1 = Math.sqrt(Math.pow(afstand, 2) / Math.pow(Math.sin(vinkel), 2) - Math.pow(afstand, 2));
 		double x = 0.5 * (v2.getY() - v1.getY()) / var0 * var1 + (0.5 * v1.getX()) + (0.5 * v2.getX());
 		double y = 0.5 * (-v2.getX() + v1.getX()) / var0 * var1 + (0.5 * v1.getY()) + (0.5 * v2.getY());
-		// System.out.println("x: " + x + " --- y: " + y);
 		return new Vector2(x, y);
 	}
 
@@ -219,7 +204,6 @@ public class PositionSystem {
 			double x4 = x3 + (h * (cent2.getY() - cent1.getY())) / d;
 			double y4 = y3 - (h * (cent2.getX() - cent1.getX())) / d;
 			return new Vector2(x4, y4);
-
 		}
 		return null;
 	}
@@ -251,7 +235,7 @@ public class PositionSystem {
 			} else {
 				p1 = getVec(qrResult.getText());
 				p2 = getVec(getLeft(qrResult.getText()));
-				p2Index = 0;
+				p2Index = 1;
 			}
 		}
 
@@ -261,8 +245,8 @@ public class PositionSystem {
 		double distp1p2 = calcDistance(p1, p2);
 		double distp3p1 = (paperHeight*focal)/qrCordList.get(p1Index).height;
 		double distp3p2 = (paperHeight*focal)/qrCordList.get(p2Index).height;
-//		System.out.println("dist to middle: " + distp3p1);
-//		System.out.println("dist to right: " + distp3p2);
+		System.out.println("dist to p1: " + distp3p1);
+		System.out.println("dist to p2: " + distp3p2);
 		
 		double a = (distp3p1*distp3p1 - distp3p2*distp3p2 + distp1p2*distp1p2) / (2*distp1p2);
         double h = Math.sqrt(distp3p1*distp3p1 - a*a);
@@ -270,8 +254,8 @@ public class PositionSystem {
         Vector2 temp = new Vector2(p1.getX() + a*(p2.getX() - p1.getX()) / distp1p2, p1.getY() + a*(p2.getY() - p1.getY()) / distp1p2);
         Vector2 v3 = new Vector2(temp.getX() - h * (p2.getY() - p1.getY()) / distp1p2, temp.getY() + h * (p2.getX() - p1.getX()) / distp1p2);
         Vector2 v4 = new Vector2(temp.getX() + h * (p2.getY() - p1.getY()) / distp1p2, temp.getY() - h * (p2.getX() - p1.getX()) / distp1p2);
-//        System.out.println("V3 x: " + v3.getX() + " y: " + v3.getY());
-//        System.out.println("V4 x: " + v4.getX() + " y: " + v4.getY());
+        System.out.println("V3 x: " + v3.getX() + " y: " + v3.getY());
+        System.out.println("V4 x: " + v4.getX() + " y: " + v4.getY());
         
         
 		if (v3.getX() < 0 || v3.getY() < 0 || v3.getX() > 926 || v3.getY() > 1060) {
@@ -282,12 +266,9 @@ public class PositionSystem {
 		
 	}
 	
-	
 	public double findOrientation(Vector2 position, Rect qrRect, String qr) {
 		Vector2 qrVec = getVec(qr);
 		Vector2 tempOrient = qrVec.substract(position);
-		
-		//System.out.println("Orient --- " + tempOrient.toString());
 		
 		double t = 0.0;
 		double beta = 0.0;
@@ -297,12 +278,14 @@ public class PositionSystem {
 		} else {
 			t = 640 - qrRect.x;
 			beta = Math.atan(t / b);
-//			System.out.println("rect x: " + qrRect.x);
-//			System.out.println("t = " + t);
-//			System.out.println("beta = " + beta);
+			
 		}
-
+		System.out.println("rect x: " + qrRect.x);
+		System.out.println("t = " + t);
+		System.out.println("beta = " + Math.toDegrees(beta));
+		
 		tempOrient = tempOrient.rotate(beta);
+		
 		return tempOrient.getAngle(new Vector2(0,1));
 	}
 	

@@ -34,7 +34,7 @@ public class QrProc implements IMatProcess{
 		Mat img = currentFrame.clone();
 		try {
 			List<Rect> rects = qa.findQrEdges(a, img);
-			//System.out.println("rect size: " + rects.size());
+			System.out.println("rect size: " + rects.size());
 			List<Rect> sortedCords = WFGUtilities.sortResults(rects, 0, rects.size() - 1);
 			if (rects.size() >= 2 && rects.size() <= 3) {
 				int qrIndex = qa.getMidIndex(rects);
