@@ -114,7 +114,7 @@ public class ProgramManager {
 				}
 			}
 			try {
-				ct.down(100, 500);
+				ct.down(50, 500);
 				Thread.sleep(550);
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
@@ -171,9 +171,13 @@ public class ProgramManager {
 				int rotTime = ((int)((830/90)*degree));
 				try {
 					ct.rotateClockwise(100, rotTime);
+					ct.hover(1000);
 					ct.stepForward();
+					ct.hover(1000);
 					if(distance > 60){
 						flyToPoint(point);
+					} else {
+						landDrone();
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
