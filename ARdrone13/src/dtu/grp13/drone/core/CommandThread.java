@@ -14,7 +14,7 @@ import de.yadrone.base.navdata.AltitudeListener;
 public class CommandThread implements ICommandThread{	
 	private IARDrone drone;
 	private int speed = 20;
-	private int milsec = 1500;
+	private int milsec = 800;
 	
 	public CommandThread(IARDrone drone) {
 		this.drone = drone;

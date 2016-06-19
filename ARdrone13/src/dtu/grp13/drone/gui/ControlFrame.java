@@ -76,8 +76,8 @@ public class ControlFrame {
 			this.bEmergency.setPreferredSize(new Dimension(90,50));
 			this.bTakeOff.setPreferredSize(new Dimension(90,50));
 			this.bChangeCam.setPreferredSize(new Dimension(90,50));
-			this.batteryStatus.setPreferredSize(new Dimension(90,50));
-			this.batteryStatus.setFont(new Font("Arial", Font.PLAIN, 15));
+			//this.batteryStatus.setPreferredSize(new Dimension(90,50));
+			this.batteryStatus.setFont(new Font("Arial", Font.PLAIN, 11));
 			bl = new BatteryListener() {
 				
 				@Override
@@ -134,7 +134,7 @@ public class ControlFrame {
 					//pm.rotateToWall(2);
 					try {
 						pm.initHeight();
-						pm.flyToPoint(new Vector2(143,108));
+						pm.flyToPoint(new Vector2(1050,926));
 					} catch (InterruptedException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();

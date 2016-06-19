@@ -63,8 +63,10 @@ public class ProgramManager {
 		new Thread(() -> {
 			position = null;
 			this.orientation = -1;
-			while(position == null) {
+			int count = 5;
+			while(position == null && count > 0) {
 				try {
+					count--;
 					ct.rotateClockwise(10);
 					ct.hover(1000);
 					ct.hover(1000);
@@ -83,6 +85,30 @@ public class ProgramManager {
 			this.orientation = -1;
 			while(position == null) {
 				try {
+					ct.rotateClockwise(10);
+					ct.hover(1000);
+					ct.hover(1000);
+					Thread.sleep(100);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			after.run();
+		}).start();
+	}
+	public void findPosition(Runnable after, Runnable err) {
+		new Thread(() -> {
+			position = null;
+			this.orientation = -1;
+			int count = 5;
+			while(position == null) {
+				try {
+					if(!(count >= 0)){
+						err.run();
+						return;
+					}
+					count--;
 					ct.rotateClockwise(10);
 					ct.hover(1000);
 					ct.hover(1000);
@@ -142,8 +168,21 @@ public class ProgramManager {
 	}
 	
 	public void flyToPoint(Vector2 point) throws InterruptedException {
+		
+		Runnable err = new Runnable() {
+			@Override
+			public void run() {
+				try {
+					ct.stepForward();
+					ct.hover(1000);
+					flyToPoint(point);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		
 		Runnable loop = new Runnable() {
-			
 			@Override
 			public void run() {
 				double a = position.getX() + point.getX();
@@ -170,7 +209,7 @@ public class ProgramManager {
 		};
 		
 		new Thread(() -> {
-			findPosition(loop);
+			findPosition(loop, err);
 		}).start();
 	}
 	
