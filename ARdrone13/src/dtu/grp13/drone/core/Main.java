@@ -30,8 +30,8 @@ public class Main {
 		ModeController mc = new ModeController(proc);
 		PositionFrame xFrame = new PositionFrame();
 		xFrame.drawWallMarks(positionSystem.getWallmarks());
-//		xFrame.setDronePosition(new Vector2(926,324));
-//		mc.useWebcam();
+		xFrame.setDronePosition(new Vector2(926,324));
+		mc.useWebcam();
 		ARDrone drone = mc.useDrone(new IDroneSetup() {
 			@Override
 			public void setup(ARDrone drone) {
@@ -52,7 +52,7 @@ public class Main {
 		ControlFrame cf = new ControlFrame(programManager, drone.getNavDataManager());
 	
 //		try {
-//			mc.useStaticImage("./resources/pic4.jpg");
+//			mc.useStaticImage("./resources/position/pic13.jpg");
 //		} catch (IOException e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();

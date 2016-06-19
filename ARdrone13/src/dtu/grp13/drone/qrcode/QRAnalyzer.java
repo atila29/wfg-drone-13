@@ -47,23 +47,23 @@ public class QRAnalyzer {
 		Image img = WFGUtilities.toBufferedImage(src);
 		LuminanceSource source = new BufferedImageLuminanceSource((BufferedImage) img);
 		BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-		//QRCodeReader reader = new QRCodeReader();
+		// QRCodeReader reader = new QRCodeReader();
 		MultiFormatReader reader = new MultiFormatReader();
 		Result scanResult = reader.decode(bitmap);
-		
+
 		System.out.println(scanResult.getText());
-		
+
 		return scanResult;
 
 	}
-	
+
 	public int getMidIndex(List<Rect> rects) throws IOException {
-		List<Rect> sortedRects = WFGUtilities.sortResults(rects, 0, rects.size()-1);
+		List<Rect> sortedRects = WFGUtilities.sortResults(rects, 0, rects.size() - 1);
 		if (sortedRects.size() == 3) {
 			return 1;
 		} else {
 			double leftDif = Math.abs(sortedRects.get(0).x - 640);
-			double rightDif = Math.abs(sortedRects.get(1).x -640);
+			double rightDif = Math.abs(sortedRects.get(1).x - 640);
 			if (leftDif < rightDif) {
 				return 0;
 			} else {
@@ -71,33 +71,32 @@ public class QRAnalyzer {
 			}
 		}
 	}
-	 
-	public Result scanQr(Mat src, Rect rect) throws NotFoundException, ChecksumException, FormatException {
-		
-		Mat qr =  src.submat(rect);
-		//Imgproc.resize(qr, qr, new Size(500, 707));
 
+	public Result scanQr(Mat src, Rect rect) throws NotFoundException, ChecksumException, FormatException {
+
+		Mat qr = src.submat(rect);
+		// Imgproc.resize(qr, qr, new Size(500, 707));
 
 		Image img = WFGUtilities.toBufferedImage(qr);
 		LuminanceSource source = new BufferedImageLuminanceSource((BufferedImage) img);
 		BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-		//QRCodeReader reader = new QRCodeReader();
+		// QRCodeReader reader = new QRCodeReader();
 		MultiFormatReader reader = new MultiFormatReader();
 		Result scanResult = reader.decode(bitmap);
-		
+
 		System.out.println(scanResult.getText());
-		
+
 		return scanResult;
 
 	}
-	
+
 	public List<Rect> findQrEdges(Mat src, Mat dst) {
 		List<MatOfPoint> edges = new ArrayList<MatOfPoint>();
 		Mat s = src.clone();
 		// lidt billedebahandling
 		Imgproc.cvtColor(s, s, Imgproc.COLOR_BGR2GRAY);
 		Imgproc.GaussianBlur(s, s, new Size(5, 5), 0);
-		Imgproc.Canny(s, s, 35, 100 ); // læs op på, noget med lysforhold
+		Imgproc.Canny(s, s, 35, 100); // læs op på, noget med lysforhold
 
 		Imgproc.findContours(s, edges, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
 		List<Rect> rectList = new ArrayList<>();
@@ -113,50 +112,38 @@ public class QRAnalyzer {
 
 				Rect rect = Imgproc.boundingRect(edges.get(i));
 				double ratio = (double) rect.height / (double) rect.width;
+				boolean keepRect = true;
 
-				if (ratio > 1.3 && ratio < 2.5 && rect.height > 80.0 && rect.height < 700 && rect.y > 100 && rect.y < 520) {
-					rectList.add(rect);
-					//System.out.println("rect x: " + rect.x + " y: " + rect.y);
+				if (ratio > 1.3 && ratio < 2.5 && rect.height > 80.0 && rect.height < 700 && rect.y > 100
+						&& rect.y < 520) {
+					if (rectList.size() == 0) {
+						rectList.add(rect);
+					} else {
+						for (int j = 0; j < rectList.size(); j++) {
+							double dif = Math.abs(rect.x - rectList.get(j).x);
+							if (dif < 20) {
+								keepRect = false;
+							}
+
+						}
+						if (keepRect) {
+							rectList.add(rect);
+						}
+					}
 				}
 			}
 		}
-		List<Integer> indexList = new ArrayList<>();
-		Rect[] rList = rectList.toArray(new Rect[rectList.size()]);
-		double difWidth;
-		for (int i = 0; i < rectList.size(); i++) {
-			for (int j = 0; j < rectList.size(); j++) {
-				if (i == j) {
-					continue;
-				}
-				difWidth = Math.abs(rectList.get(i).x - rectList.get(j).x);
 
-				if (difWidth < 20 && rectList.get(j).height > rectList.get(i).height) {
-					rList[i] = null;
-				}
-			}
-		}
-		List<Rect> cRectList = new ArrayList<Rect>();
-		//rectList.clear();
-		for(int i = 0; i < rList.length; i++) {
-			if(rList[i] != null)
-				cRectList.add(rList[i]);
-		}
-		rectList = cRectList;
-		
-//		Rect[] lll = (Rect[]) rectList.toArray();
-//		for (int i = 0; i < indexList.size(); i++) {
-//			rectList.remove(indexList.get(i));
-//			lll[i] = null;
-//		}
-		
 		for (int i = 0; i < rectList.size(); i++) {
-			//System.out.println("rect x " + rectList.get(i).x + " y: " + rectList.get(i).y);
-			//System.out.println("height: " + rectList.get(i).height + " width: " + rectList.get(i).width);
+			// System.out.println("rect x " + rectList.get(i).x + " y: " +
+			// rectList.get(i).y);
+			// System.out.println("height: " + rectList.get(i).height + " width:
+			// " + rectList.get(i).width);
 			Imgproc.rectangle(dst, rectList.get(i).tl(), rectList.get(i).br(), new Scalar(255, 0, 0), 1);
 			Imgproc.drawMarker(dst, new Point(rectList.get(i).x, rectList.get(i).y), new Scalar(0, 255, 0));
 		}
-		
+
 		return rectList;
 	}
-	
+
 }
