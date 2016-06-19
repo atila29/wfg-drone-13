@@ -76,8 +76,8 @@ public class ControlFrame {
 			this.bEmergency.setPreferredSize(new Dimension(100,50));
 			this.bTakeOff.setPreferredSize(new Dimension(100,50));
 			this.bChangeCam.setPreferredSize(new Dimension(100,50));
-			this.batteryStatus.setPreferredSize(new Dimension(120,50));
-			this.batteryStatus.setFont(new Font("Arial", Font.PLAIN, 24));
+			this.batteryStatus.setPreferredSize(new Dimension(100,50));
+			this.batteryStatus.setFont(new Font("Arial", Font.PLAIN, 20));
 			bl = new BatteryListener() {
 				
 				@Override
