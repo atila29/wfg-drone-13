@@ -107,7 +107,7 @@ public class QRAnalyzer {
 					} else {
 						for (int j = 0; j < rectList.size(); j++) {
 							double dif = Math.abs(rect.x - rectList.get(j).x);
-							if (dif < 40) {
+							if (dif < 60) {
 								keepRect = false;
 								if (rect.height < rectList.get(j).height) {
 									rectList.set(j, rect);
