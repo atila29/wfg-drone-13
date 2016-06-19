@@ -164,7 +164,7 @@ public class ProgramManager {
 				double b = position.getY() - point.getY();
 				double distance = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
 				Vector2 stedsvektor = point.subtract(position);
-				double degree = stedsvektor.getAngle(point);
+				double degree = Math.toDegrees(stedsvektor.getAngle(point));
 				int rotTime = ((int)((830/90)*degree));
 				try {
 					ct.rotateClockwise(100, rotTime);
