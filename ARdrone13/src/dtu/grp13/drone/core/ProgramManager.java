@@ -186,14 +186,15 @@ public class ProgramManager {
 		Runnable loop = new Runnable() {
 			@Override
 			public void run() {
-				double a = position.getX() + point.getX();
-				double b = position.getY() + point.getY();
+				double a = position.getX() - point.getX();
+				double b = position.getY() - point.getY();
 				double distance = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
 				Vector2 stedsvektor = point.subtract(position);
 				double degree = Math.toDegrees(stedsvektor.getAngle(point));
 				int rotTime = ((int)((830/90)*degree));
-				WFGUtilities.LOGGER.info("drone: " + position + " point: " + point);
+				WFGUtilities.LOGGER.info("drone: " + position + " point: " + point + ", orientation: " + orientation);
 				WFGUtilities.LOGGER.info("dist: " + distance + " degree: " + degree);
+				WFGUtilities.LOGGER.info("radianer?: " + stedsvektor.getAngle(point));
 				try {
 					ct.rotateClockwise(100, rotTime);
 					ct.hover(1000);

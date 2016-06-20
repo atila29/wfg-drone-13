@@ -116,13 +116,13 @@ public class ControlFrame {
 					
 					
 					if(79 < arg0){
-						batteryStatus.setText("<html><font color='green'>Battery: </font></html>" + String.valueOf(arg0));
+						batteryStatus.setText("<html><font color='green'>"+ String.valueOf(arg0) + "</font></html>" );
 					}else if(59 < arg0 && arg0 < 80){
-						batteryStatus.setText("<html><font color='#ff0000'>Battery: </font></html>" + String.valueOf(arg0));
+						batteryStatus.setText("<html><font color='#ff0000'>"+ String.valueOf(arg0) + "</font></html>");
 					}else if(30 < arg0 && arg0 < 60){
-						batteryStatus.setText("<html><font color='orange'>Battery: </font></html>" + String.valueOf(arg0));
+						batteryStatus.setText("<html><font color='orange'>"+ String.valueOf(arg0) + "</font></html>");
 					}else if(0 < arg0 && arg0 < 31){
-						batteryStatus.setText("<html><font color='red'>Battery: </font></html>" + String.valueOf(arg0));
+						batteryStatus.setText("<html><font color='red'>"+ String.valueOf(arg0) + "</font></html>");
 					}
 				} 
 			};
@@ -161,7 +161,7 @@ public class ControlFrame {
 					//pm.rotateToWall(2);
 					try {
 						pm.initHeight();
-						pm.flyToPoint(new Vector2(1050,926));
+						pm.flyToPoint(new Vector2(200,200));
 					} catch (InterruptedException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
