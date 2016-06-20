@@ -5,6 +5,7 @@ import dtu.grp13.drone.core.matproc.procs.CubeProc;
 import dtu.grp13.drone.core.matproc.procs.QrProc;
 import dtu.grp13.drone.cube.Cube;
 import dtu.grp13.drone.gui.PositionFrame;
+import dtu.grp13.drone.util.WFGUtilities;
 import dtu.grp13.drone.vector.Vector2;
 
 public class ProgramManager {
@@ -191,6 +192,8 @@ public class ProgramManager {
 				Vector2 stedsvektor = point.subtract(position);
 				double degree = Math.toDegrees(stedsvektor.getAngle(point));
 				int rotTime = ((int)((830/90)*degree));
+				WFGUtilities.LOGGER.info("drone: " + position + " point: " + point);
+				WFGUtilities.LOGGER.info("dist: " + distance + " degree: " + degree);
 				try {
 					ct.rotateClockwise(100, rotTime);
 					ct.hover(1000);
