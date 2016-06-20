@@ -59,9 +59,6 @@ public class Main {
 		programManager.setxFrame(xFrame);
 		programManager.setPosSystem(positionSystem);
 		ControlFrame cf = new ControlFrame(programManager, drone.getNavDataManager());
-
-		WFGUtilities.LOGGER.info("sådan?");
-		WFGUtilities.LOGGER.info("sådan?");
 //		try {
 //			mc.useStaticImage("./resources/position/pic12.jpg");
 //		} catch (IOException e) {
