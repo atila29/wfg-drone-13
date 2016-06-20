@@ -45,12 +45,11 @@ public class QRAnalyzer {
 	}
 
 	public int getMidIndex(List<Rect> rects) throws IOException {
-		List<Rect> sortedRects = WFGUtilities.sortResults(rects, 0, rects.size() - 1);
-		if (sortedRects.size() == 3) {
+		if (rects.size() == 3) {
 			return 1;
 		} else {
-			double leftDif = Math.abs(sortedRects.get(0).x - 640);
-			double rightDif = Math.abs(sortedRects.get(1).x - 640);
+			double leftDif = Math.abs(rects.get(0).x - 640);
+			double rightDif = Math.abs(rects.get(1).x - 640);
 			if (leftDif < rightDif) {
 				return 0;
 			} else {

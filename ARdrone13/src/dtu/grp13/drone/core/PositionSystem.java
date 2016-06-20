@@ -235,7 +235,7 @@ public class PositionSystem {
 			} else {
 				p1 = getVec(qrResult.getText());
 				p2 = getVec(getLeft(qrResult.getText()));
-				p2Index = 1;
+				p2Index = 0;
 			}
 		}
 
