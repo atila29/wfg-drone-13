@@ -115,8 +115,9 @@ public class WFGUtilities {
 		@Override
 		public String format(LogRecord record) {
 			Date date = new Date(record.getMillis());
-			String logmsg = new SimpleDateFormat("yy-dd-MM-HH:mm").format(date);
-			logmsg = logmsg + "\r\n" + record.getMessage() + "\r\n";
+//			String logmsg = new SimpleDateFormat("yy-dd-MM-HH:mm").format(date);
+//			logmsg = logmsg + "\r\n" + record.getMessage() + "\r\n";
+			String logmsg = record.getMessage() + "\r\n";
 			Throwable thrown = record.getThrown();
 		      if (thrown != null) { 
 		    	  logmsg = logmsg + thrown.toString(); 

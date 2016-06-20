@@ -78,8 +78,10 @@ public class QRAnalyzer {
 	public List<Rect> findQrEdges(Mat src, Mat dst) {
 		List<MatOfPoint> edges = new ArrayList<MatOfPoint>();
 		Mat s = src.clone();
+		// lidt billedebahandling
 		Imgproc.cvtColor(s, s, Imgproc.COLOR_BGR2GRAY);
 		Imgproc.GaussianBlur(s, s, new Size(5, 5), 0);
+		Imgproc.Canny(s, s, 35, 100); // læs op på, noget med lysforhold
 
 		Imgproc.findContours(s, edges, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
 		List<Rect> rectList = new ArrayList<>();
@@ -97,7 +99,8 @@ public class QRAnalyzer {
 				double ratio = (double) rect.height / (double) rect.width;
 				boolean keepRect = true;
 
-				if (ratio > 1.3 && ratio < 2.5) {
+				if (ratio > 1.3 && ratio < 2.5 && rect.height > 80.0 && rect.height < 700 && rect.y > 100
+						&& rect.y < 520) {
 					if (rectList.size() == 0) {
 						rectList.add(rect);
 					} else {
@@ -128,6 +131,6 @@ public class QRAnalyzer {
 			Imgproc.drawMarker(dst, new Point(rectList.get(i).x, rectList.get(i).y), new Scalar(0, 255, 0));
 		}
 		return rectList;
-	}
+}
 
 }
