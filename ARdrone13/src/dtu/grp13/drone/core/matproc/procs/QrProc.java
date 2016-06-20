@@ -39,6 +39,7 @@ public class QrProc implements IMatProcess{
 				int qrIndex = qa.getMidIndex(sortedCords);
 				Result qrResult = qa.scanQr(currentFrame, sortedCords.get(qrIndex));
 				Vector2 position = ps.calcPosition(sortedCords, qrResult, qrIndex);
+				WFGUtilities.LOGGER.info("Position (p3): " + position.toString());
 				//double orientation = ps.findOrientation(position, qrResult);
 				double orientation = ps.findOrientation(position, sortedCords.get(qrIndex), qrResult.getText());
 				System.out.println("Pos: " + position);

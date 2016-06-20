@@ -261,15 +261,14 @@ public class PositionSystem {
         WFGUtilities.LOGGER.info("p2: " + p2.toString());
         WFGUtilities.LOGGER.info("Distance p3 til p1: " + distp3p1);
         WFGUtilities.LOGGER.info("Distance p3 til p2: " + distp3p2);
-        WFGUtilities.LOGGER.info("Position (p3): " + v4.toString());
         double degreesToQr = findOrientation(v4, qrCordList.get(p1Index), qrResult.getText());
-        WFGUtilities.LOGGER.info("Degrees to to QR: " + degreesToQr);
+        //WFGUtilities.LOGGER.info("Degrees to to QR: " + degreesToQr);
         Vector2 v5 = v4.subtract(p1);
         Vector2 v6 = v5.rotate(degreesToQr);
-        WFGUtilities.LOGGER.info("Vector to mid" + v6.toString());
+        //WFGUtilities.LOGGER.info("Vector to mid" + v6.toString());
         Vector2 v7 = v4.subtract(new Vector2(0, 0));
         double degreesToTurn = v6.getAngle(v7);
-        WFGUtilities.LOGGER.info("Degrees to turn: " + degreesToTurn);
+        //WFGUtilities.LOGGER.info("Degrees to turn: " + degreesToTurn);
         
         
 		if (v3.getX() < 0 || v3.getY() < 0 || v3.getX() > 926 || v3.getY() > 1060) {
