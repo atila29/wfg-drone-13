@@ -102,7 +102,7 @@ public class ProgramManager {
 		new Thread(() -> {
 			position = null;
 			this.orientation = -1;
-			int count = 5;
+			int count = 10;
 			while(position == null) {
 				try {
 					if(!(count >= 0)){
@@ -195,10 +195,17 @@ public class ProgramManager {
 				WFGUtilities.LOGGER.info("drone: " + position + " point: " + point + ", orientation: " + orientation);
 				WFGUtilities.LOGGER.info("dist: " + distance + " degree: " + degree);
 				WFGUtilities.LOGGER.info("radianer?: " + stedsvektor.getAngle(point));
+				int steps = (int) (distance / 300);
+				--steps;
 				try {
 					ct.rotateClockwise(100, rotTime);
 					ct.hover(1000);
 					ct.stepForward();
+					ct.hover(1000);
+					for(int i = 0; i < steps; i++){
+						ct.stepForward();
+						ct.hover(1000);
+					}
 					ct.hover(1000);
 					if(distance > 60){
 						flyToPoint(point);
