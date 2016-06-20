@@ -44,6 +44,9 @@ public class ProgramManager {
 	public void cubeFound(String color) {
 		this.cube = color;
 		cubeCount++;
+		if (position == null) {
+			position = new Vector2(0, 0);
+		}
 		xFrame.drawCube(new Cube(color, position));
 	}
 	

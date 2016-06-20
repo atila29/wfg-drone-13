@@ -2,7 +2,7 @@ package dtu.grp13.drone.core.matproc.procs;
 
 import org.opencv.core.Mat;
 
-import drone.grp13.drone.circle.CircleDetector;
+import dtu.grp13.drone.circle.CircleDetector;
 import dtu.grp13.drone.core.ProgramManager;
 
 public class CircleProc implements IMatProcess {

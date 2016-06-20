@@ -35,7 +35,7 @@ public class Main {
 		
 		ProgramManager programManager = new ProgramManager();
 		PositionSystem positionSystem = new PositionSystem();
-		FrameProcess proc = new FrameProcess(new QrProc(programManager, positionSystem));
+		FrameProcess proc = new FrameProcess(new CubeProc(programManager));
 		ModeController mc = new ModeController(proc);
 		PositionFrame xFrame = new PositionFrame();
 		xFrame.drawWallMarks(positionSystem.getWallmarks());
@@ -60,7 +60,7 @@ public class Main {
 		programManager.setPosSystem(positionSystem);
 		ControlFrame cf = new ControlFrame(programManager, drone.getNavDataManager());
 //		try {
-//			mc.useStaticImage("./resources/position/pic12.jpg");
+//			mc.useStaticImage("./resources/squares/cap1.jpg");
 //		} catch (IOException e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();

@@ -18,7 +18,6 @@ import org.opencv.imgproc.Imgproc;
 
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.ChecksumException;
-import com.google.zxing.DecodeHintType;
 import com.google.zxing.FormatException;
 import com.google.zxing.LuminanceSource;
 import com.google.zxing.MultiFormatReader;
@@ -67,8 +66,8 @@ public class QRAnalyzer {
 		Image img = WFGUtilities.toBufferedImage(qr);
 		LuminanceSource source = new BufferedImageLuminanceSource((BufferedImage) img);
 		BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-		//QRCodeReader reader = new QRCodeReader();
-		MultiFormatReader reader = new MultiFormatReader();
+		QRCodeReader reader = new QRCodeReader();
+		//MultiFormatReader reader = new MultiFormatReader();
 		Result scanResult = reader.decode(bitmap);
 
 		//System.out.println(scanResult.getText());
@@ -79,10 +78,8 @@ public class QRAnalyzer {
 	public List<Rect> findQrEdges(Mat src, Mat dst) {
 		List<MatOfPoint> edges = new ArrayList<MatOfPoint>();
 		Mat s = src.clone();
-		// lidt billedebahandling
 		Imgproc.cvtColor(s, s, Imgproc.COLOR_BGR2GRAY);
 		Imgproc.GaussianBlur(s, s, new Size(5, 5), 0);
-		Imgproc.Canny(s, s, 35, 100); // læs op på, noget med lysforhold
 
 		Imgproc.findContours(s, edges, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
 		List<Rect> rectList = new ArrayList<>();
@@ -100,8 +97,7 @@ public class QRAnalyzer {
 				double ratio = (double) rect.height / (double) rect.width;
 				boolean keepRect = true;
 
-				if (ratio > 1.3 && ratio < 2.5 && rect.height > 80.0 && rect.height < 700 && rect.y > 100
-						&& rect.y < 520) {
+				if (ratio > 1.3 && ratio < 2.5) {
 					if (rectList.size() == 0) {
 						rectList.add(rect);
 					} else {

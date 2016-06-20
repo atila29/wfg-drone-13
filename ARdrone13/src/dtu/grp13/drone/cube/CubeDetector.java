@@ -21,6 +21,8 @@ import org.opencv.features2d.FeatureDetector;
 import org.opencv.features2d.Features2d;
 import org.opencv.imgproc.Imgproc;
 
+import com.google.zxing.oned.rss.FinderPattern;
+
 import dtu.grp13.drone.core.matproc.procs.ICubeFoundAsync;
 import dtu.grp13.drone.vector.Vector2;
 
@@ -224,5 +226,4 @@ public class CubeDetector {
 		}
 		return src;
 	}
-
 }
