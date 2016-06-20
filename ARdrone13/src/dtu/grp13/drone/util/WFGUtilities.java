@@ -9,7 +9,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.FileHandler;
+import java.util.logging.Formatter;
 import java.util.logging.LogManager;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
@@ -20,7 +22,7 @@ import org.opencv.core.Rect;
 public class WFGUtilities {
 	private static String logName = null;
 	public final static Logger LOGGER = Logger.getGlobal();
-	
+	public static Formatter formatter = null;
 	
 	public static void setupLog() {
 		if(logName == null){
@@ -29,12 +31,18 @@ public class WFGUtilities {
 				LogManager.getLogManager().reset();
 				FileHandler fh = new FileHandler(logName, false);
 				LOGGER.addHandler(fh);
-				fh.setFormatter(new SimpleFormatter());
+				fh.setFormatter(getWFGFormatter());
 			} catch (SecurityException | IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public static Formatter getWFGFormatter(){
+		if(formatter == null)
+			formatter = new WFGFormatter();
+		return formatter;
 	}
 	
 	public static Mat bufferedImageToMat(BufferedImage bi) {
@@ -100,6 +108,22 @@ public class WFGUtilities {
 		} 
 		
 		return qrCordList;
+	}
+	
+	private static class WFGFormatter extends Formatter {
+
+		@Override
+		public String format(LogRecord record) {
+			Date date = new Date(record.getMillis());
+			String logmsg = new SimpleDateFormat("yy-dd-MM-HH:mm").format(date);
+			logmsg = logmsg + "\r\n" + record.getMessage() + "\r\n\r\n";
+			Throwable thrown = record.getThrown();
+		      if (thrown != null) { 
+		    	  logmsg = logmsg + thrown.toString(); 
+		      }
+		      return logmsg;
+		}
+		
 	}
 	
 }

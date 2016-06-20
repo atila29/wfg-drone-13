@@ -2,26 +2,40 @@ package dtu.grp13.drone.gui;
 
 import java.awt.Button;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Formatter;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.LogRecord;
+import java.util.logging.SimpleFormatter;
 
 import javax.swing.AbstractAction;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
+
+import org.jfree.ui.tabbedui.VerticalLayout;
 
 import de.yadrone.base.navdata.BatteryListener;
 import de.yadrone.base.navdata.NavData;
 import de.yadrone.base.navdata.NavDataManager;
 import dtu.grp13.drone.core.CommandThread;
 import dtu.grp13.drone.core.ProgramManager;
+import dtu.grp13.drone.util.WFGUtilities;
 import dtu.grp13.drone.vector.Vector2;
 
 
@@ -32,22 +46,33 @@ public class ControlFrame {
 	private ProgramManager pm;
 	private NavDataManager navdata;
 	private BatteryListener bl;
+	private JTextArea logText;
 	
 	public ControlFrame(ProgramManager pm, NavDataManager navData){
 		this.pm = pm;
 		this.navdata = navData;
+		logText = new JTextArea();
 		panel = new MyPanel();
 		frame = new JFrame();
-		frame.getContentPane().setLayout(new FlowLayout());
+		frame.getContentPane().setLayout(new VerticalLayout());
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("Control System");
 		frame.getContentPane().add(panel);
+		JScrollPane scroll = new JScrollPane(logText);
+		scroll.setPreferredSize(new Dimension(panel.getWidth(), 350));
+		frame.getContentPane().add(scroll);
 		frame.setResizable(false);
 		frame.setLocation(1295, 565);
 		frame.setVisible(true);
 		frame.pack();
+		WFGUtilities.LOGGER.addHandler(new WindowLogHandler());
 	}
-
+	
+	public void writeToLog(String msg){
+		logText.append(msg);
+		frame.validate();
+	}
+	
 	private class MyPanel extends JPanel{
 		Button bTakeOff;
 		Button bEmergency;
@@ -256,5 +281,34 @@ public class ControlFrame {
 				}
 			});
 		}
+	}
+	
+	public class WindowLogHandler extends Handler {
+		private Formatter formatter = null;
+		
+		public WindowLogHandler() {
+			LogManager manager = LogManager.getLogManager();
+		    formatter = WFGUtilities.getWFGFormatter();
+		}
+		
+		@Override
+		public void publish(LogRecord record) {
+			String message = null;
+		    if (!isLoggable(record))
+		      return;
+		    message = formatter.format(record);
+		    writeToLog(message);
+		}
+
+		@Override
+		public void flush() {
+			
+		}
+
+		@Override
+		public void close() throws SecurityException {
+			
+		}
+		
 	}
 }
