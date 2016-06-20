@@ -256,7 +256,11 @@ public class PositionSystem {
         Vector2 v4 = new Vector2(temp.getX() + h * (p2.getY() - p1.getY()) / distp1p2, temp.getY() - h * (p2.getX() - p1.getX()) / distp1p2);
 //        System.out.println("V3 x: " + v3.getX() + " y: " + v3.getY());
 //        System.out.println("V4 x: " + v4.getX() + " y: " + v4.getY());
-        
+        WFGUtilities.LOGGER.info("qr: " + qrResult.getText());
+        WFGUtilities.LOGGER.info("p1: " + p1.toString());
+        WFGUtilities.LOGGER.info("p2: " + p2.toString());
+        WFGUtilities.LOGGER.info("Distance p3 til p1: " + distp3p1);
+        WFGUtilities.LOGGER.info("Distance p3 til p2: " + distp3p2);
         
 		if (v3.getX() < 0 || v3.getY() < 0 || v3.getX() > 926 || v3.getY() > 1060) {
 			return v4;
