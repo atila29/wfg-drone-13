@@ -92,9 +92,11 @@ public class ControlFrame {
 					
 					if(79 < arg0){
 						batteryStatus.setText("<html><font color='green'>Battery: </font></html>" + String.valueOf(arg0));
-					}else if(44 < arg0 && arg0 < 80){
+					}else if(59 < arg0 && arg0 < 80){
+						batteryStatus.setText("<html><font color='#ff0000'>Battery: </font></html>" + String.valueOf(arg0));
+					}else if(30 < arg0 && arg0 < 60){
 						batteryStatus.setText("<html><font color='orange'>Battery: </font></html>" + String.valueOf(arg0));
-					}else if(0 < arg0 && arg0 < 45){
+					}else if(0 < arg0 && arg0 < 31){
 						batteryStatus.setText("<html><font color='red'>Battery: </font></html>" + String.valueOf(arg0));
 					}
 				} 
