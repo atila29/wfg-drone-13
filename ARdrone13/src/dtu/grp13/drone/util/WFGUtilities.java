@@ -3,13 +3,40 @@ package dtu.grp13.drone.util;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.FileHandler;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 
 public class WFGUtilities {
+	private static String logName = null;
+	public final static Logger LOGGER = Logger.getGlobal();
+	
+	
+	public static void setupLog() {
+		if(logName == null){
+			logName = "./logs/log_" + new SimpleDateFormat("yy-dd-MM_HH-mm'.log'").format(new Date());
+			try {
+				LogManager.getLogManager().reset();
+				FileHandler fh = new FileHandler(logName, false);
+				LOGGER.addHandler(fh);
+				fh.setFormatter(new SimpleFormatter());
+			} catch (SecurityException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public static Mat bufferedImageToMat(BufferedImage bi) {
 		Mat mat = new Mat(bi.getHeight(), bi.getWidth(), CvType.CV_8UC3);
 		byte[] data = ((DataBufferByte) bi.getRaster().getDataBuffer())
@@ -17,6 +44,7 @@ public class WFGUtilities {
 		mat.put(0, 0, data);
 		return mat;
 	}
+	
 	public static Image toBufferedImage(Mat m) {
 		// Code from
 		// http://stackoverflow.com/questions/15670933/opencv-java-load-image-to-gui

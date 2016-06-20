@@ -1,6 +1,11 @@
 package dtu.grp13.drone.core;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -18,12 +23,17 @@ import dtu.grp13.drone.core.matproc.procs.IMatProcess;
 import dtu.grp13.drone.core.matproc.procs.QrProc;
 import dtu.grp13.drone.gui.ControlFrame;
 import dtu.grp13.drone.gui.PositionFrame;
+import dtu.grp13.drone.util.WFGUtilities;
 import dtu.grp13.drone.vector.Vector2;
 
 public class Main {
+	
 
 	public static void main(String[] args) throws IOException {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+		WFGUtilities.setupLog();
+		WFGUtilities.LOGGER.info("sådan?");
+		
 		ProgramManager programManager = new ProgramManager();
 		PositionSystem positionSystem = new PositionSystem();
 		FrameProcess proc = new FrameProcess(new QrProc(programManager, positionSystem));
