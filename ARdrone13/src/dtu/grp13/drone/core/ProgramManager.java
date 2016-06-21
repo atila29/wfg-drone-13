@@ -210,10 +210,11 @@ public class ProgramManager {
 				
 				Vector2 stedsvektor = point.subtract(position);
 				double degree = Math.toDegrees(stedsvektor.getAngle(orientVec));
+
 				int rotTime = ((int)((830/90)*degree));
 				WFGUtilities.LOGGER.info("drone: " + position + " point: " + point + ", orientation: " + orientation);
 				WFGUtilities.LOGGER.info("dist: " + distance + " degree: " + degree);
-				WFGUtilities.LOGGER.info("radianer?: " + stedsvektor.getAngle(point));
+				WFGUtilities.LOGGER.info("Degrees to turn: " + degree);
 				int steps = (int) (distance / 300);
 				try {
 					ct.rotateClockwise(100, rotTime);
