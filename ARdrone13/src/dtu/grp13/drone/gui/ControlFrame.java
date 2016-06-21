@@ -52,6 +52,7 @@ public class ControlFrame {
 		this.pm = pm;
 		this.navdata = navData;
 		logText = new JTextArea();
+		logText.setEditable(false);
 		panel = new MyPanel();
 		frame = new JFrame();
 		frame.getContentPane().setLayout(new VerticalLayout());

@@ -19,7 +19,6 @@ public class ProgramManager {
 	private int cubeCount = 0;
 	private PositionSystem posSystem;
 	private int routeNr = 0;
-	private double orientation = -1;
 	private Vector2 orientVec = new Vector2(0, 0);
 	
 	// PURELY TEST
@@ -40,13 +39,12 @@ public class ProgramManager {
 	
 	public void positionFound(Vector2 pos, double orientation){
 		this.position = pos;
-		this.orientation = orientation;
 		xFrame.setDronePosition(this.position);
 	}
 
 	public void positionFound(Vector2 pos, Vector2 orientVec) {
 		this.position = pos;
-		this.orientation = orientation;
+		this.orientVec = orientVec;
 		xFrame.setDronePosition(this.position);
 	}
 	
@@ -58,6 +56,9 @@ public class ProgramManager {
 		}
 		xFrame.drawCube(new Cube(color, position));
 	}
+	
+	// flight for konkurrencen
+	
 	
 	public void takeOffDrone() throws InterruptedException{
 		ct.takeOff();
@@ -75,7 +76,6 @@ public class ProgramManager {
 	public void findPosition() {
 		new Thread(() -> {
 			position = null;
-			this.orientation = -1;
 			int count = 5;
 			while(position == null && count > 0) {
 				try {
@@ -95,7 +95,6 @@ public class ProgramManager {
 	public void findPosition(Runnable after) {
 		new Thread(() -> {
 			position = null;
-			this.orientation = -1;
 			while(position == null) {
 				try {
 					ct.rotateClockwise(10);
@@ -113,7 +112,6 @@ public class ProgramManager {
 	public void findPosition(Runnable after, Runnable err) {
 		new Thread(() -> {
 			position = null;
-			this.orientation = -1;
 			int count = 10;
 			while(position == null) {
 				try {
@@ -165,11 +163,11 @@ public class ProgramManager {
 			public void run() {
 				// her antages det at vi har vores vinkel,
 				// derefter skal vi rotate med udgangspunkt i den vinkel.
-				double dOrientation = Math.toDegrees(orientation);
-				double degreesToWall = (wall * 90) + dOrientation;
+				//double dOrientation = Math.toDegrees(orientation);
+				//double degreesToWall = (wall * 90) + dOrientation;
 				try {
-						int time = (int)(((850+(7*wall))/90) * degreesToWall);
-						ct.rotateCounterClockwise(100, time);
+						//int time = (int)(((850+(7*wall))/90) * degreesToWall);
+						//ct.rotateCounterClockwise(100, time);
 						ct.hover(1000);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
@@ -212,7 +210,7 @@ public class ProgramManager {
 				double degree = Math.toDegrees(stedsvektor.getAngle(orientVec));
 
 				int rotTime = ((int)((830/90)*degree));
-				WFGUtilities.LOGGER.info("drone: " + position + " point: " + point + ", orientation: " + orientation);
+				WFGUtilities.LOGGER.info("drone: " + position + " point: " + point + ", orientation: " + orientVec);
 				WFGUtilities.LOGGER.info("dist: " + distance + " degree: " + degree);
 				WFGUtilities.LOGGER.info("Degrees to turn: " + degree);
 				int steps = (int) (distance / 300);
