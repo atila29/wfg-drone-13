@@ -1,5 +1,7 @@
 package dtu.grp13.drone.core;
 
+import java.util.Vector;
+
 import dtu.grp13.drone.core.matproc.Processable;
 import dtu.grp13.drone.core.matproc.procs.CubeProc;
 import dtu.grp13.drone.core.matproc.procs.QrProc;
@@ -18,6 +20,7 @@ public class ProgramManager {
 	private PositionSystem posSystem;
 	private int routeNr = 0;
 	private double orientation = -1;
+	private Vector2 orientVec = new Vector2(0, 0);
 	
 	// PURELY TEST
 	private int testSec = 800;
@@ -36,6 +39,12 @@ public class ProgramManager {
 	}
 	
 	public void positionFound(Vector2 pos, double orientation){
+		this.position = pos;
+		this.orientation = orientation;
+		xFrame.setDronePosition(this.position);
+	}
+
+	public void positionFound(Vector2 pos, Vector2 orientVec) {
 		this.position = pos;
 		this.orientation = orientation;
 		xFrame.setDronePosition(this.position);
@@ -171,6 +180,11 @@ public class ProgramManager {
 		findPosition(callBackFromFindPosition);
 	}
 	
+	public void rotateToPoint(Vector2 point) {
+		
+	}
+	
+	
 	public void flyToPoint(Vector2 point) throws InterruptedException {
 		
 		Runnable err = new Runnable() {
@@ -192,8 +206,10 @@ public class ProgramManager {
 				double a = position.getX() - point.getX();
 				double b = position.getY() - point.getY();
 				double distance = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
+				
+				
 				Vector2 stedsvektor = point.subtract(position);
-				double degree = Math.toDegrees(stedsvektor.getAngle(point));
+				double degree = Math.toDegrees(stedsvektor.getAngle(orientVec));
 				int rotTime = ((int)((830/90)*degree));
 				WFGUtilities.LOGGER.info("drone: " + position + " point: " + point + ", orientation: " + orientation);
 				WFGUtilities.LOGGER.info("dist: " + distance + " degree: " + degree);
