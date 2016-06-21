@@ -199,7 +199,6 @@ public class ProgramManager {
 				WFGUtilities.LOGGER.info("dist: " + distance + " degree: " + degree);
 				WFGUtilities.LOGGER.info("radianer?: " + stedsvektor.getAngle(point));
 				int steps = (int) (distance / 300);
-				--steps;
 				try {
 					ct.rotateClockwise(100, rotTime);
 					ct.hover(1000);
