@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import dtu.grp13.drone.cube.Cube;
+import dtu.grp13.drone.util.WFGUtilities;
 import dtu.grp13.drone.vector.Matrix2;
 import dtu.grp13.drone.vector.Vector2;
 
@@ -62,6 +63,11 @@ public class PositionFrame {
 		frame.repaint();
 	}
 	
+	public void printCubes(){
+		for(Cube c : panel.getCubes()){
+			WFGUtilities.LOGGER.info("farve: " + c.getColor() + ", position: " + c.getCoordinate());
+		}
+	}
 	
 	public void setDronePosition(Vector2 c) {
 		panel.setCoor(transform(c));
@@ -74,6 +80,10 @@ public class PositionFrame {
 		private List<Vector2> wallmarks;
 		private List<Cube> cubes;
 		
+		public List<Cube> getCubes() {
+			return cubes;
+		}
+
 		public MyPanel(){
 			try {
 				img = ImageIO.read(new File("./resources/koordinate_system.png"));
@@ -111,7 +121,7 @@ public class PositionFrame {
 			if(coor != null) {
 				int x = (int)coor.getX()+6;
 				int y = (int)coor.getY()+6;
-				g.setColor(new Color(255, 0, 0));
+				g.setColor(new Color(0, 0, 255));
 				g.fillOval(x, y, 12, 12);
 			}
 			if(wallmarks != null){

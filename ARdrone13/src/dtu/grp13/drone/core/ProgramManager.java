@@ -1,7 +1,5 @@
 package dtu.grp13.drone.core;
 
-import java.util.Vector;
-
 import dtu.grp13.drone.core.matproc.Processable;
 import dtu.grp13.drone.core.matproc.procs.CubeProc;
 import dtu.grp13.drone.core.matproc.procs.QrProc;
@@ -19,7 +17,8 @@ public class ProgramManager {
 	private int cubeCount = 0;
 	private PositionSystem posSystem;
 	private int routeNr = 0;
-	private Vector2 orientVec = new Vector2(0, 0);
+	private double orientation = -1;
+	private boolean ready = true;
 	
 	// PURELY TEST
 	private int testSec = 800;
@@ -39,12 +38,7 @@ public class ProgramManager {
 	
 	public void positionFound(Vector2 pos, double orientation){
 		this.position = pos;
-		xFrame.setDronePosition(this.position);
-	}
-
-	public void positionFound(Vector2 pos, Vector2 orientVec) {
-		this.position = pos;
-		this.orientVec = orientVec;
+		this.orientation = orientation;
 		xFrame.setDronePosition(this.position);
 	}
 	
@@ -52,13 +46,11 @@ public class ProgramManager {
 		this.cube = color;
 		cubeCount++;
 		if (position == null) {
-			position = new Vector2(0, 0);
+			return;
 		}
 		xFrame.drawCube(new Cube(color, position));
+		WFGUtilities.LOGGER.info("farve: " + color + ", position: " + position);
 	}
-	
-	// flight for konkurrencen
-	
 	
 	public void takeOffDrone() throws InterruptedException{
 		ct.takeOff();
@@ -76,6 +68,27 @@ public class ProgramManager {
 	public void findPosition() {
 		new Thread(() -> {
 			position = null;
+			this.orientation = -1;
+			int count = 5;
+			while(position == null && count > 0) {
+				try {
+					count--;
+					ct.rotateClockwise(10);
+					ct.hover(1000);
+					ct.hover(1000);
+					Thread.sleep(100);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}).start();
+	}
+	
+	public void findPositionOne() {
+		new Thread(() -> {
+			position = null;
+			this.orientation = -1;
 			int count = 5;
 			while(position == null && count > 0) {
 				try {
@@ -95,8 +108,16 @@ public class ProgramManager {
 	public void findPosition(Runnable after) {
 		new Thread(() -> {
 			position = null;
+			this.orientation = -1;
+			int count = 10;
 			while(position == null) {
 				try {
+					if(!(count-- >= 0)){
+						ct.stepForward();
+						ct.hover(1000);
+						ct.stepForward();
+						ct.hover(1000);
+					}
 					ct.rotateClockwise(10);
 					ct.hover(1000);
 					ct.hover(1000);
@@ -112,6 +133,7 @@ public class ProgramManager {
 	public void findPosition(Runnable after, Runnable err) {
 		new Thread(() -> {
 			position = null;
+			this.orientation = -1;
 			int count = 10;
 			while(position == null) {
 				try {
@@ -163,11 +185,11 @@ public class ProgramManager {
 			public void run() {
 				// her antages det at vi har vores vinkel,
 				// derefter skal vi rotate med udgangspunkt i den vinkel.
-				//double dOrientation = Math.toDegrees(orientation);
-				//double degreesToWall = (wall * 90) + dOrientation;
+				double dOrientation = Math.toDegrees(orientation);
+				double degreesToWall = (wall * 90) + dOrientation;
 				try {
-						//int time = (int)(((850+(7*wall))/90) * degreesToWall);
-						//ct.rotateCounterClockwise(100, time);
+						int time = (int)(((850+(7*wall))/90) * degreesToWall);
+						ct.rotateCounterClockwise(100, time);
 						ct.hover(1000);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
@@ -177,11 +199,6 @@ public class ProgramManager {
 		};
 		findPosition(callBackFromFindPosition);
 	}
-	
-	public void rotateToPoint(Vector2 point) {
-		
-	}
-	
 	
 	public void flyToPoint(Vector2 point) throws InterruptedException {
 		
@@ -204,15 +221,12 @@ public class ProgramManager {
 				double a = position.getX() - point.getX();
 				double b = position.getY() - point.getY();
 				double distance = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
-				
-				
 				Vector2 stedsvektor = point.subtract(position);
-				double degree = Math.toDegrees(stedsvektor.getAngle(orientVec));
-
+				double degree = Math.toDegrees(stedsvektor.getAngle(point));
 				int rotTime = ((int)((830/90)*degree));
-				WFGUtilities.LOGGER.info("drone: " + position + " point: " + point + ", orientation: " + orientVec);
+				WFGUtilities.LOGGER.info("drone: " + position + " point: " + point + ", orientation: " + orientation);
 				WFGUtilities.LOGGER.info("dist: " + distance + " degree: " + degree);
-				WFGUtilities.LOGGER.info("Degrees to turn: " + degree);
+				WFGUtilities.LOGGER.info("radianer?: " + stedsvektor.getAngle(point));
 				int steps = (int) (distance / 300);
 				try {
 					ct.rotateClockwise(100, rotTime);
@@ -265,40 +279,45 @@ public class ProgramManager {
 		}).start();
 	}
 	
+	public void searchRoomOne() throws InterruptedException{
+	routeNr = 0;
 	
-	
-	public void searchRoom() throws InterruptedException{
-		routeNr = 0;
-		cubeCount = 0;
-		flyToPoint(new Vector2(50,50));
+
 		Runnable callback = new Runnable() {
 			@Override
 			public void run() {
 				try{
-					if((routeNr%2) == 0)
-						rotateToWall(1);
-					else
-						rotateToWall(3);
-					ct.stepForward();
 					ct.next();
+					Thread.sleep(1000);
+					ready = false;
+					ct.next();
+					Thread.sleep(1000);
 					ct.hover(2000);
 					Thread.sleep(1000);
 					proc.changeProcess(new CubeProc(getThis()));
 					Thread.sleep(1000);
-					if(position.getX() > 926 - 100){
-						if((routeNr%2) == 0){
-							rotateToWall(1);
-							ct.stepLeft();
-							ct.hover(1000);
-						}
-						else{
-							rotateToWall(3);
-							ct.stepRight();
-							ct.hover(1000);
-						}
-						routeNr++;
+					
+					Vector2 point = new Vector2(800, 300*routeNr);
+					
+					if(routeNr>=3){
+						routeNr = 0;
 					}
-			
+					
+					double a = position.getX() - point.getX();
+					double b = position.getY() - point.getY();
+					double distance = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
+					Vector2 stedsvektor = point.subtract(position);
+					double degree = Math.toDegrees(stedsvektor.getAngle(point));
+					int rotTime = ((int)((830/90)*degree));
+					WFGUtilities.LOGGER.info("drone: " + position + " point: " + point + ", orientation: " + orientation);
+					WFGUtilities.LOGGER.info("dist: " + distance + " degree: " + degree);
+					WFGUtilities.LOGGER.info("radianer?: " + stedsvektor.getAngle(point));
+					ct.rotateClockwise(100, rotTime);
+					ct.hover(1000);
+					ct.stepForward();
+					ct.hover(1000);
+					routeNr++;
+					ready = true;
 				} catch(InterruptedException e){
 					//todoihdofa
 				}
@@ -306,15 +325,28 @@ public class ProgramManager {
 		};
 		new Thread(() -> {
 			try {
+				ready = true;
+				findPosition();
+				Thread.sleep(1000);
 				ct.next();
+				Thread.sleep(1000);
 				proc.changeProcess(new CubeProc(this));
 				Thread.sleep(1000);
 				ct.hover(2000);
-				while(cubeCount < 40 /*add timer*/){
-					ct.next();
-					Thread.sleep(1000);
-					proc.changeProcess(new QrProc(this, posSystem));
-					findPosition(callback);
+				ct.stepForward();
+				ct.hover(1000);
+				//ct.next();
+				while(true){
+					if(ready){
+						position = null;
+						Thread.sleep(1000);
+						proc.changeProcess(new QrProc(this, posSystem));
+						findPosition(callback);
+						ct.next();
+						Thread.sleep(1000);
+						ready = false;
+					}
+					
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -322,6 +354,82 @@ public class ProgramManager {
 			}
 		}).start();
 	}
+	
+	
+	public void searchRoom() throws InterruptedException{
+	routeNr = 0;
+	
+
+		Runnable callback = new Runnable() {
+			@Override
+			public void run() {
+				try{
+					ready = false;
+					ct.next();
+					ct.hover(2000);
+					Thread.sleep(1000);
+					proc.changeProcess(new CubeProc(getThis()));
+					Thread.sleep(1000);
+					
+					Vector2 point = new Vector2(800, 300*routeNr);
+					
+					if(routeNr>=3){
+						routeNr = 0;
+					}
+					
+					double a = position.getX() - point.getX();
+					double b = position.getY() - point.getY();
+					double distance = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
+					Vector2 stedsvektor = point.subtract(position);
+					double degree = Math.toDegrees(stedsvektor.getAngle(point));
+					int rotTime = ((int)((830/90)*degree));
+					WFGUtilities.LOGGER.info("drone: " + position + " point: " + point + ", orientation: " + orientation);
+					WFGUtilities.LOGGER.info("dist: " + distance + " degree: " + degree);
+					WFGUtilities.LOGGER.info("radianer?: " + stedsvektor.getAngle(point));
+					ct.rotateClockwise(100, rotTime);
+					ct.hover(1000);
+					ct.stepForward();
+					ct.hover(1000);
+					routeNr++;
+					ready = true;
+				} catch(InterruptedException e){
+					//todoihdofa
+				}
+			}
+		};
+		new Thread(() -> {
+			try {
+				ready = true;
+				findPosition();
+				Thread.sleep(1000);
+				ct.next();
+				proc.changeProcess(new CubeProc(this));
+				Thread.sleep(1000);
+				ct.hover(2000);
+				ct.stepForward();
+				ct.hover(1000);
+				long time = (long) (System.currentTimeMillis() + (1000*60*4));
+				while(cubeCount < 40 && time > System.currentTimeMillis()){
+					if(ready){
+						position = null;
+						ct.next();
+						Thread.sleep(1000);
+						proc.changeProcess(new QrProc(this, posSystem));
+						Thread.sleep(1000);
+						ct.next();
+						Thread.sleep(1000);
+						findPosition(callback);
+						ready = false;
+					}
+					
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}).start();
+	}
+	
 	
 	public void firstCycle(){
 		findPosition(new Runnable() {
